@@ -1,0 +1,144 @@
+import { json } from '@scola/codec';
+
+import {
+  ErrorDisabler,
+  ErrorReporter,
+  FormBuilder,
+  FormReader,
+  ListBuilder,
+  ListPreparer,
+  PanelDisabler,
+  renderForm
+} from '@scola/gui';
+
+import { createBrowser } from '@scola/http';
+import { Validator } from '@scola/validator';
+import { Worker } from '@scola/worker';
+
+import { LinkGetter as LinkGetterAdd } from '../../link/add';
+
+import {
+  LinkClicker,
+  LinkHeader,
+  LinkPutter,
+  LinkResolver
+} from '../../link/select';
+
+import { LinkGetter as LinkGetterView } from '../../link/view';
+
+import {
+  filterDisabler,
+  formatCheckboxError,
+  formatDefaultError,
+  formatListBuilder
+} from '../../helper';
+
+export default function createSelectLink(structure, link) {
+  const getDisabler = new ErrorDisabler();
+  const linkPreparer = new ListPreparer();
+
+  const linkClicker = new LinkClicker({
+    link: link.name,
+    name: structure.name
+  });
+
+  const linkGetterAdd = new LinkGetterAdd({
+    link: link.name,
+    name: structure.name
+  });
+
+  const linkGetterView = new LinkGetterView({
+    link: link.name,
+    name: structure.name
+  });
+
+  const linkHeader = new LinkHeader({
+    link: link.name,
+    name: structure.name
+  });
+
+  const linkPutter = new LinkPutter({
+    link: link.name,
+    name: structure.name
+  });
+
+  const linkResolver = new LinkResolver({
+    link: link.name,
+    name: structure.name
+  });
+
+  const getReporter = new ErrorReporter({
+    format: formatDefaultError('short')
+  });
+
+  const linkFormBuilder = new FormBuilder({
+    finish: false,
+    target: 'form-select-link',
+  });
+
+  const linkFormReader = new FormReader({
+    serialize: { empty: false, hash: true },
+    target: 'form-select-link'
+  });
+
+  const linkListBuilder = new ListBuilder({
+    format: formatListBuilder(),
+    prepare: false,
+    target: 'form-select-link',
+    render: renderForm,
+    structure: link
+  });
+
+  const linkReporter = new ErrorReporter({
+    format: formatDefaultError('long')
+  });
+
+  const panelDisabler = new PanelDisabler({
+    filter: filterDisabler()
+  });
+
+  const validator = new Validator({
+    structure: [link]
+  });
+
+  const validatorReporter = new ErrorReporter({
+    format: formatCheckboxError(link.name)
+  });
+
+  getDisabler
+    .disable({ selector: '.body, .bar .right' });
+
+  panelDisabler
+    .hide({
+      permission: structure.name + '.' + link.name + '.read',
+      selector: '.body, .bar'
+    });
+
+  panelDisabler
+    .connect(linkHeader)
+    .connect(linkGetterView)
+    .through(createBrowser(json))
+    .connect(new Worker({
+      act(route, data) {
+        route.checked = data;
+        this.pass(route);
+      }
+    }))
+    .connect(linkPreparer)
+    .connect(linkGetterAdd)
+    .through(createBrowser(json))
+    .connect(getDisabler)
+    .connect(getReporter)
+    .connect(linkFormBuilder)
+    .connect(linkListBuilder)
+    .connect(linkClicker)
+    .connect(linkFormReader)
+    .connect(validator)
+    .connect(validatorReporter)
+    .connect(linkPutter)
+    .through(createBrowser(json))
+    .connect(linkReporter)
+    .connect(linkResolver);
+
+  return [panelDisabler, linkResolver];
+}
