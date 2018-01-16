@@ -11,7 +11,7 @@ export default class ListClicker extends CrudWorker {
         getView('main').handle({
           back: false,
           name: 'view-' + this._name,
-          params: { id: data[index].id }
+          params: { id: data[index][this._name + '_id'] }
         });
       });
 

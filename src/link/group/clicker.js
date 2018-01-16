@@ -14,9 +14,7 @@ export default class LinkClicker extends CrudWorker {
         getView('main').handle({
           dir: datum.action === 'view' ? 'rtl' : null,
           name: datum.action + '-' + this._name + '-' + datum.name,
-          params: {
-            id: route.params.id
-          }
+          params: route.params
         });
       });
 
@@ -29,7 +27,7 @@ export default class LinkClicker extends CrudWorker {
           dir: 'rtl',
           name: 'view-' + datum.name,
           params: {
-            id: data[datum.name].id
+            id: data[datum.name][datum.name + '_id']
           },
           remember: true
         });

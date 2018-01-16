@@ -15,6 +15,18 @@ import {
   createViewObject
 } from './src/factory/object';
 
+import {
+  disableListItem,
+  filterDisabler,
+  formatCheckboxError,
+  formatDefaultError,
+  formatFormBuilder,
+  formatLinkBuilder,
+  formatListBuilder,
+  formatSummaryBuilder,
+  formatValidatorError
+} from './src/helper';
+
 export {
   createAddLink,
   createDeleteLink,
@@ -30,4 +42,16 @@ export {
   createAddObject,
   createEditObject,
   createViewObject
+};
+
+export {
+  disableListItem,
+  filterDisabler,
+  formatCheckboxError,
+  formatDefaultError,
+  formatFormBuilder,
+  formatLinkBuilder,
+  formatListBuilder,
+  formatSummaryBuilder,
+  formatValidatorError
 };

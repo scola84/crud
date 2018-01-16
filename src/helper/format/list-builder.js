@@ -12,12 +12,12 @@ export default function formatListBuilder() {
 
     if (name === 'checked' && route.checked) {
       return route.checked.some((link) => {
-        return Number(link.id) === Number(data.id);
+        return Number(link[datum.name]) === Number(data[datum.name]);
       });
     }
 
     if (name === 'value') {
-      return data.id;
+      return data[datum.name];
     }
 
     return data[name];

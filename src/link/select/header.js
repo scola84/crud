@@ -5,6 +5,10 @@ import CrudWorker from '../../worker/crud';
 
 export default class LinkHeader extends CrudWorker {
   act(route, data = {}) {
+    const [action] = route.name.split('-');
+    const cancel = action === 'add' ?
+      'view-' + this._name + '-' + this._link : 'view-' + this._name;
+
     const panel = select(route.node)
       .classed('header search link select', true)
       .classed(this._name, true);
@@ -34,10 +38,8 @@ export default class LinkHeader extends CrudWorker {
       .on('click', () => {
         getView('main').handle({
           back: true,
-          name: 'view-' + this._name,
-          params: {
-            id: route.params.id
-          }
+          name: cancel,
+          params: route.params
         });
       });
 

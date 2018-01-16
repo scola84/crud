@@ -13,9 +13,8 @@ import {
 
 import { createBrowser } from '@scola/http';
 import { Validator } from '@scola/validator';
-import { Worker } from '@scola/worker';
 
-import { LinkGetter as LinkGetterAdd } from '../../link/add';
+import { LinkGetter } from '../../link/add';
 
 import {
   LinkClicker,
@@ -24,14 +23,14 @@ import {
   LinkResolver
 } from '../../link/select';
 
-import { LinkGetter as LinkGetterView } from '../../link/view';
-
 import {
   filterDisabler,
   formatCheckboxError,
   formatDefaultError,
   formatListBuilder
 } from '../../helper';
+
+import createFill from './select/fill';
 
 export default function createSelectLink(structure, link) {
   const getDisabler = new ErrorDisabler();
@@ -42,12 +41,7 @@ export default function createSelectLink(structure, link) {
     name: structure.name
   });
 
-  const linkGetterAdd = new LinkGetterAdd({
-    link: link.name,
-    name: structure.name
-  });
-
-  const linkGetterView = new LinkGetterView({
+  const linkGetter = new LinkGetter({
     link: link.name,
     name: structure.name
   });
@@ -86,7 +80,7 @@ export default function createSelectLink(structure, link) {
     prepare: false,
     target: 'form-select-link',
     render: renderForm,
-    structure: link
+    structure: link.fields[0]
   });
 
   const linkReporter = new ErrorReporter({
@@ -98,7 +92,7 @@ export default function createSelectLink(structure, link) {
   });
 
   const validator = new Validator({
-    structure: [link]
+    structure: [link.fields[0]]
   });
 
   const validatorReporter = new ErrorReporter({
@@ -115,17 +109,19 @@ export default function createSelectLink(structure, link) {
     });
 
   panelDisabler
-    .connect(linkHeader)
-    .connect(linkGetterView)
-    .through(createBrowser(json))
-    .connect(new Worker({
-      act(route, data) {
-        route.checked = data;
-        this.pass(route);
-      }
-    }))
-    .connect(linkPreparer)
-    .connect(linkGetterAdd)
+    .connect(linkHeader);
+
+  if (link.fill) {
+    linkHeader
+      .through(createFill(structure, link))
+      .connect(linkPreparer);
+  } else {
+    linkHeader
+      .connect(linkPreparer);
+  }
+
+  linkPreparer
+    .connect(linkGetter)
     .through(createBrowser(json))
     .connect(getDisabler)
     .connect(getReporter)

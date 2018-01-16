@@ -9,7 +9,7 @@ export default class LinkClicker extends CrudWorker {
           dir: datum.dir,
           name: 'view-' + this._link,
           params: {
-            id: data[index].id
+            id: data[index][this._link + '_id']
           },
           remember: true
         });

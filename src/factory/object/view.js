@@ -3,33 +3,24 @@ import { json } from '@scola/codec';
 import {
   ErrorDisabler,
   ErrorReporter,
-  NavBuilder,
-  NavDisabler,
   PanelDisabler,
-  SummaryBuilder
 } from '@scola/gui';
 
 import { createBrowser } from '@scola/http';
 import { Broadcaster, Worker } from '@scola/worker';
 
 import {
-  LinkClicker,
-  LinkGetter
-} from '../../link/group';
-
-import {
-  ObjectClicker,
   ObjectGetter,
   ObjectHeader
 } from '../../object/view';
 
 import {
-  disableListItem,
   filterDisabler,
   formatDefaultError,
-  formatLinkBuilder,
-  formatSummaryBuilder
 } from '../../helper';
+
+import createLink from './view/link';
+import createSummary from './view/summary';
 
 export default function createViewObject(structure) {
   const broadcaster = new Broadcaster();
@@ -38,44 +29,6 @@ export default function createViewObject(structure) {
 
   const getReporter = new ErrorReporter({
     format: formatDefaultError('short')
-  });
-
-  const linkClicker = new LinkClicker({
-    name: structure.name
-  });
-
-  const linkDisabler = new NavDisabler({
-    filter: filterDisabler(),
-    target: 'nav-link'
-  });
-
-  const linkFinisher = new NavBuilder({
-    format: formatLinkBuilder(),
-    target: 'nav-link',
-    prepare: false,
-    structure: structure.link
-  });
-
-  const linkGetter = new LinkGetter({
-    name: structure.name
-  });
-
-  const linkPreparer = new NavBuilder({
-    finish: false,
-    target: 'nav-link'
-  });
-
-  const objectBuilder = new SummaryBuilder({
-    format: formatSummaryBuilder(),
-    structure: structure.object.summary
-  });
-
-  const objectClicker = new ObjectClicker({
-    name: structure.name
-  });
-
-  const objectDisabler = new PanelDisabler({
-    filter: filterDisabler()
   });
 
   const objectHeader = new ObjectHeader({
@@ -93,33 +46,11 @@ export default function createViewObject(structure) {
   getDisabler
     .disable({ selector: '.body' });
 
-  objectDisabler
-    .hide({
-      permission: `${structure.name}.object.write`,
-      selector: '.actions .edit'
-    });
-
   panelDisabler
     .hide({
       permission: `${structure.name}.object.read`,
       selector: '.body, .bar'
     });
-
-  structure.link[0].fields.forEach(({ name }) => {
-    linkDisabler
-      .disable({
-        permission: [`${name}.object.read`, disableListItem(`li.${name}`)],
-        selector: `li.${name}, li.${name} .primary button`
-      })
-      .hide({
-        permission: `${structure.name}.${name}.write`,
-        selector: `li.${name} .secondary .button`
-      })
-      .hide({
-        permission: `${structure.name}.${name}.read`,
-        selector: `li.${name}`
-      });
-  });
 
   panelDisabler
     .connect(objectHeader)
@@ -129,20 +60,17 @@ export default function createViewObject(structure) {
     .connect(getReporter)
     .connect(broadcaster);
 
-  broadcaster
-    .connect(objectBuilder)
-    .connect(objectDisabler)
-    .connect(objectClicker)
-    .connect(union);
+  if (structure.object.summary) {
+    broadcaster
+      .through(createSummary(structure))
+      .connect(union);
+  }
 
-  broadcaster
-    .connect(linkPreparer)
-    .connect(linkGetter)
-    .through(createBrowser(json))
-    .connect(linkFinisher)
-    .connect(linkDisabler)
-    .connect(linkClicker)
-    .connect(union);
+  if (structure.link) {
+    broadcaster
+      .through(createLink(structure))
+      .connect(union);
+  }
 
   return [panelDisabler, union];
 }

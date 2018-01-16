@@ -67,7 +67,7 @@ export default function createDeleteLink(structure, link) {
     prepare: false,
     target: 'form-delete-link',
     render: renderForm,
-    structure: link
+    structure: link.fields[0]
   });
 
   const linkReporter = new ErrorReporter({
@@ -84,7 +84,7 @@ export default function createDeleteLink(structure, link) {
   });
 
   const validator = new Validator({
-    structure: structure.link
+    structure: [link.fields[0]]
   });
 
   const validatorReporter = new ErrorReporter({

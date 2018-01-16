@@ -62,7 +62,7 @@ export default function createAddLink(structure, link) {
     prepare: false,
     target: 'form-add-link',
     render: renderForm,
-    structure: link
+    structure: link.fields[0]
   });
 
   const linkPoster = new LinkPoster({
@@ -84,7 +84,7 @@ export default function createAddLink(structure, link) {
   });
 
   const validator = new Validator({
-    structure: link
+    structure: [link.fields[0]]
   });
 
   const validatorReporter = new ErrorReporter({

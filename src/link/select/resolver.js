@@ -6,9 +6,7 @@ export default class LinkResolver extends CrudWorker {
     getView('main').handle({
       back: true,
       name: 'view-' + this._name,
-      params: {
-        id: route.params.id
-      }
+      params: route.params
     });
   }
 }
