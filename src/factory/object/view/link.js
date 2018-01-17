@@ -44,7 +44,9 @@ export default function createLink(structure) {
     target: 'nav-link'
   });
 
-  structure.link[0].fields.forEach(({ name }) => {
+  for (let i = 0; i < structure.link[0].fields.length; i += 1) {
+    const { name } = structure.link[0].fields[i];
+
     linkDisabler
       .disable({
         permission: [`${name}.object.read`, disableListItem(`li.${name}`)],
@@ -58,7 +60,7 @@ export default function createLink(structure) {
         permission: `${structure.name}.${name}.read`,
         selector: `li.${name}`
       });
-  });
+  }
 
   linkPreparer
     .connect(linkGetter)
