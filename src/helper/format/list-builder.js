@@ -1,12 +1,16 @@
 import { stringFormat } from '@scola/d3-string-format';
 
-export default function formatListBuilder() {
+export default function formatListBuilder(sname) {
+  const formatAdd = stringFormat('action.form.l1');
+  const formatError = stringFormat('error.long');
+  const formatName = stringFormat(sname);
+
   return (datum, index, nodes, { data, name, route }) => {
     if (name === 'l1') {
       if (datum.name === 'empty') {
-        return stringFormat('error.long')('empty');
+        return formatError('empty', formatName('nav.l1.d').toLowerCase());
       } else if (datum.name === 'add') {
-        return stringFormat('action.nav.label')('add');
+        return formatAdd('add', formatName('nav.l1.0'));
       }
     }
 

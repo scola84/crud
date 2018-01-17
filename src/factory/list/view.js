@@ -28,7 +28,7 @@ export default function createViewList(structure) {
 
   const builder = new ListBuilder({
     add: false,
-    format: formatListBuilder()
+    format: formatListBuilder(structure.name)
   });
 
   const clicker = new ListClicker({

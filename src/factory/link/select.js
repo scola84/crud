@@ -76,7 +76,7 @@ export default function createSelectLink(structure, link) {
   });
 
   const linkListBuilder = new ListBuilder({
-    format: formatListBuilder(),
+    format: formatListBuilder(link.name),
     prepare: false,
     target: 'form-select-link',
     render: renderForm,

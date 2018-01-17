@@ -63,7 +63,7 @@ export default function createDeleteLink(structure, link) {
 
   const linkListBuilder = new ListBuilder({
     add: false,
-    format: formatListBuilder(),
+    format: formatListBuilder(link.name),
     prepare: false,
     target: 'form-delete-link',
     render: renderForm,

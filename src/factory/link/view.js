@@ -34,7 +34,7 @@ export default function createViewLink(structure, link) {
 
   const linkBuilder = new ListBuilder({
     add: false,
-    format: formatListBuilder(),
+    format: formatListBuilder(link.name),
     structure: local.link
   });
 

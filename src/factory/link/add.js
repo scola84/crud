@@ -58,7 +58,7 @@ export default function createAddLink(structure, link) {
   });
 
   const linkListBuilder = new ListBuilder({
-    format: formatListBuilder(),
+    format: formatListBuilder(link.name),
     prepare: false,
     target: 'form-add-link',
     render: renderForm,
