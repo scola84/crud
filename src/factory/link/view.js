@@ -22,8 +22,6 @@ import {
   formatListBuilder
 } from '../../helper';
 
-import local from '../../structure';
-
 export default function createViewLink(structure, link) {
   const getDisabler = new ErrorDisabler();
   const linkPreparer = new ListPreparer();
@@ -35,7 +33,7 @@ export default function createViewLink(structure, link) {
   const linkBuilder = new ListBuilder({
     add: false,
     format: formatListBuilder(link.name),
-    structure: local.link
+    structure: link.actions.view
   });
 
   const linkClicker = new LinkClicker({

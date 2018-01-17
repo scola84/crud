@@ -30,7 +30,7 @@ export default class LinkHeader extends CrudWorker {
     center
       .append('div')
       .classed('title', true)
-      .text(stringFormat(this._link)('nav.label.d'));
+      .text(stringFormat(this._link)('nav.l1.d'));
 
     left
       .append('button')

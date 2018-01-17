@@ -25,24 +25,27 @@ import {
 
 import {
   filterDisabler,
-  formatCheckboxError,
+  formatValidatorError,
   formatDefaultError,
+  formatFormBuilder,
   formatListBuilder
 } from '../../helper';
 
 import createFill from './select/fill';
 
 export default function createSelectLink(structure, link) {
+  const actions = link.actions.add || link.actions.edit;
+
   const getDisabler = new ErrorDisabler();
   const linkPreparer = new ListPreparer();
 
   const linkClicker = new LinkClicker({
-    link: link.name,
+    link: link.object,
     name: structure.name
   });
 
   const linkGetter = new LinkGetter({
-    link: link.name,
+    link: link.object,
     name: structure.name
   });
 
@@ -65,9 +68,16 @@ export default function createSelectLink(structure, link) {
     format: formatDefaultError('short')
   });
 
-  const linkFormBuilder = new FormBuilder({
+  const linkFormPreparer = new FormBuilder({
     finish: false,
     target: 'form-select-link',
+  });
+
+  const linkFormBuilder = new FormBuilder({
+    format: formatFormBuilder('resident'),
+    prepare: false,
+    structure: actions.slice(0, -1),
+    target: 'form-select-link'
   });
 
   const linkFormReader = new FormReader({
@@ -80,7 +90,7 @@ export default function createSelectLink(structure, link) {
     prepare: false,
     target: 'form-select-link',
     render: renderForm,
-    structure: link.fields[0]
+    structure: actions.slice(-1).pop()
   });
 
   const linkReporter = new ErrorReporter({
@@ -92,11 +102,11 @@ export default function createSelectLink(structure, link) {
   });
 
   const validator = new Validator({
-    structure: [link.fields[0]]
+    structure: actions
   });
 
   const validatorReporter = new ErrorReporter({
-    format: formatCheckboxError(link.name)
+    format: formatValidatorError(link.name)
   });
 
   getDisabler
@@ -125,6 +135,7 @@ export default function createSelectLink(structure, link) {
     .through(createBrowser(json))
     .connect(getDisabler)
     .connect(getReporter)
+    .connect(linkFormPreparer)
     .connect(linkFormBuilder)
     .connect(linkListBuilder)
     .connect(linkClicker)

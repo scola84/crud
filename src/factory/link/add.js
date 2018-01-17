@@ -49,7 +49,7 @@ export default function createAddLink(structure, link) {
   });
 
   const linkGetter = new LinkGetter({
-    link: link.name,
+    link: link.object,
     name: structure.name
   });
   const linkHeader = new LinkHeader({
@@ -62,7 +62,7 @@ export default function createAddLink(structure, link) {
     prepare: false,
     target: 'form-add-link',
     render: renderForm,
-    structure: link.fields[0]
+    structure: link.actions.add[0]
   });
 
   const linkPoster = new LinkPoster({
@@ -84,7 +84,7 @@ export default function createAddLink(structure, link) {
   });
 
   const validator = new Validator({
-    structure: [link.fields[0]]
+    structure: link.actions.add
   });
 
   const validatorReporter = new ErrorReporter({

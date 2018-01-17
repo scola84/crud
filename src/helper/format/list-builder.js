@@ -1,9 +1,11 @@
 import { stringFormat } from '@scola/d3-string-format';
+import { timeFormat } from 'd3';
 
 export default function formatListBuilder(sname) {
   const formatAdd = stringFormat('action.form.l1');
   const formatError = stringFormat('error.long');
   const formatName = stringFormat(sname);
+  const formatList = stringFormat(sname + '.list');
 
   return (datum, index, nodes, { data, name, route }) => {
     if (name === 'l1') {
@@ -24,6 +26,15 @@ export default function formatListBuilder(sname) {
       return data[datum.name];
     }
 
-    return data[name];
+    let string = formatList(name, data[name]);
+
+    if (datum.date) {
+      (string.match(/(\d+)/g) || []).forEach((match) => {
+        string = string.replace(match,
+          timeFormat(datum.date)(new Date(Number(match))));
+      });
+    }
+
+    return string;
   };
 }

@@ -2,7 +2,7 @@ import { stringFormat } from '@scola/d3-string-format';
 
 export default function formatLinkBuilder() {
   return (datum, index, nodes, { data, name }) => {
-    const prefix = (datum.label || datum.name) + '.nav';
+    const prefix = datum.name + '.nav';
     const value = data && data[datum.name] || {};
 
     const link = Object.assign({}, value, {

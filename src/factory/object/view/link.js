@@ -45,11 +45,11 @@ export default function createLink(structure) {
   });
 
   for (let i = 0; i < structure.link[0].fields.length; i += 1) {
-    const { name } = structure.link[0].fields[i];
+    const { name, object } = structure.link[0].fields[i];
 
     linkDisabler
       .disable({
-        permission: [`${name}.object.read`, disableListItem(`li.${name}`)],
+        permission: [`${object}.object.read`, disableListItem(`li.${name}`)],
         selector: `li.${name}, li.${name} .primary button`
       })
       .hide({
