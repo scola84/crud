@@ -23,8 +23,8 @@ import {
 
 import {
   filterDisabler,
-  formatCheckboxError,
   formatDefaultError,
+  formatValidatorError,
   formatListBuilder
 } from '../../helper';
 
@@ -39,6 +39,10 @@ export default function createDeleteLink(structure, link) {
   const linkDeleter = new LinkDeleter({
     link: link.name,
     name: structure.name
+  });
+
+  const linkDisabler = new PanelDisabler({
+    filter: filterDisabler()
   });
 
   const linkFormBuilder = new FormBuilder({
@@ -67,7 +71,7 @@ export default function createDeleteLink(structure, link) {
     prepare: false,
     target: 'form-delete-link',
     render: renderForm,
-    structure: link.actions.del[0]
+    structure: link.actions.del
   });
 
   const linkReporter = new ErrorReporter({
@@ -79,29 +83,25 @@ export default function createDeleteLink(structure, link) {
     name: structure.name
   });
 
-  const panelDisabler = new PanelDisabler({
-    filter: filterDisabler()
-  });
-
   const validator = new Validator({
     structure: link.actions.del
   });
 
   const validatorReporter = new ErrorReporter({
-    format: formatCheckboxError(link.name)
+    format: formatValidatorError(link.name)
   });
 
   getDisabler
     .disable({ selector: '.body' });
 
-  panelDisabler
+  linkDisabler
     .hide({
-      permission: structure.name + '.' + link.name + '.write',
+      permission: `${structure.name}.${link.name}.del`,
       selector: '.body, .bar'
     });
 
-  panelDisabler
-    .connect(linkHeader)
+  linkHeader
+    .connect(linkDisabler)
     .connect(linkPreparer)
     .connect(linkGetter)
     .through(createBrowser(json))
@@ -117,5 +117,5 @@ export default function createDeleteLink(structure, link) {
     .connect(linkReporter)
     .connect(linkResolver);
 
-  return [panelDisabler, linkResolver];
+  return [linkHeader, linkResolver];
 }

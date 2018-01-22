@@ -3,6 +3,9 @@
   display: initial;
 }
 
+.main .panel.link.edit .primary span:last-child,
+.main .panel.link.edit .secondary span:first-child,
+.main .panel.link.edit form ul + ul,
 .main .panel.object.edit form ul + ul,
 .main .panel.object.edit.deleted .header .button,
 .main .panel.object.edit.deleted form#form-delete,

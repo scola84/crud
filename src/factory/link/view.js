@@ -38,7 +38,11 @@ export default function createViewLink(structure, link) {
 
   const linkClicker = new LinkClicker({
     name: structure.name,
-    link: link.name
+    link: link.object
+  });
+
+  const linkDisabler = new PanelDisabler({
+    filter: filterDisabler()
   });
 
   const linkGetter = new LinkGetter({
@@ -51,28 +55,40 @@ export default function createViewLink(structure, link) {
     link: link.name
   });
 
-  const panelDisabler = new PanelDisabler({
-    filter: filterDisabler()
-  });
-
   getDisabler
     .disable({ selector: '.body' });
 
-  panelDisabler
+  linkDisabler
+    .disable({
+      permission: `${link.object}.object.view`,
+      selector: `li.${link.name}, li.${link.name} .primary button`
+    })
     .hide({
-      permission: structure.name + '.' + link.name + '.read',
+      permission: `${structure.name}.${link.name}.add`,
+      selector: '.header .add'
+    })
+    .hide({
+      permission: `${structure.name}.${link.name}.del`,
+      selector: '.header .delete'
+    })
+    .hide({
+      permission: `${structure.name}.${link.name}.view`,
       selector: '.body, .bar'
+    })
+    .hide({
+      permission: `${structure.name}.${link.name}.edit`,
+      selector: `li.${link.name} .secondary .button`
     });
 
-  panelDisabler
-    .connect(linkHeader)
+  linkHeader
     .connect(linkPreparer)
     .connect(linkGetter)
     .through(createBrowser(json))
     .connect(getDisabler)
     .connect(getReporter)
     .connect(linkBuilder)
+    .connect(linkDisabler)
     .connect(linkClicker);
 
-  return [panelDisabler, linkClicker];
+  return [linkHeader, linkClicker];
 }

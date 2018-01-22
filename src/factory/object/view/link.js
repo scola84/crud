@@ -1,8 +1,8 @@
 import { json } from '@scola/codec';
 
 import {
-  NavBuilder,
-  NavDisabler,
+  ListBuilder,
+  ListDisabler,
 } from '@scola/gui';
 
 import { createBrowser } from '@scola/http';
@@ -23,12 +23,13 @@ export default function createLink(structure) {
     name: structure.name
   });
 
-  const linkDisabler = new NavDisabler({
+  const linkDisabler = new ListDisabler({
     filter: filterDisabler(),
     target: 'nav-link'
   });
 
-  const linkFinisher = new NavBuilder({
+  const linkFinisher = new ListBuilder({
+    dynamic: false,
     format: formatLinkBuilder(),
     target: 'nav-link',
     prepare: false,
@@ -39,7 +40,7 @@ export default function createLink(structure) {
     name: structure.name
   });
 
-  const linkPreparer = new NavBuilder({
+  const linkPreparer = new ListBuilder({
     finish: false,
     target: 'nav-link'
   });
@@ -49,15 +50,11 @@ export default function createLink(structure) {
 
     linkDisabler
       .disable({
-        permission: [`${object}.object.read`, disableListItem(`li.${name}`)],
+        permission: [`${object}.object.view`, disableListItem(`li.${name}`)],
         selector: `li.${name}, li.${name} .primary button`
       })
       .hide({
-        permission: `${structure.name}.${name}.write`,
-        selector: `li.${name} .secondary .button`
-      })
-      .hide({
-        permission: `${structure.name}.${name}.read`,
+        permission: `${structure.name}.${name}.view`,
         selector: `li.${name}`
       });
   }

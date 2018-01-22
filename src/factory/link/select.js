@@ -44,6 +44,10 @@ export default function createSelectLink(structure, link) {
     name: structure.name
   });
 
+  const linkDisabler = new PanelDisabler({
+    filter: filterDisabler()
+  });
+
   const linkGetter = new LinkGetter({
     link: link.object,
     name: structure.name
@@ -74,7 +78,7 @@ export default function createSelectLink(structure, link) {
   });
 
   const linkFormBuilder = new FormBuilder({
-    format: formatFormBuilder('resident'),
+    format: formatFormBuilder(link.name),
     prepare: false,
     structure: actions.slice(0, -1),
     target: 'form-select-link'
@@ -86,19 +90,15 @@ export default function createSelectLink(structure, link) {
   });
 
   const linkListBuilder = new ListBuilder({
-    format: formatListBuilder(link.name),
+    format: formatListBuilder(link.object),
     prepare: false,
     target: 'form-select-link',
     render: renderForm,
-    structure: actions.slice(-1).pop()
+    structure: actions.slice(-1)
   });
 
   const linkReporter = new ErrorReporter({
     format: formatDefaultError('long')
-  });
-
-  const panelDisabler = new PanelDisabler({
-    filter: filterDisabler()
   });
 
   const validator = new Validator({
@@ -112,14 +112,11 @@ export default function createSelectLink(structure, link) {
   getDisabler
     .disable({ selector: '.body, .bar .right' });
 
-  panelDisabler
+  linkDisabler
     .hide({
-      permission: structure.name + '.' + link.name + '.read',
+      permission: `${structure.name}.${link.name}.edit`,
       selector: '.body, .bar'
     });
-
-  panelDisabler
-    .connect(linkHeader);
 
   if (link.fill) {
     linkHeader
@@ -138,6 +135,7 @@ export default function createSelectLink(structure, link) {
     .connect(linkFormPreparer)
     .connect(linkFormBuilder)
     .connect(linkListBuilder)
+    .connect(linkDisabler)
     .connect(linkClicker)
     .connect(linkFormReader)
     .connect(validator)
@@ -147,5 +145,5 @@ export default function createSelectLink(structure, link) {
     .connect(linkReporter)
     .connect(linkResolver);
 
-  return [panelDisabler, linkResolver];
+  return [linkHeader, linkResolver];
 }

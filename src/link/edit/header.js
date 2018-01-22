@@ -6,7 +6,7 @@ import CrudWorker from '../../worker/crud';
 export default class LinkHeader extends CrudWorker {
   act(route, data = {}) {
     const panel = select(route.node)
-      .classed('header link view', true)
+      .classed('header link edit', true)
       .classed(this._name, true);
 
     const header = panel
@@ -24,43 +24,30 @@ export default class LinkHeader extends CrudWorker {
     center
       .append('div')
       .classed('title', true)
-      .text(stringFormat(this._link)('nav.l1.d'));
+      .text(stringFormat(this._link)('nav.l1.0'));
 
     left
       .append('button')
       .attr('tabindex', 0)
-      .classed('button icon ion-ios-arrow-back', true)
-      .text(stringFormat('action.nav.label')('back'))
+      .classed('button', true)
+      .text(stringFormat('action.nav.label')('cancel'))
       .on('click', () => {
         getView('main').handle({
           back: true,
-          dir: 'ltr',
-          name: 'view-' + this._name,
-          params: route.params
+          name: 'view-' + this._name + '-' + this._link,
+          params: {
+            id: route.params.id
+          }
         });
       });
 
     right
       .append('button')
+      .attr('form', 'form-edit-link')
       .attr('tabindex', 0)
-      .classed('button icon delete ion-ios-trash-outline', true)
-      .on('click', () => {
-        getView('main').handle({
-          name: 'delete-' + this._name + '-' + this._link,
-          params: route.params
-        });
-      });
-
-    right
-      .append('button')
-      .attr('tabindex', 0)
-      .classed('button icon add ion-ios-plus-empty', true)
-      .on('click', () => {
-        getView('main').handle({
-          name: 'add-' + this._name + '-' + this._link,
-          params: route.params
-        });
-      });
+      .attr('type', 'submit')
+      .classed('button', true)
+      .text(stringFormat('action.nav.label')('save'));
 
     this.pass(route, data);
   }

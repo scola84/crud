@@ -14,7 +14,7 @@ import {
 
 export default function createSummary(structure) {
   const objectBuilder = new SummaryBuilder({
-    format: formatSummaryBuilder(),
+    format: formatSummaryBuilder(structure.name),
     structure: structure.object.summary
   });
 
@@ -28,7 +28,7 @@ export default function createSummary(structure) {
 
   objectDisabler
     .hide({
-      permission: `${structure.name}.object.write`,
+      permission: `${structure.name}.object.edit`,
       selector: '.actions .edit'
     });
 

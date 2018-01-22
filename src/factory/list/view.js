@@ -23,52 +23,60 @@ import {
 } from '../../helper';
 
 export default function createViewList(structure) {
-  const disabler = new ErrorDisabler();
-  const preparer = new ListPreparer();
+  const getDisabler = new ErrorDisabler();
+  const listPreparer = new ListPreparer();
 
-  const builder = new ListBuilder({
+  const listBuilder = new ListBuilder({
     add: false,
     format: formatListBuilder(structure.name)
   });
 
-  const clicker = new ListClicker({
+  const listClicker = new ListClicker({
     name: structure.name
   });
 
-  const getter = new ListGetter({
-    name: structure.name
-  });
-
-  const header = new ListHeader({
-    name: structure.name
-  });
-
-  const panelDisabler = new PanelDisabler({
+  const listDisabler = new PanelDisabler({
     filter: filterDisabler()
   });
 
-  const reporter = new ErrorReporter({
+  const listGetter = new ListGetter({
+    name: structure.name
+  });
+
+  const listHeader = new ListHeader({
+    name: structure.name
+  });
+
+  const getReporter = new ErrorReporter({
     format: formatDefaultError('short')
   });
 
-  disabler
+  getDisabler
     .disable({ selector: '.body' });
 
-  panelDisabler
+  listDisabler
+    .disable({
+      permission: `${structure.name}.object.view`,
+      selector: 'li, li .primary button'
+    })
     .hide({
-      permission: structure.name + '.object.write',
+      permission: `${structure.name}.list.view`,
+      selector: '.bar, .body'
+    })
+    .hide({
+      permission: `${structure.name}.list.add`,
       selector: '.bar.header .right .add'
     });
 
-  panelDisabler
-    .connect(header)
-    .connect(preparer)
-    .connect(getter)
+  listHeader
+    .connect(listPreparer)
+    .connect(listGetter)
     .through(createBrowser(json))
-    .connect(disabler)
-    .connect(reporter)
-    .connect(builder)
-    .connect(clicker);
+    .connect(getDisabler)
+    .connect(getReporter)
+    .connect(listBuilder)
+    .connect(listDisabler)
+    .connect(listClicker);
 
-  return [panelDisabler, clicker];
+  return [listHeader, listClicker];
 }

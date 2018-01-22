@@ -6,70 +6,52 @@ import {
   FormBuilder,
   FormReader,
   ListBuilder,
-  ListPreparer,
   PanelDisabler,
-  renderForm
+  renderList
 } from '@scola/gui';
 
 import { createBrowser } from '@scola/http';
 import { Validator } from '@scola/validator';
-import { Broadcaster } from '@scola/worker';
 
 import {
+  LinkClicker,
   LinkGetter,
   LinkHeader,
-  LinkPoster,
+  LinkPutter,
   LinkResolver
-} from '../../link/add';
+} from '../../link/edit';
 
 import {
   filterDisabler,
-  formatDefaultError,
   formatValidatorError,
+  formatDefaultError,
+  formatFormBuilder,
   formatListBuilder
 } from '../../helper';
 
-export default function createAddLink(structure, link) {
-  const broadcaster = new Broadcaster();
+export default function createEditLink(structure, link) {
   const getDisabler = new ErrorDisabler();
-  const linkPreparer = new ListPreparer();
 
-  const getReporter = new ErrorReporter({
-    format: formatDefaultError('short')
+  const linkClicker = new LinkClicker({
+    link: link.object,
+    name: structure.name
   });
 
   const linkDisabler = new PanelDisabler({
     filter: filterDisabler()
   });
 
-  const linkFormBuilder = new FormBuilder({
-    finish: false,
-    target: 'form-add-link',
-  });
-
-  const linkFormReader = new FormReader({
-    serialize: { empty: false, hash: true },
-    target: 'form-add-link'
-  });
-
   const linkGetter = new LinkGetter({
-    link: link.object,
+    link: link.name,
     name: structure.name
   });
+
   const linkHeader = new LinkHeader({
     link: link.name,
     name: structure.name
   });
 
-  const linkListBuilder = new ListBuilder({
-    format: formatListBuilder(link.object),
-    prepare: false,
-    target: 'form-add-link',
-    render: renderForm,
-    structure: link.actions.add
-  });
-
-  const linkPoster = new LinkPoster({
+  const linkPutter = new LinkPutter({
     link: link.name,
     name: structure.name
   });
@@ -79,43 +61,73 @@ export default function createAddLink(structure, link) {
     name: structure.name
   });
 
+  const getReporter = new ErrorReporter({
+    format: formatDefaultError('short')
+  });
+
+  const linkFormPreparer = new FormBuilder({
+    finish: false,
+    target: 'form-edit-link',
+  });
+
+  const linkFormBuilder = new FormBuilder({
+    filter: (route, data) => data[0],
+    format: formatFormBuilder(link.name),
+    prepare: false,
+    structure: link.actions.edit,
+    target: 'form-edit-link'
+  });
+
+  const linkFormReader = new FormReader({
+    serialize: { empty: false, hash: true },
+    target: 'form-edit-link'
+  });
+
+  const linkListBuilder = new ListBuilder({
+    format: formatListBuilder(link.name),
+    render: renderList,
+    structure: [{ fields: [{ dir: 'rtl' }] }]
+  });
+
   const linkReporter = new ErrorReporter({
     format: formatDefaultError('long')
   });
 
   const validator = new Validator({
-    structure: link.actions.add
+    structure: link.actions.edit
   });
 
   const validatorReporter = new ErrorReporter({
-    format: formatValidatorError(structure.name)
+    format: formatValidatorError(link.name)
   });
 
   getDisabler
     .disable({ selector: '.body, .bar .right' });
 
   linkDisabler
+    .disable({
+      permission: `${link.object}.object.view`,
+      selector: '.list li, .list li button'
+    })
     .hide({
       permission: `${structure.name}.${link.name}.add`,
       selector: '.body, .bar'
     });
 
   linkHeader
-    .connect(linkDisabler)
-    .connect(linkPreparer)
     .connect(linkGetter)
     .through(createBrowser(json))
     .connect(getDisabler)
     .connect(getReporter)
-    .connect(broadcaster);
-
-  broadcaster
+    .connect(linkFormPreparer)
     .connect(linkFormBuilder)
     .connect(linkListBuilder)
+    .connect(linkDisabler)
+    .connect(linkClicker)
     .connect(linkFormReader)
     .connect(validator)
     .connect(validatorReporter)
-    .connect(linkPoster)
+    .connect(linkPutter)
     .through(createBrowser(json))
     .connect(linkReporter)
     .connect(linkResolver);

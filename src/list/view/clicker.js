@@ -5,6 +5,9 @@ import CrudWorker from '../../worker/crud';
 export default class ListClicker extends CrudWorker {
   act(route, data) {
     route.list.enter
+      .filter((datum, index, nodes) => {
+        return select(nodes[index]).classed('disabled') === false;
+      })
       .on('click', (datum, index) => {
         select('body').dispatch('click');
 

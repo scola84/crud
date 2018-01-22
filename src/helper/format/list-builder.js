@@ -26,13 +26,16 @@ export default function formatListBuilder(sname) {
       return data[datum.name];
     }
 
-    let string = formatList(name, data[name]);
+    let string = typeof data[name] === 'undefined' || data[name] === null ?
+      '' : formatList(name, data[name]);
 
     if (datum.date) {
-      (string.match(/(\d+)/g) || []).forEach((match) => {
-        string = string.replace(match,
-          timeFormat(datum.date)(new Date(Number(match))));
-      });
+      const dates = string.match(/(\d+)/g) || [];
+
+      for (let i = 0; i < dates.length; i += 1) {
+        string = string.replace(dates[i],
+          timeFormat(datum.date)(new Date(Number(dates[i]))));
+      }
     }
 
     return string;

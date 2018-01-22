@@ -5,8 +5,8 @@ export default class LinkGetter extends CrudWorker {
     this.pass({
       box: route,
       url: {
-        path: '/api/' + this._name + '/' +
-          route.params.id + '/' + this._link,
+        path: '/api/' + this._name + '/' + route.params.id + '/' +
+          this._link + '/' + route.params.lid,
         query: data
       }
     });

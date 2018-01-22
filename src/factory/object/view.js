@@ -31,6 +31,10 @@ export default function createViewObject(structure) {
     format: formatDefaultError('short')
   });
 
+  const objectDisabler = new PanelDisabler({
+    filter: filterDisabler()
+  });
+
   const objectHeader = new ObjectHeader({
     name: structure.name
   });
@@ -39,21 +43,17 @@ export default function createViewObject(structure) {
     name: structure.name
   });
 
-  const panelDisabler = new PanelDisabler({
-    filter: filterDisabler()
-  });
-
   getDisabler
     .disable({ selector: '.body' });
 
-  panelDisabler
+  objectDisabler
     .hide({
-      permission: `${structure.name}.object.read`,
+      permission: `${structure.name}.object.view`,
       selector: '.body, .bar'
     });
 
-  panelDisabler
-    .connect(objectHeader)
+  objectHeader
+    .connect(objectDisabler)
     .connect(objectGetter)
     .through(createBrowser(json))
     .connect(getDisabler)
@@ -72,5 +72,5 @@ export default function createViewObject(structure) {
       .connect(union);
   }
 
-  return [panelDisabler, union];
+  return [objectHeader, union];
 }

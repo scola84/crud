@@ -29,10 +29,10 @@ export default function createAddObject(structure) {
   const objectBuilder = new FormBuilder({
     format: formatFormBuilder(structure.name),
     target: 'form-add',
-    structure: [structure.object.form]
+    structure: [structure.object.add]
   });
 
-  const panelDisabler = new PanelDisabler({
+  const objectDisabler = new PanelDisabler({
     filter: filterDisabler()
   });
 
@@ -60,14 +60,14 @@ export default function createAddObject(structure) {
     format: formatValidatorError(structure.name)
   });
 
-  panelDisabler
+  objectDisabler
     .hide({
-      permission: structure.name + '.object.write',
+      permission: `${structure.name}.list.add`,
       selector: '.body, .bar'
     });
 
-  panelDisabler
-    .connect(objectHeader)
+  objectHeader
+    .connect(objectDisabler)
     .connect(objectBuilder)
     .connect(objectReader)
     .connect(validator)
@@ -77,5 +77,5 @@ export default function createAddObject(structure) {
     .connect(objectReporter)
     .connect(objectResolver);
 
-  return [panelDisabler, objectResolver];
+  return [objectHeader, objectResolver];
 }

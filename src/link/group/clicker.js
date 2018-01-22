@@ -4,9 +4,7 @@ import CrudWorker from '../../worker/crud';
 
 export default class LinkClicker extends CrudWorker {
   act(route, data) {
-    const enter = route.nav.enter;
-
-    enter
+    route.list.enter
       .selectAll('.button[tabindex="0"]')
       .on('click', (datum) => {
         event.stopPropagation();
@@ -18,16 +16,16 @@ export default class LinkClicker extends CrudWorker {
         });
       });
 
-    enter
+    route.list.enter
       .filter((datum, index, nodes) => {
         return select(nodes[index]).classed('disabled') === false;
       })
       .on('click', (datum) => {
         getView('main').handle({
-          dir: 'rtl',
-          name: 'view-' + datum.name,
+          dir: datum.dir,
+          name: 'view-' + datum.object,
           params: {
-            id: data[datum.name][datum.name + '_id']
+            id: data[datum.name][datum.object + '_id']
           },
           remember: true
         });

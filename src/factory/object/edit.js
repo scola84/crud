@@ -56,6 +56,10 @@ export default function createEditObject(structure) {
     name: structure.name
   });
 
+  const objectDisabler = new PanelDisabler({
+    filter: filterDisabler()
+  });
+
   const objectGetter = new ObjectGetter({
     name: structure.name
   });
@@ -80,14 +84,10 @@ export default function createEditObject(structure) {
     name: structure.name
   });
 
-  const panelDisabler = new PanelDisabler({
-    filter: filterDisabler()
-  });
-
   const putBuilder = new FormBuilder({
     format: formatFormBuilder(structure.name),
     target: 'form-edit',
-    structure: [structure.object.form, structure.object.id]
+    structure: [structure.object.edit, structure.object.id]
   });
 
   const putDisabler = new FormDisabler({
@@ -102,7 +102,7 @@ export default function createEditObject(structure) {
   });
 
   const validator = new Validator({
-    structure: [structure.object.form, structure.object.id]
+    structure: [structure.object.edit, structure.object.id]
   });
 
   const validatorReporter = new ErrorReporter({
@@ -111,27 +111,27 @@ export default function createEditObject(structure) {
 
   deleteDisabler
     .disable({
-      permission: structure.name + '.object.write',
+      permission: `${structure.name}.object.del`,
       selector: 'input'
     });
 
   getDisabler
     .disable({ selector: '.body' });
 
-  panelDisabler
+  objectDisabler
     .hide({
-      permission: structure.name + '.object.write',
+      permission: `${structure.name}.object.view`,
       selector: '.body, .bar'
     });
 
   putDisabler
     .disable({
-      permission: structure.name + '.object.write',
+      permission: `${structure.name}.object.edit`,
       selector: 'input'
     });
 
-  panelDisabler
-    .connect(objectHeader)
+  objectHeader
+    .connect(objectDisabler)
     .connect(objectGetter)
     .through(createBrowser(json))
     .connect(getDisabler)
@@ -166,5 +166,5 @@ export default function createEditObject(structure) {
   objectReporter
     .connect(objectResolver);
 
-  return [panelDisabler, objectResolver];
+  return [objectHeader, objectResolver];
 }

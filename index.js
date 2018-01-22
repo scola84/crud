@@ -1,6 +1,7 @@
 import {
   createAddLink,
   createDeleteLink,
+  createEditLink,
   createSelectLink,
   createViewLink
 } from './src/factory/link';
@@ -18,7 +19,6 @@ import {
 import {
   disableListItem,
   filterDisabler,
-  formatCheckboxError,
   formatDefaultError,
   formatFormBuilder,
   formatLinkBuilder,
@@ -30,6 +30,7 @@ import {
 export {
   createAddLink,
   createDeleteLink,
+  createEditLink,
   createSelectLink,
   createViewLink
 };
@@ -47,7 +48,6 @@ export {
 export {
   disableListItem,
   filterDisabler,
-  formatCheckboxError,
   formatDefaultError,
   formatFormBuilder,
   formatLinkBuilder,
