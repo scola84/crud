@@ -1,57 +1,57 @@
 import {
-  createAddLink,
-  createDeleteLink,
-  createEditLink,
-  createSelectLink,
-  createViewLink
-} from './src/factory/link';
+  createAdd,
+  createEdit,
+  createList,
+  createSelect,
+  createView
+} from './src/factory';
 
 import {
-  createViewList
-} from './src/factory/list';
-
-import {
-  createAddObject,
-  createEditObject,
-  createViewObject
-} from './src/factory/object';
-
-import {
-  disableListItem,
+  disableLink,
   filterDisabler,
+  filterLink,
+  filterPermission,
   formatDefaultError,
-  formatFormBuilder,
-  formatLinkBuilder,
-  formatListBuilder,
-  formatSummaryBuilder,
+  formatForm,
+  formatLink,
+  formatList,
+  formatString,
+  formatSummary,
   formatValidatorError
 } from './src/helper';
 
+import {
+  routeAdd,
+  routeEdit,
+  routeList,
+  routeView
+} from './src/helper/route';
+
 export {
-  createAddLink,
-  createDeleteLink,
-  createEditLink,
-  createSelectLink,
-  createViewLink
+  createAdd,
+  createEdit,
+  createList,
+  createSelect,
+  createView
 };
 
 export {
-  createViewList
-};
-
-export {
-  createAddObject,
-  createEditObject,
-  createViewObject
-};
-
-export {
-  disableListItem,
+  disableLink,
   filterDisabler,
+  filterLink,
+  filterPermission,
   formatDefaultError,
-  formatFormBuilder,
-  formatLinkBuilder,
-  formatListBuilder,
-  formatSummaryBuilder,
+  formatForm,
+  formatLink,
+  formatList,
+  formatString,
+  formatSummary,
   formatValidatorError
+};
+
+export {
+  routeAdd,
+  routeEdit,
+  routeList,
+  routeView
 };

@@ -1,19 +1,25 @@
-import disableListItem from './disable/list-item';
+import disableLink from './disable/link';
 import filterDisabler from './filter/disabler';
+import filterLink from './filter/link';
+import filterPermission from './filter/permission';
 import formatDefaultError from './format/error/default';
-import formatFormBuilder from './format/form-builder';
-import formatLinkBuilder from './format/link-builder';
-import formatListBuilder from './format/list-builder';
-import formatSummaryBuilder from './format/summary-builder';
+import formatForm from './format/form';
+import formatLink from './format/link';
+import formatList from './format/list';
+import formatString from './format/string';
+import formatSummary from './format/summary';
 import formatValidatorError from './format/error/validator';
 
 export {
-  disableListItem,
+  disableLink,
   filterDisabler,
+  filterLink,
+  filterPermission,
   formatDefaultError,
-  formatFormBuilder,
-  formatLinkBuilder,
-  formatListBuilder,
-  formatSummaryBuilder,
+  formatForm,
+  formatLink,
+  formatList,
+  formatString,
+  formatSummary,
   formatValidatorError
 };

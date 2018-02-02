@@ -5,8 +5,8 @@
 
 .main .panel.link.edit .primary span:last-child,
 .main .panel.link.edit .secondary span:first-child,
-.main .panel.link.edit form ul + ul,
-.main .panel.object.edit form ul + ul,
+.main .panel.link.edit form ul:last-child,
+.main .panel.object.edit form ul:last-child,
 .main .panel.object.edit.deleted .header .button,
 .main .panel.object.edit.deleted form#form-delete,
 .main .panel.object.edit:not(.deleted) form#form-undelete {
