@@ -34,119 +34,138 @@ import {
   formatList
 } from '../helper';
 
-export default function createSelect(structure, route, helper) {
-  const checkerMerger = new CheckerMerger();
-  const getDisabler = new ErrorDisabler();
-  const selectPreparer = new ListPreparer();
-  const union = new Worker();
-
-  const checkerGetter = new Requester({
-    route: route.checker
+export default function createSelect(structure, route) {
+  const checker = new Requester({
+    id: 'crud-select-checker',
+    route: route.check
   });
 
-  const selectClicker = new SelectClicker({
-    route: route.clicker
+  const checkMerger = new CheckerMerger({
+    id: 'crud-select-check-merger'
   });
 
-  const selectDisabler = new PanelDisabler({
-    filter: filterDisabler()
+  const selector = new Requester({
+    id: 'crud-selector',
+    route: route.select
   });
 
-  const selectGetter = new Requester({
-    route: route.getter
+  const selectorDisabler = new ErrorDisabler({
+    id: 'crud-select-selector-disabler'
   });
 
-  const selectHeader = new SelectHeader({
-    format: helper.format(),
-    route: route.header
-  });
-
-  const selectResolver = new Resolver({
-    route: route.resolver
-  });
-
-  const selectSender = new Requester({
-    route: route.sender
-  });
-
-  const getReporter = new ErrorReporter({
-    format: formatDefaultError('short')
-  });
-
-  const selectFormPreparer = new FormBuilder({
-    finish: false,
-    target: 'form-select',
+  const selectorReporter = new ErrorReporter({
+    format: formatDefaultError('short'),
+    id: 'crud-select-selector-reporter'
   });
 
   const selectFormBuilder = new FormBuilder({
-    format: formatForm(helper.format()),
-    prepare: false,
+    format: formatForm(route.format()),
+    id: 'crud-select-form-builder',
     structure: structure.form.slice(0, -1),
     target: 'form-select'
   });
 
   const selectFormReader = new FormReader({
+    id: 'crud-select-form-reader',
     serialize: { empty: false, hash: true },
     target: 'form-select'
   });
 
-  const selectBuilder = new ListBuilder({
-    format: formatList(helper.format()),
+  const selectHeader = new SelectHeader({
+    format: route.format(),
+    id: 'crud-select-header',
+    route: route.header
+  });
+
+  const selectListBuilder = new ListBuilder({
+    add: route.click ? true : false,
+    format: formatList(route.format()),
+    id: 'crud-select-list-builder',
     prepare: false,
     target: 'form-select',
     render: renderForm,
     structure: structure.form.slice(-1)
   });
 
-  const selectReporter = new ErrorReporter({
-    format: formatDefaultError('long')
+  const selectListClicker = new SelectClicker({
+    id: 'crud-select-clicker',
+    route: route.click
   });
 
-  const validator = new Validator({
+  const selectListDisabler = new PanelDisabler({
+    filter: filterDisabler(),
+    id: 'crud-select-disabler'
+  });
+
+  const selectListPreparer = new ListPreparer({
+    id: 'crud-select-list-preparer'
+  });
+
+  const selectValidator = new Validator({
+    id: 'crud-select-validator',
     structure: structure.form
   });
 
-  const validatorReporter = new ErrorReporter({
-    format: formatValidatorError(helper.format())
+  const selectValidatorReporter = new ErrorReporter({
+    format: formatValidatorError(route.format()),
+    id: 'crud-select-validator-reporter'
   });
 
-  getDisabler
+  const sender = new Requester({
+    id: 'crud-select-sender',
+    route: route.send
+  });
+
+  const sendReporter = new ErrorReporter({
+    format: formatDefaultError('long'),
+    id: 'crud-select-send-reporter'
+  });
+
+  const sendResolver = new Resolver({
+    id: 'crud-select-send-resolver',
+    route: route.resolve
+  });
+
+  const union = new Worker({
+    id: 'crud-select-union'
+  });
+
+  selectorDisabler
     .disable({ selector: '.body, .bar .right' });
 
-  selectDisabler
+  selectListDisabler
     .hide({
-      permission: helper.permission(),
+      permission: route.permission(),
       selector: '.body, .bar'
     });
 
-  if (route.checker) {
+  if (route.check) {
     selectHeader
-      .connect(checkerGetter)
+      .connect(checker)
       .through(createBrowser(json))
-      .connect(checkerMerger)
-      .connect(selectPreparer);
+      .connect(checkMerger)
+      .connect(selectListPreparer);
   } else {
     selectHeader
-      .connect(selectPreparer);
+      .connect(selectListPreparer);
   }
 
-  selectPreparer
-    .connect(selectGetter)
+  selectListPreparer
+    .connect(selector)
     .through(createBrowser(json))
-    .connect(getDisabler)
-    .connect(getReporter)
-    .connect(selectFormPreparer)
+    .connect(selectorDisabler)
+    .connect(selectorReporter)
     .connect(selectFormBuilder)
-    .connect(selectBuilder)
-    .connect(selectDisabler)
-    .connect(selectClicker)
+    .connect(selectListBuilder)
+    .connect(selectListDisabler)
+    .connect(selectListClicker)
     .connect(selectFormReader)
-    .connect(validator)
-    .connect(validatorReporter)
-    .connect(selectSender)
+    .connect(selectValidator)
+    .connect(selectValidatorReporter)
+    .connect(sender)
     .through(createBrowser(json))
-    .connect(selectReporter)
-    .connect(selectResolver)
+    .connect(sendReporter)
+    .connect(sendResolver)
     .connect(union);
 
   return [selectHeader, union];

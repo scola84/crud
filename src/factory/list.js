@@ -15,9 +15,7 @@ import {
   ListHeader
 } from '../list';
 
-import {
-  Requester
-} from '../worker';
+import { Requester } from '../worker';
 
 import {
   filterDisabler,
@@ -25,63 +23,74 @@ import {
   formatList
 } from '../helper';
 
-export default function createList(structure, route, helper) {
-  const getDisabler = new ErrorDisabler();
-  const listPreparer = new ListPreparer();
-
+export default function createList(structure, route) {
   const listBuilder = new ListBuilder({
     add: false,
-    format: formatList(helper.format())
+    format: formatList(route.format()),
+    id: 'crud-list-builder'
   });
 
   const listClicker = new ListClicker({
-    route: route.clicker
+    id: 'crud-list-clicker',
+    route: route.click
   });
 
   const listDisabler = new PanelDisabler({
-    filter: filterDisabler()
-  });
-
-  const listGetter = new Requester({
-    route: route.getter
+    filter: filterDisabler(),
+    id: 'crud-list-disabler'
   });
 
   const listHeader = new ListHeader({
-    format: helper.format(),
+    format: route.format(),
+    id: 'crud-list-header',
     route: route.header
   });
 
-  const getReporter = new ErrorReporter({
-    format: formatDefaultError('short')
+  const listPreparer = new ListPreparer({
+    id: 'crud-list-preparer'
   });
 
-  getDisabler
+  const lister = new Requester({
+    id: 'crud-lister',
+    route: route.list
+  });
+
+  const listerDisabler = new ErrorDisabler({
+    id: 'crud-list-lister-disabler'
+  });
+
+  const listerReporter = new ErrorReporter({
+    format: formatDefaultError('short'),
+    id: 'crud-lister-reporter'
+  });
+
+  listerDisabler
     .disable({ selector: '.body' });
 
   listDisabler
     .disable({
-      permission: helper.permission('view'),
+      permission: route.permission('view'),
       selector: 'li, li .primary button'
     })
     .hide({
-      permission: helper.permission('add'),
+      permission: route.permission('add'),
       selector: '.bar.header .right .add'
     })
     .hide({
-      permission: helper.permission('delete'),
+      permission: route.permission('delete'),
       selector: '.bar.header .right .delete'
     })
     .hide({
-      permission: helper.permission('list'),
+      permission: route.permission('list'),
       selector: '.bar, .body'
     });
 
   listHeader
     .connect(listPreparer)
-    .connect(listGetter)
+    .connect(lister)
     .through(createBrowser(json))
-    .connect(getDisabler)
-    .connect(getReporter)
+    .connect(listerDisabler)
+    .connect(listerReporter)
     .connect(listBuilder)
     .connect(listDisabler)
     .connect(listClicker);

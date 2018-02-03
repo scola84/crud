@@ -1,55 +1,71 @@
-import defaults from 'lodash-es/defaults';
+import defaultsDeep from 'lodash-es/defaultsDeep';
+import filterPermission from '../filter/permission';
+import formatString from '../format/string';
 
-export default function routeList(routes = {}) {
-  routes = defaults({}, routes, {
-    id: `${routes.name}_id`,
-    clicker: `view-${routes.name}`,
-    getter: `/api/${routes.name}`,
-    header_add: `add-${routes.name}`,
-    header_delete: `delete-${routes.name}`
+export default function routeList(options = {}) {
+  options = defaultsDeep({}, options, {
+    id: `${options.name}_id`,
+    format: options.name,
+    permission: `${options.name}.self`
+  }, {
+    click: `view-${options.name}`,
+    header: {
+      add: `add-${options.name}`,
+      back: 'main',
+      del: `delete-${options.name}`
+    },
+    list: `/api/${options.name}`
   });
 
-  return {
-    clicker(datum, index, nodes, { getView, data }) {
+  function click(datum, index, nodes, { getView, data }) {
+    getView('main').handle({
+      back: false,
+      name: options.click,
+      params: {
+        [options.id]: data.data[index][options.id]
+      }
+    });
+  }
+
+  function header(datum, index, nodes, { getView, name, route }) {
+    if (name === 'add') {
       getView('main').handle({
         back: false,
-        name: routes.clicker,
-        params: {
-          [routes.id]: data.data[index][routes.id]
-        }
+        name: options.header.add
       });
-    },
-    getter(d, i, n, { data }) {
-      return {
-        method: 'GET',
-        url: {
-          path: routes.getter,
-          query: data
-        }
-      };
-    },
-    header(d, i, n, { getView, name, route }) {
-      if (name === 'add') {
-        getView('main').handle({
-          back: false,
-          name: routes.header_add
-        });
-      }
-
-      if (name === 'back') {
-        getView('menu').handle({
-          back: true,
-          dir: 'ltr',
-          name: 'main'
-        });
-      }
-
-      if (name === 'delete') {
-        getView('main').handle({
-          name: routes.header_delete,
-          params: route.params
-        });
-      }
     }
+
+    if (name === 'back') {
+      getView('menu').handle({
+        back: true,
+        dir: 'ltr',
+        name: options.header.back
+      });
+    }
+
+    if (name === 'delete') {
+      getView('main').handle({
+        name: options.header.del,
+        params: route.params
+      });
+    }
+  }
+
+  function list(route, data) {
+    return {
+      method: 'GET',
+      url: {
+        path: options.list,
+        query: data
+      }
+    };
+  }
+
+  return {
+    format: formatString(options.format),
+    permission: filterPermission(options.permission),
+    click: options.click ? click : null,
+    header: options.header ? header : null,
+    list: options.list ? list : null
   };
 }

@@ -31,72 +31,90 @@ import {
   formatSummary
 } from '../helper';
 
-export default function createView(structure, route, helper) {
-  const broadcaster = new Broadcaster();
-  const getDisabler = new ErrorDisabler();
-  const union = new Worker();
-
-  const getReporter = new ErrorReporter({
-    format: formatDefaultError('short')
+export default function createView(structure, route) {
+  const broadcaster = new Broadcaster({
+    id: 'crud-view-broadcaster'
   });
 
   const linkDisabler = new ListDisabler({
     filter: filterDisabler(),
-    target: 'nav-link'
+    id: 'crud-view-link-disabler',
+    target: 'link-list'
   });
 
   const linkBuilder = new ListBuilder({
     dynamic: false,
     filter: filterLink(),
     format: formatLink(),
-    target: 'nav-link',
+    id: 'crud-view-link-builder',
+    target: 'link-list',
     structure: structure.view.link
   });
 
   const linkClicker = new LinkClicker({
+    id: 'crud-view-link-clicker',
     route: route.link
   });
 
   const objectDisabler = new PanelDisabler({
-    filter: filterDisabler()
-  });
-
-  const objectGetter = new Requester({
-    route: route.getter
+    filter: filterDisabler(),
+    id: 'crud-view-object-disabler'
   });
 
   const objectHeader = new ObjectHeader({
-    format: helper.format()
+    format: route.format(),
+    id: 'crud-view-object-header'
   });
 
   const summaryBuilder = new SummaryBuilder({
-    format: formatSummary(helper.format()),
+    format: formatSummary(route.format()),
+    id: 'crud-view-summary-builder',
     structure: structure.view.summary
   });
 
   const summaryClicker = new SummaryClicker({
+    id: 'crud-view-summary-clicker',
     route: route.summary
   });
 
   const summaryDisabler = new PanelDisabler({
-    filter: filterDisabler()
+    filter: filterDisabler(),
+    id: 'crud-view-summary-disabler'
   });
 
-  getDisabler
+  const union = new Worker({
+    id: 'crud-view-union'
+  });
+
+  const viewer = new Requester({
+    id: 'crud-viewer',
+    route: route.view
+  });
+
+  const viewDisabler = new ErrorDisabler({
+    id: 'crud-view-disabler'
+  });
+
+  const viewReporter = new ErrorReporter({
+    format: formatDefaultError('short'),
+    id: 'crud-view-reporter'
+  });
+
+  viewDisabler
     .disable({ selector: '.body' });
 
   objectDisabler
     .hide({
-      permission: helper.permission('view'),
+      permission: route.permission('view'),
       selector: '.body, .bar'
     });
 
   objectHeader
     .connect(objectDisabler)
-    .connect(objectGetter)
+    .connect(viewer)
     .through(createBrowser(json))
-    .connect(getDisabler)
-    .connect(getReporter)
+    .connect(viewDisabler)
+    .connect(viewReporter)
     .connect(broadcaster);
 
   if (structure.view.summary) {

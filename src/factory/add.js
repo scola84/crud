@@ -24,59 +24,69 @@ import {
   formatValidatorError
 } from '../helper';
 
-export default function createAdd(structure, route, helper) {
-  const objectReader = new FormReader();
+export default function createAdd(structure, route) {
+  const adder = new Requester({
+    id: 'crud-adder',
+    route: route.add
+  });
 
-  const objectBuilder = new FormBuilder({
-    format: formatForm(helper.format()),
-    target: 'form-add',
+  const addBuilder = new FormBuilder({
+    format: formatForm(route.format()),
+    id: 'crud-add-builder',
+    structure: structure.add.form,
+    target: 'form-add'
+  });
+
+  const addReader = new FormReader({
+    id: 'crud-add-reader'
+  });
+
+  const addReporter = new ErrorReporter({
+    format: formatDefaultError('long'),
+    id: 'crud-add-reporter'
+  });
+
+  const addResolver = new Resolver({
+    id: 'crud-add-resolver',
+    route: route.resolve
+  });
+
+  const addValidator = new Validator({
+    id: 'crud-add-validator',
     structure: structure.add.form
+  });
+
+  const addValidatorReporter = new ErrorReporter({
+    format: formatValidatorError(route.format()),
+    id: 'crud-add-validator-reporter'
   });
 
   const objectDisabler = new PanelDisabler({
-    filter: filterDisabler()
+    filter: filterDisabler(),
+    id: 'crud-add-object-disabler'
   });
 
   const objectHeader = new ObjectHeader({
-    format: helper.format()
-  });
-
-  const objectPoster = new Requester({
-    route: route.poster
-  });
-
-  const objectReporter = new ErrorReporter({
-    format: formatDefaultError('long')
-  });
-
-  const objectResolver = new Resolver({
-    route: route.resolver
-  });
-
-  const validator = new Validator({
-    structure: structure.add.form
-  });
-
-  const validatorReporter = new ErrorReporter({
-    format: formatValidatorError(helper.format())
+    format: route.format(),
+    id: 'crud-add-object-header'
   });
 
   objectDisabler
     .hide({
-      permission: helper.permission('add'),
+      permission: route.permission('add'),
       selector: '.body, .bar'
     });
 
   objectHeader
     .connect(objectDisabler)
-    .connect(objectBuilder)
-    .connect(objectReader)
-    .connect(validator)
-    .connect(validatorReporter)
-    .connect(objectPoster)
+    .connect(addBuilder)
+    .connect(addReader)
+    .connect(addValidator)
+    .connect(addValidatorReporter)
+    .connect(adder)
     .through(createBrowser(json))
-    .connect(objectReporter)
-    .connect(objectResolver);
+    .connect(addReporter)
+    .connect(addResolver);
 
-  return [objectHeader, objectResolver];
+  return [objectHeader, addResolver];
 }

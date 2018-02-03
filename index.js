@@ -24,6 +24,7 @@ import {
   routeAdd,
   routeEdit,
   routeList,
+  routeSelect,
   routeView
 } from './src/helper/route';
 
@@ -53,5 +54,6 @@ export {
   routeAdd,
   routeEdit,
   routeList,
+  routeSelect,
   routeView
 };

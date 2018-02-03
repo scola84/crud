@@ -31,7 +31,7 @@ export default class ObjectHeader extends GraphicWorker {
       .classed('button', true)
       .text(stringFormat('action.nav.label')('cancel'))
       .on('click', (d, i, n) => {
-        this.route(d, i, n, { getView, data, route });
+        this.route(d, i, n, { getView, data, name: 'cancel', route });
       });
 
     right
