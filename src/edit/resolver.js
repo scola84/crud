@@ -4,18 +4,20 @@ import Resolver from '../worker/resolver';
 export default class ObjectResolver extends Resolver {
   act(route, data, callback) {
     if (route.response.request.method === 'PUT') {
-      this._resolvePut(route);
-    } else {
       super.act(route, data, callback);
+    } else {
+      this._resolveDelete(route);
     }
   }
 
   _resolveDelete(route) {
-    const response = route.response;
-    const deleted = response.request.method === 'DELETE' &&
-      response.request.url.query === null;
+    const panel = select(route.node);
 
-    select(route.node)
-      .classed('deleted', deleted);
+    panel
+      .selectAll('form')
+      .attr('action', null);
+
+    panel
+      .classed('deleted', !panel.classed('deleted'));
   }
 }

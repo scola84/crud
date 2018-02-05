@@ -2,7 +2,7 @@ import { GraphicWorker, getView } from '@scola/gui';
 import { select } from 'd3';
 
 export default class ListClicker extends GraphicWorker {
-  act(route, data) {
+  act(route, data, callback) {
     route.list.enter
       .filter((datum, index, nodes) => {
         return select(nodes[index]).classed('disabled') === false;
@@ -12,6 +12,6 @@ export default class ListClicker extends GraphicWorker {
         this.route(d, i, n, { getView, data, route });
       });
 
-    this.pass(route, data);
+    this.pass(route, data, callback);
   }
 }

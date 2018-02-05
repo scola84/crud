@@ -1,6 +1,6 @@
 import formatDate from './date';
 
-export default function formatFormBuilder(format, property = 'name') {
+export default function formatForm(format, property = 'name') {
   return (datum, index, nodes, { data, name, route }) => {
     if (name === 'value') {
       let value = null;

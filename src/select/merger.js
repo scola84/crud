@@ -1,8 +1,8 @@
 import { GraphicWorker } from '@scola/gui';
 
-export default class CheckerMerger extends GraphicWorker {
+export default class ViewMerger extends GraphicWorker {
   act(route, data, callback) {
-    route.checked = data.data;
+    route.checked = Array.isArray(data.data) ? data.data : [data.data];
     this.pass(route, callback);
   }
 }

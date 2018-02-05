@@ -2,7 +2,7 @@ import { GraphicWorker, getView } from '@scola/gui';
 import { event, select } from 'd3';
 
 export default class LinkClicker extends GraphicWorker {
-  act(route, data) {
+  act(route, data, callback) {
     route.list.enter
       .selectAll('.button[tabindex="0"]')
       .on('click', (d, i, n) => {
@@ -18,6 +18,6 @@ export default class LinkClicker extends GraphicWorker {
         this.route(d, i, n, { getView, data, name: 'view', route });
       });
 
-    this.pass(route);
+    this.pass(route, data, callback);
   }
 }

@@ -3,12 +3,12 @@ import { GraphicWorker, getView } from '@scola/gui';
 import { select } from 'd3';
 
 export default class SelectHeader extends GraphicWorker {
-  act(route, data = {}) {
-    const [action] = route.name.split('-');
+  act(route, data, callback) {
+    const [action] = route.path.split('-');
 
     const panel = select(route.node)
       .classed('header search', true)
-      .classed(route.name.replace('-', ' '), true);
+      .classed(route.path.replace('-', ' '), true);
 
     const header = panel
       .select('.header');
@@ -25,13 +25,13 @@ export default class SelectHeader extends GraphicWorker {
     center
       .append('div')
       .classed('title', true)
-      .text(this.format('nav.l1.d'));
+      .text(this.format('value.l1.d'));
 
     left
       .append('button')
       .attr('tabindex', 0)
       .classed('button', true)
-      .text(stringFormat('action.nav.label')('cancel'))
+      .text(stringFormat('action.panel.button')('cancel'))
       .on('click', (d, i, n) => {
         this.route(d, i, n, { getView, data, name: 'cancel', route });
       });
@@ -42,8 +42,8 @@ export default class SelectHeader extends GraphicWorker {
       .attr('tabindex', 0)
       .attr('type', 'submit')
       .classed('button', true)
-      .text(stringFormat('action.nav.label')(action));
+      .text(stringFormat('action.panel.button')(action));
 
-    this.pass(route, data);
+    this.pass(route, data, callback);
   }
 }

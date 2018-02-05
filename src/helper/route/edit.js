@@ -1,75 +1,74 @@
+import { StateRouter } from '@scola/gui';
 import defaults from 'lodash-es/defaults';
-import sprintf from 'sprintf-js';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
+import formatUrl from '../format/url';
 
 export default function routeEdit(options = {}) {
-  options = defaults({}, options, {
+  const names = defaults({}, options, {
     id: `${options.name}_id`,
     format: options.name,
-    permission: `${options.name}.self`
-  }, {
-    del: `/api/${options.name}`,
-    edit: `/api/${options.name}/%s`,
-    header: {
-      cancel: `view-${options.name}`
-    },
-    resolve: `view-${options.name}`,
-    view: `/api/${options.name}/%s`
+    permission: `${options.name}.self`,
+    target: 'main'
   });
 
-  function del() {
+  const routes = defaults({}, options, {
+    odel: `/api/${options.name}/%(${names.id})s`,
+    edit: `/api/${options.name}/%(${names.id})s`,
+    header: {
+      cancel: `view-${options.name}@${names.target}:back`
+    },
+    resolve: `view-${options.name}@${names.target}:back`,
+    view: `/api/${options.name}/%(${names.id})s`,
+  });
+
+  function odel(route, data) {
     return {
       method: 'DELETE',
-      url: {
-        path: options.del
-      }
+      url: formatUrl(routes.odel, route, data)
     };
   }
 
-  function view(route) {
+  function view(route, data) {
     return {
       method: 'GET',
-      url: {
-        path: sprintf.sprintf(options.view, route.params[options.id])
-      }
+      url: formatUrl(routes.view, route, data)
     };
   }
 
   function header(datum, index, nodes, { getView, name, route }) {
-    if (name === 'cancel') {
-      getView('main').handle({
-        back: true,
-        name: options.header.cancel,
-        params: route.params
-      });
-    }
+    const goto = StateRouter.parseRoute(routes.header[name],
+      route.params);
+
+    getView(goto.name).handle(goto);
   }
 
-  function edit(route) {
+  function edit(route, data) {
     return {
       method: 'PUT',
-      url: {
-        path: sprintf.sprintf(options.edit, route.params[options.id])
-      }
+      url: formatUrl(routes.edit, route, data)
     };
   }
 
   function resolve(datum, index, nodes, { getView, route }) {
-    getView('main').handle({
-      back: true,
-      name: options.resolve,
-      params: route.params
-    });
+    const parts = Array.isArray(routes.resolve) ?
+      routes.resolve : [routes.resolve];
+
+    let goto = null;
+
+    for (let i = 0; i < parts.length; i += 1) {
+      goto = StateRouter.parseRoute(parts[i], route.params);
+      getView(goto.name).handle(goto);
+    }
   }
 
   return {
-    format: formatString(options.format),
-    permission: filterPermission(options.permission),
-    del: options.del ? del : null,
-    edit: options.edit ? edit : null,
-    header: options.header ? header : null,
-    resolve: options.resolve ? resolve : null,
-    view: options.view ? view : null
+    format: formatString(names.format),
+    permission: filterPermission(names.permission),
+    odel: routes.odel ? odel : null,
+    edit: routes.edit ? edit : null,
+    header: routes.header ? header : null,
+    resolve: routes.resolve ? resolve : null,
+    view: routes.view ? view : null
   };
 }

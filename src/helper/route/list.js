@@ -1,71 +1,52 @@
+import { StateRouter } from '@scola/gui';
 import defaultsDeep from 'lodash-es/defaultsDeep';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
+import formatUrl from '../format/url';
 
 export default function routeList(options = {}) {
-  options = defaultsDeep({}, options, {
+  const names = defaultsDeep({}, options, {
     id: `${options.name}_id`,
     format: options.name,
-    permission: `${options.name}.self`
-  }, {
-    click: `view-${options.name}`,
+    permission: `${options.name}.self`,
+    target: 'main'
+  });
+
+  const routes = defaultsDeep({}, options, {
+    click: `view-${options.name}@${names.target}:clear`,
     header: {
-      add: `add-${options.name}`,
-      back: 'main',
+      add: `add-${options.name}@${names.target}:clear`,
+      back: 'main@menu:back;ltr',
       del: `delete-${options.name}`
     },
-    list: `/api/${options.name}`
+    list: `/api/${options.name}?`
   });
 
   function click(datum, index, nodes, { getView, data }) {
-    getView('main').handle({
-      back: false,
-      name: options.click,
-      params: {
-        [options.id]: data.data[index][options.id]
-      }
+    const goto = StateRouter.parseRoute(routes.click, {
+      [names.id]: data.data[index][names.id]
     });
+
+    getView(goto.name).handle(goto);
   }
 
   function header(datum, index, nodes, { getView, name, route }) {
-    if (name === 'add') {
-      getView('main').handle({
-        back: false,
-        name: options.header.add
-      });
-    }
-
-    if (name === 'back') {
-      getView('menu').handle({
-        back: true,
-        dir: 'ltr',
-        name: options.header.back
-      });
-    }
-
-    if (name === 'delete') {
-      getView('main').handle({
-        name: options.header.del,
-        params: route.params
-      });
-    }
+    const goto = StateRouter.parseRoute(routes.header[name], route.params);
+    getView(goto.name).handle(goto);
   }
 
   function list(route, data) {
     return {
       method: 'GET',
-      url: {
-        path: options.list,
-        query: data
-      }
+      url: formatUrl(routes.list, route, data)
     };
   }
 
   return {
-    format: formatString(options.format),
-    permission: filterPermission(options.permission),
-    click: options.click ? click : null,
-    header: options.header ? header : null,
-    list: options.list ? list : null
+    format: formatString(names.format),
+    permission: filterPermission(names.permission),
+    click: routes.click ? click : null,
+    header: routes.header ? header : null,
+    list: routes.list ? list : null
   };
 }

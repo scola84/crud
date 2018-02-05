@@ -1,7 +1,8 @@
+import { StateRouter } from '@scola/gui';
 import defaults from 'lodash-es/defaults';
-import sprintf from 'sprintf-js';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
+import formatUrl from '../format/url';
 
 export default function routeView(options = {}) {
   options = defaults({}, options, {
@@ -9,45 +10,34 @@ export default function routeView(options = {}) {
     format: options.name,
     permission: `${options.name}.self`
   }, {
-    view: `/api/${options.name}/%s`
+    view: `/api/${options.name}/%(${options.name}_id)s`
   });
 
   function link(datum, index, nodes, { getView, data, name, route }) {
     if (name === 'edit') {
-      getView('main').handle({
-        dir: datum.edit.dir,
-        name: datum.edit.route,
-        params: route.params
-      });
+      const goto = StateRouter.parseRoute(datum.edit.route, route.params);
+      getView(goto.name).handle(goto);
     }
 
     if (name === 'view') {
       const value = data.link[index];
-
-      getView('main').handle({
-        dir: 'rtl',
-        name: datum.view.route,
-        params: {
-          [value.name + '_id']: value.id
-        },
-        remember: true
+      const goto = StateRouter.parseRoute(datum.view.route, {
+        [value.name + '_id']: value.id
       });
+
+      getView(goto.name).handle(goto);
     }
   }
 
   function summary(datum, index, nodes, { getView, route }) {
-    getView('main').handle({
-      name: datum.route,
-      params: route.params
-    });
+    const goto = StateRouter.parseRoute(datum.route, route.params);
+    getView(goto.name).handle(goto);
   }
 
-  function view(route) {
+  function view(route, data) {
     return {
       method: 'GET',
-      url: {
-        path: sprintf.sprintf(options.view, route.params[options.id])
-      }
+      url: formatUrl(options.view, route, data)
     };
   }
 

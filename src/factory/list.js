@@ -77,7 +77,7 @@ export default function createList(structure, route) {
       selector: '.bar.header .right .add'
     })
     .hide({
-      permission: route.permission('delete'),
+      permission: route.permission('del'),
       selector: '.bar.header .right .delete'
     })
     .hide({

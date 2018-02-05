@@ -3,10 +3,10 @@ import { GraphicWorker, getView } from '@scola/gui';
 import { select } from 'd3';
 
 export default class ObjectHeader extends GraphicWorker {
-  act(route, data = {}) {
+  act(route, data, callback) {
     const panel = select(route.node)
       .classed('header object', true)
-      .classed(route.name.replace('-', ' '), true);
+      .classed(route.path.replace('-', ' '), true);
 
     const header = panel
       .select('.header');
@@ -23,13 +23,13 @@ export default class ObjectHeader extends GraphicWorker {
     center
       .append('div')
       .classed('title', true)
-      .text(this.format('nav.l1.0'));
+      .text(this.format('value.l1.0'));
 
     left
       .append('button')
       .attr('tabindex', 0)
       .classed('button', true)
-      .text(stringFormat('action.nav.label')('cancel'))
+      .text(stringFormat('action.panel.button')('cancel'))
       .on('click', (d, i, n) => {
         this.route(d, i, n, { getView, data, name: 'cancel', route });
       });
@@ -40,8 +40,8 @@ export default class ObjectHeader extends GraphicWorker {
       .attr('tabindex', 0)
       .attr('type', 'submit')
       .classed('button', true)
-      .text(stringFormat('action.nav.label')('save'));
+      .text(stringFormat('action.panel.button')('save'));
 
-    this.pass(route, data);
+    this.pass(route, data, callback);
   }
 }

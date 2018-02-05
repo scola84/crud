@@ -16,9 +16,9 @@ import { Validator } from '@scola/validator';
 import { Worker } from '@scola/worker';
 
 import {
-  CheckerMerger,
   SelectClicker,
   SelectHeader,
+  ViewMerger
 } from '../select';
 
 import {
@@ -35,15 +35,6 @@ import {
 } from '../helper';
 
 export default function createSelect(structure, route) {
-  const checker = new Requester({
-    id: 'crud-select-checker',
-    route: route.check
-  });
-
-  const checkMerger = new CheckerMerger({
-    id: 'crud-select-check-merger'
-  });
-
   const selector = new Requester({
     id: 'crud-selector',
     route: route.select
@@ -130,6 +121,15 @@ export default function createSelect(structure, route) {
     id: 'crud-select-union'
   });
 
+  const viewer = new Requester({
+    id: 'crud-select-viewer',
+    route: route.view
+  });
+
+  const viewMerger = new ViewMerger({
+    id: 'crud-select-view-merger'
+  });
+
   selectorDisabler
     .disable({ selector: '.body, .bar .right' });
 
@@ -139,11 +139,11 @@ export default function createSelect(structure, route) {
       selector: '.body, .bar'
     });
 
-  if (route.check) {
+  if (route.view) {
     selectHeader
-      .connect(checker)
+      .connect(viewer)
       .through(createBrowser(json))
-      .connect(checkMerger)
+      .connect(viewMerger)
       .connect(selectListPreparer);
   } else {
     selectHeader

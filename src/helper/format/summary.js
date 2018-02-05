@@ -1,7 +1,7 @@
 import { stringFormat } from '@scola/d3-string-format';
 
-export default function formatSummaryBuilder(format) {
-  const formatAction = stringFormat('action.nav.label');
+export default function formatSummary(format) {
+  const formatAction = stringFormat('action.panel.button');
 
   return (datum, index, nodes, { data, name }) => {
     if (name === 'action') {

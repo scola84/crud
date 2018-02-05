@@ -36,14 +36,14 @@ export default function createEdit(structure, route) {
 
   const deleter = new Requester({
     id: 'crud-deleter',
-    route: route.del
+    route: route.odel
   });
 
   const deleteBuilder = new FormBuilder({
     format: formatForm(route.format('action'), 'label'),
     id: 'crud-edit-delete-builder',
     target: 'form-delete',
-    structure: structure.del && structure.del.form.slice(0, -1)
+    structure: structure.odel && structure.odel.form.slice(0, -1)
   });
 
   const deleteDisabler = new FormDisabler({
@@ -105,19 +105,20 @@ export default function createEdit(structure, route) {
   });
 
   const objectResolver = new ObjectResolver({
-    id: 'crud-edit-object-resolver'
+    id: 'crud-edit-object-resolver',
+    route: route.resolve
   });
 
   const undeleter = new Requester({
     id: 'crud-edit-undeleter',
-    route: route.del
+    route: route.odel
   });
 
   const undeleteBuilder = new FormBuilder({
     format: formatForm(route.format('action'), 'label'),
     id: 'crud-edit-undelete-builder',
     target: 'form-undelete',
-    structure: structure.del && structure.del.form
+    structure: structure.odel && structure.odel.form
   });
 
   const undeleteReader = new FormReader({
@@ -140,7 +141,7 @@ export default function createEdit(structure, route) {
 
   deleteDisabler
     .disable({
-      permission: route.permission('delete'),
+      permission: route.permission('del'),
       selector: 'input'
     });
 
@@ -157,7 +158,7 @@ export default function createEdit(structure, route) {
     });
 
   viewDisabler
-    .disable({ selector: '.body' });
+    .disable({ selector: '.body, .bar .right' });
 
   objectHeader
     .connect(objectDisabler)
@@ -177,7 +178,7 @@ export default function createEdit(structure, route) {
     .through(createBrowser(json))
     .connect(objectReporter);
 
-  if (structure.del) {
+  if (structure.odel) {
     broadcaster
       .connect(deleteBuilder)
       .connect(deleteDisabler)

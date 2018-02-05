@@ -9,10 +9,10 @@ import {
 import { select } from 'd3';
 
 export default class ListHeader extends GraphicWorker {
-  act(route, data) {
+  act(route, data, callback) {
     const panel = select(route.node)
       .classed('header outset', true)
-      .classed(route.name.replace('-', ' '), true);
+      .classed(route.path.replace('-', ' '), true);
 
     const header = panel
       .select('.header');
@@ -29,13 +29,13 @@ export default class ListHeader extends GraphicWorker {
     center
       .append('div')
       .classed('title', true)
-      .text(this.format('nav.l1.d'));
+      .text(this.format('value.l1.d'));
 
     left
       .append('button')
       .attr('tabindex', 0)
       .classed('button icon back ion-ios-arrow-back', true)
-      .text(stringFormat('action.nav.label')('back'))
+      .text(stringFormat('action.panel.button')('back'))
       .on('click', (d, i, n) => {
         this.route(d, i, n, { getView, data, name: 'back', route });
       });
@@ -59,6 +59,6 @@ export default class ListHeader extends GraphicWorker {
         this.route(d, i, n, { getView, data, name: 'add', route });
       });
 
-    this.pass(route, data);
+    this.pass(route, data, callback);
   }
 }

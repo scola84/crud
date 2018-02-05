@@ -24,7 +24,9 @@ export default function disableLink(structure, disabler) {
         selector: `li.${name} .secondary button`
       })
       .hide({
-        permission: `${edit.auth}.list`,
+        permission: [
+          [`${edit.auth}.list`, `${edit.auth}.view`]
+        ],
         selector: `li.${name}`
       });
   }

@@ -1,9 +1,9 @@
-import CheckerMerger from './merger';
 import SelectClicker from './clicker';
 import SelectHeader from './header';
+import ViewMerger from './merger';
 
 export {
-  CheckerMerger,
   SelectClicker,
-  SelectHeader
+  SelectHeader,
+  ViewMerger
 };

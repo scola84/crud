@@ -1,86 +1,79 @@
-import defaults from 'lodash-es/defaults';
+import { StateRouter } from '@scola/gui';
+import defaultsDeep from 'lodash-es/defaultsDeep';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
+import formatUrl from '../format/url';
 
 export default function routeSelect(options = {}) {
-  options = defaults({}, options, {
-    format: options.source,
+  const names = defaultsDeep({}, options, {
+    format: options.list,
     method: 'PUT',
-    permission: `${options.target}.self`
-  }, {
-    check: `/api/${options.target}`,
-    click: `add-${options.source}`,
-    edit: `/api/${options.name}`,
-    header: {
-      cancel: `view-${options.name}`
-    },
-    resolve: `view-${options.name}`,
-    select: `/api/${options.source}`,
-    send: `/api/${options.target}`
+    permission: `${options.object}.self`,
+    target: 'main'
   });
 
-  function check(route) {
-    return {
-      method: 'GET',
-      url: {
-        path: options.check,
-        query: route.params
-      }
-    };
-  }
+  const routes = defaultsDeep({}, options, {
+    click: `add-${options.list}@${names.target}:remember,rtl`,
+    header: {
+      cancel: `view-${options.name}@${names.target}:back`
+    },
+    resolve: `view-${options.name}@${names.target}:back`,
+    select: `/api/${options.list}?`,
+    send: `/api/${options.object}`,
+    view: `/api/${options.object}`
+  });
 
   function click(datum, index, nodes, { getView }) {
-    getView('main').handle({
-      name: options.click,
-      remember: true
-    });
+    const goto = StateRouter.parseRoute(routes.click);
+    getView(goto.name).handle(goto);
   }
 
   function header(datum, index, nodes, { getView, name, route }) {
-    if (name === 'cancel') {
-      getView('main').handle({
-        back: true,
-        name: options.header.cancel,
-        params: route.params
-      });
-    }
+    const goto = StateRouter.parseRoute(routes.header[name], route.params);
+    getView(goto.name).handle(goto);
   }
 
   function resolve(datum, index, nodes, { getView, route }) {
-    getView('main').handle({
-      back: true,
-      name: options.resolve,
-      params: route.params
-    });
+    const parts = Array.isArray(routes.resolve) ?
+      routes.resolve : [routes.resolve];
+
+    let goto = null;
+
+    for (let i = 0; i < parts.length; i += 1) {
+      goto = StateRouter.parseRoute(parts[i], route.params);
+      getView(goto.name).handle(goto);
+    }
   }
 
   function select(route, data) {
     return {
       method: 'GET',
-      url: {
-        path: options.select,
-        query: data
-      }
+      url: formatUrl(routes.select, route, data)
     };
   }
 
-  function send() {
+  function send(route, data) {
     return {
-      method: options.method,
-      url: {
-        path: options.send
-      }
+      method: names.method,
+      url: formatUrl(routes.send, route, data)
+    };
+  }
+
+  function view(route, data) {
+    return {
+      method: 'GET',
+      url: formatUrl(routes.view, route, data)
     };
   }
 
   return {
-    format: formatString(options.format),
-    permission: filterPermission(options.permission),
-    check: options.check ? check : null,
-    click: options.click ? click : null,
-    header: options.header ? header : null,
-    resolve: options.resolve ? resolve : null,
-    select: options.select ? select : null,
-    send: options.send ? send : null
+    format: formatString(names.format),
+    permission: filterPermission(names.permission),
+    click: routes.click ? click : null,
+    header: routes.header ? header : null,
+    resolve: routes.resolve ? resolve : null,
+    select: routes.select ? select : null,
+    send: routes.send ? send : null,
+    view: routes.view ? view : null
   };
 }
