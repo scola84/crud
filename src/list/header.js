@@ -2,7 +2,6 @@ import { stringFormat } from '@scola/d3-string-format';
 
 import {
   GraphicWorker,
-  getView,
   renderSearch
 } from '@scola/gui';
 
@@ -37,7 +36,7 @@ export default class ListHeader extends GraphicWorker {
       .classed('button icon back ion-ios-arrow-back', true)
       .text(stringFormat('action.panel.button')('back'))
       .on('click', (d, i, n) => {
-        this.route(d, i, n, { getView, data, name: 'back', route });
+        this.route(d, i, n, { data, name: 'back', route });
       });
 
     renderSearch(route, { panel, right });
@@ -47,7 +46,7 @@ export default class ListHeader extends GraphicWorker {
       .attr('tabindex', 0)
       .classed('button icon delete ion-ios-trash-outline', true)
       .on('click', (d, i, n) => {
-        this.route(d, i, n, { getView, data, name: 'delete', route });
+        this.route(d, i, n, { data, name: 'delete', route });
       });
 
     right
@@ -56,7 +55,7 @@ export default class ListHeader extends GraphicWorker {
       .classed('button icon add ion-ios-plus-empty', true)
       .on('click', (d, i, n) => {
         select('body').dispatch('click');
-        this.route(d, i, n, { getView, data, name: 'add', route });
+        this.route(d, i, n, { data, name: 'add', route });
       });
 
     this.pass(route, data, callback);

@@ -1,8 +1,8 @@
-import { StateRouter } from '@scola/gui';
 import defaults from 'lodash-es/defaults';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
 import formatUrl from '../format/url';
+import handleRoute from '../handle/route';
 
 export default function routeAdd(options = {}) {
   const names = defaults({}, options, {
@@ -24,22 +24,14 @@ export default function routeAdd(options = {}) {
     };
   }
 
-  function resolve(datum, index, nodes, { getView, data }) {
-    const parts = Array.isArray(routes.resolve) ?
-      routes.resolve : [routes.resolve];
-
-    let goto = null;
-
-    for (let i = 0; i < parts.length; i += 1) {
-      goto = StateRouter.parseRoute(parts[i], {
-        [names.id]: data.data.id
-      });
-
-      getView(goto.name).handle(goto);
-    }
+  function resolve(datum, index, nodes, { data }) {
+    handleRoute(routes.resolve, {
+      [names.id]: data.data.id
+    });
   }
 
   return {
+    id: names.id,
     format: formatString(names.format),
     permission: filterPermission(names.permission),
     add: routes.add ? add : null,

@@ -1,51 +1,51 @@
-import { StateRouter } from '@scola/gui';
 import defaults from 'lodash-es/defaults';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
 import formatUrl from '../format/url';
+import handleRoute from '../handle/route';
 
 export default function routeView(options = {}) {
-  options = defaults({}, options, {
+  const names = defaults({}, options, {
     id: `${options.name}_id`,
     format: options.name,
     permission: `${options.name}.self`
-  }, {
+  });
+
+  const routes = defaults({}, options, {
     view: `/api/${options.name}/%(${options.name}_id)s`
   });
 
-  function link(datum, index, nodes, { getView, data, name, route }) {
+  function link(datum, index, nodes, { data, name, route }) {
     if (name === 'edit') {
-      const goto = StateRouter.parseRoute(datum.edit.route, route.params);
-      getView(goto.name).handle(goto);
+      handleRoute(datum.edit.route, route.params);
     }
 
     if (name === 'view') {
       const value = data.link[index];
-      const goto = StateRouter.parseRoute(datum.view.route, {
+
+      handleRoute(datum.view.route, {
         [value.name + '_id']: value.id
       });
-
-      getView(goto.name).handle(goto);
     }
   }
 
-  function summary(datum, index, nodes, { getView, route }) {
-    const goto = StateRouter.parseRoute(datum.route, route.params);
-    getView(goto.name).handle(goto);
+  function summary(datum, index, nodes, { route }) {
+    handleRoute(datum.route, route.params);
   }
 
   function view(route, data) {
     return {
       method: 'GET',
-      url: formatUrl(options.view, route, data)
+      url: formatUrl(routes.view, route, data)
     };
   }
 
   return {
-    format: formatString(options.format),
-    permission: filterPermission(options.permission),
+    id: names.id,
+    format: formatString(names.format),
+    permission: filterPermission(names.permission),
     link,
     summary,
-    view: options.view ? view : null
+    view: routes.view ? view : null
   };
 }

@@ -60,12 +60,12 @@ export default function createList(structure, route) {
   });
 
   const listerReporter = new ErrorReporter({
-    format: formatDefaultError('short'),
+    format: formatDefaultError(route.format(), 'short'),
     id: 'crud-lister-reporter'
   });
 
   listerDisabler
-    .disable({ selector: '.body' });
+    .disable({ selector: '.body, .bar .right' });
 
   listDisabler
     .disable({
@@ -88,7 +88,7 @@ export default function createList(structure, route) {
   listHeader
     .connect(listPreparer)
     .connect(lister)
-    .through(createBrowser(json))
+    .connect(createBrowser(json))
     .connect(listerDisabler)
     .connect(listerReporter)
     .connect(listBuilder)

@@ -7,6 +7,7 @@ import {
 } from './src/factory';
 
 import {
+  decideRequester,
   disableLink,
   filterDisabler,
   filterLink,
@@ -28,6 +29,8 @@ import {
   routeView
 } from './src/helper/route';
 
+import locale from './src/locale';
+
 export {
   createAdd,
   createEdit,
@@ -37,6 +40,7 @@ export {
 };
 
 export {
+  decideRequester,
   disableLink,
   filterDisabler,
   filterLink,
@@ -56,4 +60,8 @@ export {
   routeList,
   routeSelect,
   routeView
+};
+
+export {
+  locale
 };

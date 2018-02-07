@@ -1,4 +1,4 @@
-import { GraphicWorker, getView } from '@scola/gui';
+import { GraphicWorker } from '@scola/gui';
 import { select } from 'd3';
 
 export default class SelectClicker extends GraphicWorker {
@@ -8,7 +8,7 @@ export default class SelectClicker extends GraphicWorker {
         return select(nodes[index]).classed('disabled') === false;
       })
       .on('click', (d, i, n) => {
-        this.route(d, i, n, { getView, route, data });
+        this.route(d, i, n, { route, data });
       });
 
     this.pass(route, data, callback);

@@ -1,5 +1,5 @@
 import { stringFormat } from '@scola/d3-string-format';
-import { GraphicWorker, getView } from '@scola/gui';
+import { GraphicWorker } from '@scola/gui';
 import { select } from 'd3';
 
 export default class ObjectHeader extends GraphicWorker {
@@ -28,10 +28,10 @@ export default class ObjectHeader extends GraphicWorker {
     left
       .append('button')
       .attr('tabindex', 0)
-      .classed('button', true)
+      .classed('button cancel', true)
       .text(stringFormat('action.panel.button')('cancel'))
       .on('click', (d, i, n) => {
-        this.route(d, i, n, { getView, data, name: 'cancel', route });
+        this.route(d, i, n, { data, name: 'cancel', route });
       });
 
     right
@@ -39,8 +39,17 @@ export default class ObjectHeader extends GraphicWorker {
       .attr('form', 'form-edit')
       .attr('tabindex', 0)
       .attr('type', 'submit')
-      .classed('button', true)
+      .classed('button save', true)
       .text(stringFormat('action.panel.button')('save'));
+
+    right
+      .append('button')
+      .attr('tabindex', 0)
+      .classed('button done', true)
+      .text(stringFormat('action.panel.button')('done'))
+      .on('click', (d, i, n) => {
+        this.route(d, i, n, { data, name: 'done', route });
+      });
 
     this.pass(route, data, callback);
   }

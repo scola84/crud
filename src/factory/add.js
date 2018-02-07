@@ -42,7 +42,7 @@ export default function createAdd(structure, route) {
   });
 
   const addReporter = new ErrorReporter({
-    format: formatDefaultError('long'),
+    format: formatDefaultError(route.format(), 'long'),
     id: 'crud-add-reporter'
   });
 
@@ -84,7 +84,7 @@ export default function createAdd(structure, route) {
     .connect(addValidator)
     .connect(addValidatorReporter)
     .connect(adder)
-    .through(createBrowser(json))
+    .connect(createBrowser(json))
     .connect(addReporter)
     .connect(addResolver);
 

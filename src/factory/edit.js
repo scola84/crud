@@ -23,6 +23,7 @@ import {
 } from '../worker';
 
 import {
+  decideRequester,
   filterDisabler,
   formatDefaultError,
   formatForm,
@@ -36,14 +37,14 @@ export default function createEdit(structure, route) {
 
   const deleter = new Requester({
     id: 'crud-deleter',
-    route: route.odel
+    route: route.del
   });
 
   const deleteBuilder = new FormBuilder({
     format: formatForm(route.format('action'), 'label'),
     id: 'crud-edit-delete-builder',
     target: 'form-delete',
-    structure: structure.odel && structure.odel.form.slice(0, -1)
+    structure: structure.del && structure.del.form.slice(0, 2)
   });
 
   const deleteDisabler = new FormDisabler({
@@ -100,7 +101,7 @@ export default function createEdit(structure, route) {
   });
 
   const objectReporter = new ErrorReporter({
-    format: formatDefaultError('long'),
+    format: formatDefaultError(route.format(), 'long'),
     id: 'crud-edit-object-reporter'
   });
 
@@ -111,14 +112,14 @@ export default function createEdit(structure, route) {
 
   const undeleter = new Requester({
     id: 'crud-edit-undeleter',
-    route: route.odel
+    route: route.del
   });
 
   const undeleteBuilder = new FormBuilder({
     format: formatForm(route.format('action'), 'label'),
     id: 'crud-edit-undelete-builder',
     target: 'form-undelete',
-    structure: structure.odel && structure.odel.form
+    structure: structure.del && structure.del.form.slice(1)
   });
 
   const undeleteReader = new FormReader({
@@ -126,6 +127,7 @@ export default function createEdit(structure, route) {
   });
 
   const viewer = new Requester({
+    decide: decideRequester(route.id),
     id: 'crud-edit-viewer',
     route: route.view
   });
@@ -135,7 +137,7 @@ export default function createEdit(structure, route) {
   });
 
   const viewReporter = new ErrorReporter({
-    format: formatDefaultError('short'),
+    format: formatDefaultError(route.format(), 'short'),
     id: 'crud-edit-view-reporter'
   });
 
@@ -163,7 +165,7 @@ export default function createEdit(structure, route) {
   objectHeader
     .connect(objectDisabler)
     .connect(viewer)
-    .through(createBrowser(json))
+    .connect(createBrowser(json))
     .connect(viewDisabler)
     .connect(viewReporter)
     .connect(broadcaster);
@@ -175,23 +177,23 @@ export default function createEdit(structure, route) {
     .connect(editValidator)
     .connect(editValidatorReporter)
     .connect(editor)
-    .through(createBrowser(json))
+    .connect(createBrowser(json))
     .connect(objectReporter);
 
-  if (structure.odel) {
+  if (structure.del) {
     broadcaster
       .connect(deleteBuilder)
       .connect(deleteDisabler)
       .connect(deleteReader)
       .connect(deleter)
-      .through(createBrowser(json))
+      .connect(createBrowser(json))
       .connect(objectReporter);
 
     broadcaster
       .connect(undeleteBuilder)
       .connect(undeleteReader)
       .connect(undeleter)
-      .through(createBrowser(json))
+      .connect(createBrowser(json))
       .connect(objectReporter);
   }
 

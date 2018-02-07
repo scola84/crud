@@ -1,8 +1,8 @@
-import { StateRouter } from '@scola/gui';
 import defaultsDeep from 'lodash-es/defaultsDeep';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
 import formatUrl from '../format/url';
+import handleRoute from '../handle/route';
 
 export default function routeSelect(options = {}) {
   const names = defaultsDeep({}, options, {
@@ -15,34 +15,24 @@ export default function routeSelect(options = {}) {
   const routes = defaultsDeep({}, options, {
     click: `add-${options.list}@${names.target}:remember,rtl`,
     header: {
-      cancel: `view-${options.name}@${names.target}:back`
+      cancel: `view-${options.name}?@${names.target}:back`
     },
-    resolve: `view-${options.name}@${names.target}:back`,
+    resolve: `view-${options.name}?@${names.target}:back`,
     select: `/api/${options.list}?`,
     send: `/api/${options.object}`,
     view: `/api/${options.object}`
   });
 
-  function click(datum, index, nodes, { getView }) {
-    const goto = StateRouter.parseRoute(routes.click);
-    getView(goto.name).handle(goto);
+  function click() {
+    handleRoute(routes.click);
   }
 
-  function header(datum, index, nodes, { getView, name, route }) {
-    const goto = StateRouter.parseRoute(routes.header[name], route.params);
-    getView(goto.name).handle(goto);
+  function header(datum, index, nodes, { name, route }) {
+    handleRoute(routes.header[name], route.params);
   }
 
-  function resolve(datum, index, nodes, { getView, route }) {
-    const parts = Array.isArray(routes.resolve) ?
-      routes.resolve : [routes.resolve];
-
-    let goto = null;
-
-    for (let i = 0; i < parts.length; i += 1) {
-      goto = StateRouter.parseRoute(parts[i], route.params);
-      getView(goto.name).handle(goto);
-    }
+  function resolve(datum, index, nodes, { route }) {
+    handleRoute(routes.resolve, route.params);
   }
 
   function select(route, data) {
@@ -67,6 +57,7 @@ export default function routeSelect(options = {}) {
   }
 
   return {
+    id: names.id,
     format: formatString(names.format),
     permission: filterPermission(names.permission),
     click: routes.click ? click : null,

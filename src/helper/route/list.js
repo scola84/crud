@@ -1,8 +1,8 @@
-import { StateRouter } from '@scola/gui';
 import defaultsDeep from 'lodash-es/defaultsDeep';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
 import formatUrl from '../format/url';
+import handleRoute from '../handle/route';
 
 export default function routeList(options = {}) {
   const names = defaultsDeep({}, options, {
@@ -13,7 +13,7 @@ export default function routeList(options = {}) {
   });
 
   const routes = defaultsDeep({}, options, {
-    click: `view-${options.name}@${names.target}:clear`,
+    click: `view-${options.name}?@${names.target}:clear`,
     header: {
       add: `add-${options.name}@${names.target}:clear`,
       back: 'main@menu:back;ltr',
@@ -22,17 +22,14 @@ export default function routeList(options = {}) {
     list: `/api/${options.name}?`
   });
 
-  function click(datum, index, nodes, { getView, data }) {
-    const goto = StateRouter.parseRoute(routes.click, {
+  function click(datum, index, nodes, { data }) {
+    handleRoute(routes.click, {
       [names.id]: data.data[index][names.id]
     });
-
-    getView(goto.name).handle(goto);
   }
 
-  function header(datum, index, nodes, { getView, name, route }) {
-    const goto = StateRouter.parseRoute(routes.header[name], route.params);
-    getView(goto.name).handle(goto);
+  function header(datum, index, nodes, { name, route }) {
+    handleRoute(routes.header[name], route.params);
   }
 
   function list(route, data) {
@@ -43,6 +40,7 @@ export default function routeList(options = {}) {
   }
 
   return {
+    id: names.id,
     format: formatString(names.format),
     permission: filterPermission(names.permission),
     click: routes.click ? click : null,

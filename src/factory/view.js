@@ -23,6 +23,7 @@ import {
 } from '../worker';
 
 import {
+  decideRequester,
   disableLink,
   filterDisabler,
   filterLink,
@@ -87,6 +88,7 @@ export default function createView(structure, route) {
   });
 
   const viewer = new Requester({
+    decide: decideRequester(route.id),
     id: 'crud-viewer',
     route: route.view
   });
@@ -96,7 +98,7 @@ export default function createView(structure, route) {
   });
 
   const viewReporter = new ErrorReporter({
-    format: formatDefaultError('short'),
+    format: formatDefaultError(route.format(), 'short'),
     id: 'crud-view-reporter'
   });
 
@@ -112,7 +114,7 @@ export default function createView(structure, route) {
   objectHeader
     .connect(objectDisabler)
     .connect(viewer)
-    .through(createBrowser(json))
+    .connect(createBrowser(json))
     .connect(viewDisabler)
     .connect(viewReporter)
     .connect(broadcaster);

@@ -1,3 +1,4 @@
+import decideRequester from './decide/requester';
 import disableLink from './disable/link';
 import filterDisabler from './filter/disabler';
 import filterLink from './filter/link';
@@ -11,6 +12,7 @@ import formatSummary from './format/summary';
 import formatValidatorError from './format/error/validator';
 
 export {
+  decideRequester,
   disableLink,
   filterDisabler,
   filterLink,

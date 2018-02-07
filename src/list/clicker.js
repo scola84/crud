@@ -1,4 +1,4 @@
-import { GraphicWorker, getView } from '@scola/gui';
+import { GraphicWorker } from '@scola/gui';
 import { select } from 'd3';
 
 export default class ListClicker extends GraphicWorker {
@@ -9,7 +9,7 @@ export default class ListClicker extends GraphicWorker {
       })
       .on('click', (d, i, n) => {
         select('body').dispatch('click');
-        this.route(d, i, n, { getView, data, route });
+        this.route(d, i, n, { data, route });
       });
 
     this.pass(route, data, callback);

@@ -1,7 +1,7 @@
-import { GraphicWorker, getView } from '@scola/gui';
+import { GraphicWorker } from '@scola/gui';
 
 export default class Resolver extends GraphicWorker {
   act(route, data) {
-    this.route(null, null, null, { getView, data, route });
+    this.route(null, null, null, { data, route });
   }
 }

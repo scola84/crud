@@ -45,7 +45,7 @@ export default function createSelect(structure, route) {
   });
 
   const selectorReporter = new ErrorReporter({
-    format: formatDefaultError('short'),
+    format: formatDefaultError(route.format(), 'short'),
     id: 'crud-select-selector-reporter'
   });
 
@@ -108,7 +108,7 @@ export default function createSelect(structure, route) {
   });
 
   const sendReporter = new ErrorReporter({
-    format: formatDefaultError('long'),
+    format: formatDefaultError(route.format(), 'long'),
     id: 'crud-select-send-reporter'
   });
 
@@ -142,7 +142,7 @@ export default function createSelect(structure, route) {
   if (route.view) {
     selectHeader
       .connect(viewer)
-      .through(createBrowser(json))
+      .connect(createBrowser(json))
       .connect(viewMerger)
       .connect(selectListPreparer);
   } else {
@@ -152,7 +152,7 @@ export default function createSelect(structure, route) {
 
   selectListPreparer
     .connect(selector)
-    .through(createBrowser(json))
+    .connect(createBrowser(json))
     .connect(selectorDisabler)
     .connect(selectorReporter)
     .connect(selectFormBuilder)
@@ -163,7 +163,7 @@ export default function createSelect(structure, route) {
     .connect(selectValidator)
     .connect(selectValidatorReporter)
     .connect(sender)
-    .through(createBrowser(json))
+    .connect(createBrowser(json))
     .connect(sendReporter)
     .connect(sendResolver)
     .connect(union);
