@@ -33,7 +33,7 @@ export default class ObjectHeader extends GraphicWorker {
     renderBack(route, { icon: true, left, text }, () => {
       getView('main').handle({
         back: true,
-        dir: 'ltr'
+        ltr: true
       });
     });
 
