@@ -22,6 +22,14 @@ export default function formatForm(format, property = 'name') {
       }
     }
 
+    if (datum.type === 'select') {
+      if (name.name === 'selected') {
+        return name.value === data[datum.name];
+      } else if (name.name === 'text') {
+        return format('form.' + datum.name + '.' + name.value);
+      }
+    }
+
     return format('form.' + name + '.' + datum[property]);
   };
 }

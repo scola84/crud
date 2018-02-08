@@ -72,9 +72,9 @@ export default function createAdd(structure, route) {
   });
 
   objectDisabler
-    .hide({
+    .disable({
       permission: route.permission('add'),
-      selector: '.body, .bar'
+      selector: '.body, .bar .right'
     });
 
   objectHeader

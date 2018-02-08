@@ -20,7 +20,9 @@ export default function disableLink(structure, disabler) {
         selector: `li.${name}, li.${name} .primary button`
       })
       .hide({
-        permission: `${edit.auth}.edit`,
+        permission: [
+          [`${edit.auth}.add`, `${edit.auth}.del`, `${edit.auth}.edit`]
+        ],
         selector: `li.${name} .secondary button`
       })
       .hide({

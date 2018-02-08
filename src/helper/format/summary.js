@@ -8,12 +8,7 @@ export default function formatSummary(format) {
       return formatAction(datum.name);
     }
 
-    if (name === 'abbr') {
-      if (typeof data[name] !== 'undefined') {
-        return format('summary.' + name, data[name]);
-      }
-    }
-
-    return data[name] || null;
+    return typeof data[name] === 'undefined' || data[name] === null ?
+      null : format('summary.' + name, data[name]);
   };
 }

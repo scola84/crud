@@ -26,7 +26,7 @@ export default class ObjectHeader extends GraphicWorker {
     center
       .append('div')
       .classed('title', true)
-      .text(this.format('value.l1.0'));
+      .text(this.format('title.l1.0'));
 
     const text = stringFormat('action.panel.button')('back');
 

@@ -154,13 +154,15 @@ export default function createEdit(structure, route) {
     });
 
   objectDisabler
-    .hide({
+    .disable({
       permission: route.permission('view'),
-      selector: '.body, .bar'
+      selector: '.body, .bar .right'
     });
 
   viewDisabler
-    .disable({ selector: '.body, .bar .right' });
+    .disable({
+      selector: '.body, .bar .right'
+    });
 
   objectHeader
     .connect(objectDisabler)

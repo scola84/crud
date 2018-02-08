@@ -65,9 +65,15 @@ export default function createList(structure, route) {
   });
 
   listerDisabler
-    .disable({ selector: '.body, .bar .right' });
+    .disable({
+      selector: '.body, .bar .right'
+    });
 
   listDisabler
+    .disable({
+      permission: route.permission('list'),
+      selector: '.body, .bar .right'
+    })
     .disable({
       permission: route.permission('view'),
       selector: 'li, li .primary button'
@@ -79,10 +85,6 @@ export default function createList(structure, route) {
     .hide({
       permission: route.permission('del'),
       selector: '.bar.header .right .delete'
-    })
-    .hide({
-      permission: route.permission('list'),
-      selector: '.bar, .body'
     });
 
   listHeader

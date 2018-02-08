@@ -131,12 +131,14 @@ export default function createSelect(structure, route) {
   });
 
   selectorDisabler
-    .disable({ selector: '.body, .bar .right' });
+    .disable({
+      selector: '.body, .bar .right'
+    });
 
   selectListDisabler
-    .hide({
+    .disable({
       permission: route.permission(),
-      selector: '.body, .bar'
+      selector: '.body, .bar .right'
     });
 
   if (route.view) {

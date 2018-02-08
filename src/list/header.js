@@ -28,7 +28,7 @@ export default class ListHeader extends GraphicWorker {
     center
       .append('div')
       .classed('title', true)
-      .text(this.format('value.l1.d'));
+      .text(this.format('title.l1.d'));
 
     left
       .append('button')

@@ -103,12 +103,14 @@ export default function createView(structure, route) {
   });
 
   viewDisabler
-    .disable({ selector: '.body' });
+    .disable({
+      selector: '.body'
+    });
 
   objectDisabler
-    .hide({
+    .disable({
       permission: route.permission('view'),
-      selector: '.body, .bar'
+      selector: '.body'
     });
 
   objectHeader
