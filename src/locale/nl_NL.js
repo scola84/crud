@@ -11,8 +11,9 @@ export default {
         add: 'Toevoegen',
         back: 'Terug',
         cancel: 'Annuleren',
+        clr: 'Verwijderen',
+        del: 'Verwijderen',
         done: 'Klaar',
-        delete: 'Verwijderen',
         edit: 'Wijzigen',
         save: 'Opslaan'
       },

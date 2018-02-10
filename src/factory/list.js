@@ -27,7 +27,8 @@ export default function createList(structure, route) {
   const listBuilder = new ListBuilder({
     add: false,
     format: formatList(route.format()),
-    id: 'crud-list-builder'
+    id: 'crud-list-builder',
+    structure: structure.list && structure.list.list
   });
 
   const listClicker = new ListClicker({

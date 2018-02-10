@@ -1,7 +1,7 @@
-export default function filterPermission(base) {
-  return (local) => {
+export default function filterPermission(permission) {
+  return (name) => {
     return (request) => {
-      return request.user.may(local ? base + '.' + local : base);
+      return request.user.may(permission[name]);
     };
   };
 }

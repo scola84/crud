@@ -46,7 +46,7 @@ export default class ListHeader extends GraphicWorker {
       .attr('tabindex', 0)
       .classed('button icon delete ion-ios-trash-outline', true)
       .on('click', (d, i, n) => {
-        this.route(d, i, n, { data, name: 'delete', route });
+        this.route(d, i, n, { data, name: 'del', route });
       });
 
     right

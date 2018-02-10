@@ -1,18 +1,22 @@
-import defaults from 'lodash-es/defaults';
+import defaultsDeep from 'lodash-es/defaultsDeep';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
 import formatUrl from '../format/url';
 import handleRoute from '../handle/route';
 
 export default function routeView(options = {}) {
-  const names = defaults({}, options, {
-    id: `${options.name}_id`,
-    format: options.name,
-    permission: `${options.name}.self`
+  const names = defaultsDeep({}, options.names, {
+    id: `${options.names.name}_id`,
+    format: options.names.name,
+    name: options.names.name
   });
 
-  const routes = defaults({}, options, {
-    view: `/api/${options.name}/%(${options.name}_id)s`
+  const permissions = defaultsDeep({}, options.permissions, {
+    view: `${names.name}.self.view`
+  });
+
+  const routes = defaultsDeep({}, options.routes, {
+    view: `/api/${names.name}/%(${names.name}_id)s`
   });
 
   function link(datum, index, nodes, { data, name, route }) {
@@ -43,8 +47,8 @@ export default function routeView(options = {}) {
   return {
     id: names.id,
     format: formatString(names.format),
-    permission: filterPermission(names.permission),
     link,
+    permission: filterPermission(permissions),
     summary,
     view: routes.view ? view : null
   };

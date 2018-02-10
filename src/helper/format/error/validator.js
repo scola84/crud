@@ -13,10 +13,15 @@ export default function formatValidatorError(format, prefix = 'l1') {
     const type = formatType(error.field.type);
 
     if (error.reason) {
-      return formatMessage(error.message + '.' + error.reason, name, type);
+      return formatMessage(error.message + '.' + error.reason, {
+        length: error.field.length,
+        name,
+        type
+      });
     }
 
-    return formatMessage(error.message + '.' + error.field.type,
-      name.toLowerCase());
+    return formatMessage(error.message + '.' + error.field.type, {
+      name: name.toLowerCase()
+    });
   };
 }

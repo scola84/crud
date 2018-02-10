@@ -68,7 +68,8 @@ export default function createAdd(structure, route) {
 
   const objectHeader = new ObjectHeader({
     format: route.format(),
-    id: 'crud-add-object-header'
+    id: 'crud-add-object-header',
+    route: route.header
   });
 
   objectDisabler

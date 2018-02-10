@@ -1,26 +1,30 @@
-import defaults from 'lodash-es/defaults';
+import defaultsDeep from 'lodash-es/defaultsDeep';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
 import formatUrl from '../format/url';
 import handleRoute from '../handle/route';
 
 export default function routeEdit(options = {}) {
-  const names = defaults({}, options, {
-    id: `${options.name}_id`,
-    format: options.name,
-    permission: `${options.name}.self`,
+  const names = defaultsDeep({}, options.names, {
+    id: `${options.names.name}_id`,
+    format: options.names.name,
+    name: options.names.name,
     target: 'main'
   });
 
-  const routes = defaults({}, options, {
-    del: `/api/${options.name}/%(${names.id})s`,
-    edit: `/api/${options.name}/%(${names.id})s`,
-    header: {
-      cancel: `view-${options.name}?@${names.target}:back`,
-      done: `view-${options.name}@${names.target}:back`
-    },
-    resolve: `view-${options.name}?@${names.target}:back`,
-    view: `/api/${options.name}/%(${names.id})s`,
+  const permissions = defaultsDeep({}, options.permissions, {
+    del: `${names.name}.self.del`,
+    edit: `${names.name}.self.edit`,
+    view: `${names.name}.self.view`
+  });
+
+  const routes = defaultsDeep({}, options.routes, {
+    del: `/api/${names.name}/%(${names.id})s`,
+    edit: `/api/${names.name}/%(${names.id})s`,
+    cancel: `view-${names.name}?@${names.target}:back`,
+    done: `view-${names.name}@${names.target}:back`,
+    resolve: `view-${names.name}?@${names.target}:back`,
+    view: `/api/${names.name}/%(${names.id})s`,
   });
 
   function del(route, data) {
@@ -38,7 +42,7 @@ export default function routeEdit(options = {}) {
   }
 
   function header(datum, index, nodes, { name, route }) {
-    handleRoute(routes.header[name], route.params);
+    handleRoute(routes[name], route.params);
   }
 
   function edit(route, data) {
@@ -53,12 +57,12 @@ export default function routeEdit(options = {}) {
   }
 
   return {
-    id: names.id,
-    format: formatString(names.format),
-    permission: filterPermission(names.permission),
     del: routes.del ? del : null,
     edit: routes.edit ? edit : null,
-    header: routes.header ? header : null,
+    format: formatString(names.format),
+    header,
+    id: names.id,
+    permission: filterPermission(permissions),
     resolve: routes.resolve ? resolve : null,
     view: routes.view ? view : null
   };

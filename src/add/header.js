@@ -1,5 +1,10 @@
 import { stringFormat } from '@scola/d3-string-format';
-import { GraphicWorker } from '@scola/gui';
+
+import {
+  GraphicWorker,
+  renderCancel
+} from '@scola/gui';
+
 import { select } from 'd3';
 
 export default class ObjectHeader extends GraphicWorker {
@@ -24,6 +29,12 @@ export default class ObjectHeader extends GraphicWorker {
       .append('div')
       .classed('title', true)
       .text(this.format('title.l1.0'));
+
+    const text = stringFormat('action.panel.button')('cancel');
+
+    renderCancel(route, { icon: true, left, text }, (d, i, n) => {
+      this.route(d, i, n, { data, name: 'cancel', route });
+    });
 
     left
       .append('button')

@@ -137,7 +137,7 @@ export default function createSelect(structure, route) {
 
   selectListDisabler
     .disable({
-      permission: route.permission(),
+      permission: route.permission('select'),
       selector: '.body, .bar .right'
     });
 
