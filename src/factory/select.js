@@ -35,18 +35,18 @@ import {
 } from '../helper';
 
 export default function createSelect(structure, route) {
-  const selector = new Requester({
-    id: 'crud-selector',
-    route: route.select
+  const lister = new Requester({
+    id: 'crud-lister',
+    route: route.http('list')
   });
 
-  const selectorDisabler = new ErrorDisabler({
-    id: 'crud-select-selector-disabler'
+  const listerDisabler = new ErrorDisabler({
+    id: 'crud-select-lister-disabler'
   });
 
-  const selectorReporter = new ErrorReporter({
+  const listerReporter = new ErrorReporter({
     format: formatDefaultError(route.format(), 'short'),
-    id: 'crud-select-selector-reporter'
+    id: 'crud-select-lister-reporter'
   });
 
   const selectFormBuilder = new FormBuilder({
@@ -65,12 +65,12 @@ export default function createSelect(structure, route) {
   const selectHeader = new SelectHeader({
     format: route.format(),
     id: 'crud-select-header',
-    route: route.header
+    route: route.gui()
   });
 
   const selectListBuilder = new ListBuilder({
-    add: route.click ? true : false,
-    format: formatList(route.format()),
+    add: route.add,
+    format: formatList(route.format('list')),
     id: 'crud-select-list-builder',
     prepare: false,
     target: 'form-select',
@@ -80,7 +80,7 @@ export default function createSelect(structure, route) {
 
   const selectListClicker = new SelectClicker({
     id: 'crud-select-clicker',
-    route: route.click
+    route: route.gui()
   });
 
   const selectListDisabler = new PanelDisabler({
@@ -104,7 +104,7 @@ export default function createSelect(structure, route) {
 
   const sender = new Requester({
     id: 'crud-select-sender',
-    route: route.send
+    route: route.http('send')
   });
 
   const sendReporter = new ErrorReporter({
@@ -114,7 +114,7 @@ export default function createSelect(structure, route) {
 
   const sendResolver = new Resolver({
     id: 'crud-select-send-resolver',
-    route: route.resolve
+    route: route.gui()
   });
 
   const union = new Worker({
@@ -123,14 +123,14 @@ export default function createSelect(structure, route) {
 
   const viewer = new Requester({
     id: 'crud-select-viewer',
-    route: route.view
+    route: route.http('view')
   });
 
   const viewMerger = new ViewMerger({
     id: 'crud-select-view-merger'
   });
 
-  selectorDisabler
+  listerDisabler
     .disable({
       selector: '.body, .bar .right'
     });
@@ -153,10 +153,10 @@ export default function createSelect(structure, route) {
   }
 
   selectListPreparer
-    .connect(selector)
+    .connect(lister)
     .connect(createBrowser(json))
-    .connect(selectorDisabler)
-    .connect(selectorReporter)
+    .connect(listerDisabler)
+    .connect(listerReporter)
     .connect(selectFormBuilder)
     .connect(selectListBuilder)
     .connect(selectListDisabler)

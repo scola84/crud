@@ -1,55 +1,45 @@
-import defaultsDeep from 'lodash-es/defaultsDeep';
+import defaults from 'lodash-es/defaults';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
-import formatUrl from '../format/url';
-import handleRoute from '../handle/route';
+import handleGui from '../handle/gui';
+import handleHttp from '../handle/http';
 
 export default function routeList(options = {}) {
-  const names = defaultsDeep({}, options.names, {
-    id: `${options.names.name}_id`,
-    format: options.names.name,
-    name: options.names.name,
+  const names = defaults({}, options.names, {
+    id: `${options.names.object}_id`,
+    object: options.names.object,
     target: 'main'
   });
 
-  const permissions = defaultsDeep({}, options.permissions, {
-    add: `${names.name}.self.add`,
-    del: `${names.name}.self.del`,
-    list: `${names.name}.self.list`,
-    view: `${names.name}.self.view`
+  const format = defaults({}, options.format, {
+    object: names.object
   });
 
-  const routes = defaultsDeep({}, options.routes, {
-    add: `add-${names.name}@${names.target}:clear`,
+  const permissions = defaults({}, options.permissions, {
+    add: `${names.object}.${names.object}.add`,
+    del: `${names.object}.${names.object}.del`,
+    edit: `${names.object}.${names.object}.edit`,
+    list: `${names.object}.${names.object}.list`,
+    view: `${names.object}.${names.object}.view`
+  });
+
+  const gui = defaults({}, options.gui, {
+    add: `add-${names.object}@${names.target}:clear`,
     back: 'main@menu:back;ltr',
-    click: `view-${names.name}?@${names.target}:clear`,
-    del: `del-${names.name}`,
-    list: `/api/${names.name}?`
+    edit: `edit-${names.object}?${names.id}@${names.target}`,
+    view: `view-${names.object}?${names.id}@${names.target}:clear`,
+    del: `del-${names.object}`
   });
 
-  function click(datum, index, nodes, { data }) {
-    handleRoute(routes.click, {
-      [names.id]: data.data[index][names.id]
-    });
-  }
-
-  function header(datum, index, nodes, { name, route }) {
-    handleRoute(routes[name], route.params);
-  }
-
-  function list(route, data) {
-    return {
-      method: 'GET',
-      url: formatUrl(routes.list, route, data)
-    };
-  }
+  const http = defaults({}, options.http, {
+    list: `GET /api/${names.object}?`
+  });
 
   return {
-    click: routes.click ? click : null,
-    format: formatString(names.format),
-    header,
+    format: formatString(format),
+    gui: handleGui(gui),
+    http: handleHttp(http),
     id: names.id,
-    list: routes.list ? list : null,
     permission: filterPermission(permissions)
   };
 }

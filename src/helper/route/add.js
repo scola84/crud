@@ -1,50 +1,38 @@
-import defaultsDeep from 'lodash-es/defaultsDeep';
+import defaults from 'lodash-es/defaults';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
-import formatUrl from '../format/url';
-import handleRoute from '../handle/route';
+import handleGui from '../handle/gui';
+import handleHttp from '../handle/http';
 
 export default function routeAdd(options = {}) {
-  const names = defaultsDeep({}, options.names, {
-    id: `${options.names.name}_id`,
-    format: options.names.name,
-    name: options.names.name,
+  const names = defaults({}, options.names, {
+    id: `${options.names.object}_id`,
+    object: options.names.object,
     target: 'main'
   });
 
-  const permissions = defaultsDeep({}, options.permissions, {
-    add: `${names.name}.self.add`
+  const format = defaults({}, options.format, {
+    object: names.object
   });
 
-  const routes = defaultsDeep({}, options.routes, {
-    add: `/api/${names.name}`,
+  const gui = defaults({}, options.routes, {
     cancel: `@${names.target}:back`,
-    resolve: `edit-${names.name}@${names.target}:back`
+    resolve: `edit-${names.object}@${names.target}:back`
   });
 
-  function add(route, data) {
-    return {
-      method: 'POST',
-      url: formatUrl(routes.add, route, data)
-    };
-  }
+  const http = defaults({}, options.routes, {
+    add: `POST /api/${names.object}`
+  });
 
-  function header(datum, index, nodes, { name, route }) {
-    handleRoute(routes[name], route.params);
-  }
-
-  function resolve(datum, index, nodes, { data }) {
-    handleRoute(routes.resolve, {
-      [names.id]: data.data.id
-    });
-  }
+  const permissions = defaults({}, options.permissions, {
+    add: `${names.object}.${names.object}.add`
+  });
 
   return {
-    add: routes.add ? add : null,
-    format: formatString(names.format),
-    header,
+    format: formatString(format),
+    gui: handleGui(gui),
+    http: handleHttp(http),
     id: names.id,
-    permission: filterPermission(permissions),
-    resolve: routes.resolve ? resolve : null
+    permission: filterPermission(permissions)
   };
 }

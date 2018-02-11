@@ -8,7 +8,7 @@ export default class SelectClicker extends GraphicWorker {
         return select(nodes[index]).classed('disabled') === false;
       })
       .on('click', (d, i, n) => {
-        this.route(d, i, n, { route, data });
+        this.route(d, i, n, { route, name: 'add', data });
       });
 
     this.pass(route, data, callback);

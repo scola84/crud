@@ -1,55 +1,32 @@
-import defaultsDeep from 'lodash-es/defaultsDeep';
+import defaults from 'lodash-es/defaults';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
-import formatUrl from '../format/url';
-import handleRoute from '../handle/route';
+import handleGui from '../handle/gui';
+import handleHttp from '../handle/http';
 
 export default function routeView(options = {}) {
-  const names = defaultsDeep({}, options.names, {
-    id: `${options.names.name}_id`,
-    format: options.names.name,
-    name: options.names.name
+  const names = defaults({}, options.names, {
+    id: `${options.names.object}_id`,
+    object: options.names.object
   });
 
-  const permissions = defaultsDeep({}, options.permissions, {
-    view: `${names.name}.self.view`
+  const format = defaults({}, options.format, {
+    object: names.object
   });
 
-  const routes = defaultsDeep({}, options.routes, {
-    view: `/api/${names.name}/%(${names.name}_id)s`
+  const permissions = defaults({}, options.permissions, {
+    view: `${names.object}.${names.object}.view`
   });
 
-  function link(datum, index, nodes, { data, name, route }) {
-    if (name === 'edit') {
-      handleRoute(datum.edit.route, route.params);
-    }
-
-    if (name === 'view') {
-      const value = data.link[index];
-
-      handleRoute(datum.view.route, {
-        [value.name + '_id']: value.id
-      });
-    }
-  }
-
-  function summary(datum, index, nodes, { route }) {
-    handleRoute(datum.route, route.params);
-  }
-
-  function view(route, data) {
-    return {
-      method: 'GET',
-      url: formatUrl(routes.view, route, data)
-    };
-  }
+  const http = defaults({}, options.http, {
+    view: `GET /api/${names.object}/%(${names.object}_id)s`
+  });
 
   return {
+    format: formatString(format),
+    gui: handleGui(),
+    http: handleHttp(http),
     id: names.id,
-    format: formatString(names.format),
-    link,
-    permission: filterPermission(permissions),
-    summary,
-    view: routes.view ? view : null
+    permission: filterPermission(permissions)
   };
 }

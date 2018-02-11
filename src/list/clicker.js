@@ -1,15 +1,22 @@
 import { GraphicWorker } from '@scola/gui';
-import { select } from 'd3';
+import { event, select } from 'd3';
 
 export default class ListClicker extends GraphicWorker {
   act(route, data, callback) {
     route.list.enter
-      .filter((datum, index, nodes) => {
-        return select(nodes[index]).classed('disabled') === false;
-      })
-      .on('click', (d, i, n) => {
+      .on('click', (datum, index, nodes) => {
         select('body').dispatch('click');
-        this.route(d, i, n, { data, route });
+
+        const d = data.data[index];
+        const disabled = select(nodes[index]).classed('disabled');
+        const name = select(event.target).classed('button') ?
+          'edit' : 'view';
+
+        if (name === 'view' && disabled === true) {
+          return;
+        }
+
+        this.route(datum, index, nodes, { data: d, name, route });
       });
 
     this.pass(route, data, callback);

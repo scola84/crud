@@ -33,7 +33,7 @@ export default function createList(structure, route) {
 
   const listClicker = new ListClicker({
     id: 'crud-list-clicker',
-    route: route.click
+    route: route.gui()
   });
 
   const listDisabler = new PanelDisabler({
@@ -44,7 +44,7 @@ export default function createList(structure, route) {
   const listHeader = new ListHeader({
     format: route.format(),
     id: 'crud-list-header',
-    route: route.header
+    route: route.gui()
   });
 
   const listPreparer = new ListPreparer({
@@ -53,7 +53,7 @@ export default function createList(structure, route) {
 
   const lister = new Requester({
     id: 'crud-lister',
-    route: route.list
+    route: route.http('list')
   });
 
   const listerDisabler = new ErrorDisabler({
@@ -82,6 +82,10 @@ export default function createList(structure, route) {
     .hide({
       permission: route.permission('add'),
       selector: '.bar.header .right .add'
+    })
+    .hide({
+      permission: route.permission('edit'),
+      selector: 'li .secondary .button'
     })
     .hide({
       permission: route.permission('del'),

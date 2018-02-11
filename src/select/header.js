@@ -7,7 +7,8 @@ export default class SelectHeader extends GraphicWorker {
     const [action] = route.path.split('-');
 
     const panel = select(route.node)
-      .classed('header search', true)
+      .classed('header', true)
+      .classed('search', route.search)
       .classed(route.path.replace('-', ' '), true);
 
     const header = panel

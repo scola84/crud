@@ -11,24 +11,33 @@ export default function disableLink(structure, disabler) {
   for (let i = 0; i < structure.view.link[0].fields.length; i += 1) {
     const { name, edit, view } = structure.view.link[0].fields[i];
 
+    const editLink = [
+      `${edit.permission}.add`,
+      `${edit.permission}.del`,
+      `${edit.permission}.edit`
+    ];
+
+    const viewLink = [
+      `${edit.permission}.list`,
+      `${edit.permission}.view`
+    ];
+
+    const viewObject = [
+      `${view.permission}.view`,
+      disableListItem(`li.${name}`)
+    ];
+
     disabler
       .disable({
-        permission: [
-          `${view.auth}.view`,
-          disableListItem(`li.${name}`)
-        ],
+        permission: viewObject,
         selector: `li.${name}, li.${name} .primary button`
       })
       .hide({
-        permission: [
-          [`${edit.auth}.add`, `${edit.auth}.del`, `${edit.auth}.edit`]
-        ],
+        permission: [editLink],
         selector: `li.${name} .secondary button`
       })
       .hide({
-        permission: [
-          [`${edit.auth}.list`, `${edit.auth}.view`]
-        ],
+        permission: [viewLink],
         selector: `li.${name}`
       });
   }

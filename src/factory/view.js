@@ -54,7 +54,7 @@ export default function createView(structure, route) {
 
   const linkClicker = new LinkClicker({
     id: 'crud-view-link-clicker',
-    route: route.link
+    route: route.gui()
   });
 
   const objectDisabler = new PanelDisabler({
@@ -75,7 +75,7 @@ export default function createView(structure, route) {
 
   const summaryClicker = new SummaryClicker({
     id: 'crud-view-summary-clicker',
-    route: route.summary
+    route: route.gui()
   });
 
   const summaryDisabler = new PanelDisabler({
@@ -90,7 +90,7 @@ export default function createView(structure, route) {
   const viewer = new Requester({
     decide: decideRequester(route.id),
     id: 'crud-viewer',
-    route: route.view
+    route: route.http('view')
   });
 
   const viewDisabler = new ErrorDisabler({

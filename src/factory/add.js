@@ -9,7 +9,6 @@ import {
 
 import { createBrowser } from '@scola/http';
 import { Validator } from '@scola/validator';
-
 import { ObjectHeader } from '../add';
 
 import {
@@ -18,6 +17,7 @@ import {
 } from '../worker';
 
 import {
+  filterAdd,
   filterDisabler,
   formatDefaultError,
   formatForm,
@@ -27,7 +27,7 @@ import {
 export default function createAdd(structure, route) {
   const adder = new Requester({
     id: 'crud-adder',
-    route: route.add
+    route: route.http('add')
   });
 
   const addBuilder = new FormBuilder({
@@ -47,8 +47,9 @@ export default function createAdd(structure, route) {
   });
 
   const addResolver = new Resolver({
+    filter: filterAdd(route.id),
     id: 'crud-add-resolver',
-    route: route.resolve
+    route: route.gui()
   });
 
   const addValidator = new Validator({
@@ -69,7 +70,7 @@ export default function createAdd(structure, route) {
   const objectHeader = new ObjectHeader({
     format: route.format(),
     id: 'crud-add-object-header',
-    route: route.header
+    route: route.gui()
   });
 
   objectDisabler

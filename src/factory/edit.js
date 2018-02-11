@@ -37,7 +37,7 @@ export default function createEdit(structure, route) {
 
   const deleter = new Requester({
     id: 'crud-deleter',
-    route: route.del
+    route: route.http('del')
   });
 
   const deleteBuilder = new FormBuilder({
@@ -59,7 +59,7 @@ export default function createEdit(structure, route) {
 
   const editor = new Requester({
     id: 'crud-editor',
-    route: route.edit
+    route: route.http('edit')
   });
 
   const editBuilder = new FormBuilder({
@@ -97,7 +97,7 @@ export default function createEdit(structure, route) {
   const objectHeader = new ObjectHeader({
     format: route.format(),
     id: 'crud-edit-object-header',
-    route: route.header
+    route: route.gui()
   });
 
   const objectReporter = new ErrorReporter({
@@ -107,12 +107,12 @@ export default function createEdit(structure, route) {
 
   const objectResolver = new ObjectResolver({
     id: 'crud-edit-object-resolver',
-    route: route.resolve
+    route: route.gui()
   });
 
   const undeleter = new Requester({
     id: 'crud-edit-undeleter',
-    route: route.del
+    route: route.http('del')
   });
 
   const undeleteBuilder = new FormBuilder({
@@ -129,7 +129,7 @@ export default function createEdit(structure, route) {
   const viewer = new Requester({
     decide: decideRequester(route.id),
     id: 'crud-edit-viewer',
-    route: route.view
+    route: route.http('view')
   });
 
   const viewDisabler = new ErrorDisabler({
