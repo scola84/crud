@@ -1,6 +1,6 @@
 import sprintf from 'sprintf-js';
 
-export default function handleHttp(routes) {
+export default function handleHttp(routes = {}) {
   return (name) => {
     return (route, data) => {
       const [method, path] = routes[name].split(' ');

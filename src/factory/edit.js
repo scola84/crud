@@ -1,4 +1,5 @@
 import { json } from '@scola/codec';
+import { stringFormat } from '@scola/d3-string-format';
 
 import {
   ErrorDisabler,
@@ -41,7 +42,7 @@ export default function createEdit(structure, route) {
   });
 
   const deleteBuilder = new FormBuilder({
-    format: formatForm(route.format('action'), 'label'),
+    format: formatForm(stringFormat('action'), 'label'),
     id: 'crud-edit-delete-builder',
     target: 'form-delete',
     structure: structure.del && structure.del.form.slice(0, 2)
@@ -116,7 +117,7 @@ export default function createEdit(structure, route) {
   });
 
   const undeleteBuilder = new FormBuilder({
-    format: formatForm(route.format('action'), 'label'),
+    format: formatForm(stringFormat('action'), 'label'),
     id: 'crud-edit-undelete-builder',
     target: 'form-undelete',
     structure: structure.del && structure.del.form.slice(1)

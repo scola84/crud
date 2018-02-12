@@ -1,11 +1,11 @@
 import { StateRouter, getView } from '@scola/gui';
 
-export default function handleGui(routes) {
+export default function handleGui(routes = {}) {
   return () => {
     return (datum, index, nodes, { data, name, route }) => {
-      let all = datum && datum.route ||
+      let all = routes[name] ||
         datum && datum[name] && datum[name].route ||
-        routes[name];
+        datum && datum.route;
 
       all = Array.isArray(all) ? all : [all];
 
