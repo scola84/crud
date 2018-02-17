@@ -1,5 +1,3 @@
-import formatDate from './date';
-
 export default function formatForm(format, property = 'name') {
   return (datum, index, nodes, { data, name, route }) => {
     if (name === 'value') {
@@ -14,11 +12,14 @@ export default function formatForm(format, property = 'name') {
       }
 
       if (typeof datum.value !== 'undefined') {
-        value = datum.value;
+        value = typeof datum.value === 'function' ?
+          datum.value() : datum.value;
       }
 
       if (value !== null) {
-        return datum.date ? formatDate(datum, value) : value;
+        return datum.type === 'plain' ?
+          format('form.value.' + datum.name, value) :
+          value;
       }
     }
 
@@ -26,7 +27,7 @@ export default function formatForm(format, property = 'name') {
       if (name.name === 'selected') {
         return name.value === data[datum.name];
       } else if (name.name === 'text') {
-        return format('form.' + datum.name + '.' + name.value);
+        return format('form.value.' + datum.name + '.' + name.value);
       }
     }
 

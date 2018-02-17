@@ -8,7 +8,17 @@ export default function formatSummary(format) {
       return formatAction(datum.name);
     }
 
-    return typeof data[name] === 'undefined' || data[name] === null ?
-      null : format('summary.' + name, data[name]);
+    if (name === 'state') {
+      const state = datum.state.filter((value, power) => {
+        return (data.state & (2 ** power)) !== 0;
+      });
+
+      return state.length ? state.join(' ') : 'empty';
+    }
+
+    const value = typeof data[name] === 'undefined' ||
+      data[name] === null ? '' : data[name];
+
+    return format('summary.' + name, value) || null;
   };
 }

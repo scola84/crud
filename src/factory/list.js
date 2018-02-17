@@ -48,6 +48,7 @@ export default function createList(structure, route) {
   });
 
   const listPreparer = new ListPreparer({
+    height: structure.list.height,
     id: 'crud-list-preparer'
   });
 

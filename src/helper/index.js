@@ -4,7 +4,6 @@ import filterAdd from './filter/add';
 import filterDisabler from './filter/disabler';
 import filterLink from './filter/link';
 import filterPermission from './filter/permission';
-import formatDate from './format/date';
 import formatDefaultError from './format/error/default';
 import formatForm from './format/form';
 import formatLink from './format/link';
@@ -22,7 +21,6 @@ export {
   filterDisabler,
   filterLink,
   filterPermission,
-  formatDate,
   formatDefaultError,
   formatForm,
   formatLink,

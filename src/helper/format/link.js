@@ -7,11 +7,13 @@ export default function formatLink() {
 
     const link = Object.assign({}, value, {
       count: value.count ? value.count - 1 : 0,
-      l2: value.l1 || '',
-      l3: value.l1 || ''
+      l2: value.l2 || '',
+      l3: value.l3 || '',
+      l4: value.l4 || '',
+      l5: value.l5 || ''
     });
 
-    if (name === 'l2' && link.count < 1) {
+    if (name === 'l3' && link.count < 1) {
       return null;
     }
 

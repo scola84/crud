@@ -1,6 +1,6 @@
 import { stringFormat } from '@scola/d3-string-format';
 
-export default function formatValidatorError(format, prefix = 'l1') {
+export default function formatValidatorError(format) {
   const formatMessage = stringFormat('validator.error.long');
   const formatType = stringFormat('validator.type');
 
@@ -9,7 +9,8 @@ export default function formatValidatorError(format, prefix = 'l1') {
       return error.message;
     }
 
-    const name = format('form.' + prefix + '.' + error.field.name);
+    const name = format('form.l1.' + error.field.name) ||
+      format('form.placeholder.' + error.field.name);
     const type = formatType(error.field.type);
 
     if (error.reason) {

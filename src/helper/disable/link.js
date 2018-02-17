@@ -2,8 +2,8 @@ function disableListItem(selector) {
   return (route, data, node) => {
     return node
       .selectAll(selector)
-      .selectAll('.primary span:empty, .secondary span:empty')
-      .size() < 2;
+      .selectAll('.l0:empty, .l2:empty, .l3:empty, .l4:empty, .l5:empty')
+      .size() < 5;
   };
 }
 

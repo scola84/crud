@@ -1,5 +1,3 @@
-import formatDate from './date';
-
 export default function formatList(format) {
   return (datum, index, nodes, { data, name, route }) => {
     if (name === 'checked') {
@@ -20,13 +18,17 @@ export default function formatList(format) {
       }
     }
 
-    let string = typeof data[name] === 'undefined' || data[name] === null ?
-      '' : format('list.' + name, data[name]);
+    if (name === 'state') {
+      const state = datum.state.filter((value, power) => {
+        return (data.state & (2 ** power)) !== 0;
+      });
 
-    if (datum.date) {
-      string = formatDate(datum, string);
+      return state.length ? state.join(' ') : 'empty';
     }
 
-    return string;
+    const value = typeof data[name] === 'undefined' ||
+      data[name] === null ? '' : data[name];
+
+    return format('list.' + name, value) || null;
   };
 }
