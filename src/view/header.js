@@ -2,8 +2,7 @@ import { stringFormat } from '@scola/d3-string-format';
 
 import {
   GraphicWorker,
-  renderBack,
-  getView
+  renderBack
 } from '@scola/gui';
 
 import { select } from 'd3';
@@ -33,11 +32,8 @@ export default class ObjectHeader extends GraphicWorker {
 
     const text = stringFormat('action.panel.button')('back');
 
-    renderBack(route, { icon: true, left, text }, () => {
-      getView('main').handle({
-        back: true,
-        ltr: true
-      });
+    renderBack(route, { icon: true, left, text }, (d, i, n) => {
+      this.route(d, i, n, { data, name: 'back', route });
     });
 
     right
