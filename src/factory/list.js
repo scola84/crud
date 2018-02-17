@@ -44,7 +44,8 @@ export default function createList(structure, route) {
   const listHeader = new ListHeader({
     format: route.format(),
     id: 'crud-list-header',
-    route: route.gui()
+    route: route.gui(),
+    structure: structure.list.header
   });
 
   const listPreparer = new ListPreparer({

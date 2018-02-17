@@ -23,6 +23,9 @@ export default class ObjectHeader extends GraphicWorker {
     const left = header
       .select('.left');
 
+    const right = header
+      .select('.right');
+
     center
       .append('div')
       .classed('title', true)
@@ -36,6 +39,16 @@ export default class ObjectHeader extends GraphicWorker {
         ltr: true
       });
     });
+
+    right
+      .selectAll('button')
+      .data(this._structure || [])
+      .enter()
+      .append('button')
+      .attr('class', (d) => 'button icon ' + d.button)
+      .on('click', (d, i, n) => {
+        this.route(d, i, n, { data, route });
+      });
 
     this.pass(route, data, callback);
   }

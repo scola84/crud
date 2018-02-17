@@ -64,7 +64,9 @@ export default function createView(structure, route) {
 
   const objectHeader = new ObjectHeader({
     format: route.format(),
-    id: 'crud-view-object-header'
+    id: 'crud-view-object-header',
+    route: route.gui(),
+    structure: structure.view.header
   });
 
   const summaryBuilder = new SummaryBuilder({

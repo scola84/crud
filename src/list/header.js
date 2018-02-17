@@ -39,6 +39,16 @@ export default class ListHeader extends GraphicWorker {
         this.route(d, i, n, { data, name: 'back', route });
       });
 
+    right
+      .selectAll('button')
+      .data(this._structure || [])
+      .enter()
+      .append('button')
+      .attr('class', (d) => 'button icon ' + d.button)
+      .on('click', (d, i, n) => {
+        this.route(d, i, n, { data, route });
+      });
+
     renderSearch(route, { panel, right });
 
     right
