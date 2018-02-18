@@ -7,9 +7,9 @@ export default function formatLink() {
 
     const link = Object.assign({}, value, {
       count: value.count ? value.count - 1 : 0,
-      l2: value.l2 || '',
-      l3: value.l3 || '',
-      l4: value.l4 || '',
+      l2: value.l5 || '',
+      l3: value.l5 || '',
+      l4: value.l5 || '',
       l5: value.l5 || ''
     });
 

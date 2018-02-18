@@ -3,12 +3,24 @@ import { GraphicWorker } from '@scola/gui';
 import { select } from 'd3';
 
 export default class SelectHeader extends GraphicWorker {
+  constructor(options = {}) {
+    super(options);
+
+    this._search = null;
+    this.setSearch(options.search);
+  }
+
+  setSearch(value = true) {
+    this._search = value;
+    return this;
+  }
+
   act(route, data, callback) {
     const [action] = route.path.split('-');
 
     const panel = select(route.node)
       .classed('header', true)
-      .classed('search', route.search)
+      .classed('search', this._search)
       .classed(route.path.replace('-', ' '), true);
 
     const header = panel

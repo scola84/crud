@@ -65,7 +65,8 @@ export default function createSelect(structure, route) {
   const selectHeader = new SelectHeader({
     format: route.format(),
     id: 'crud-select-header',
-    route: route.gui()
+    route: route.gui(),
+    search: structure.search
   });
 
   const selectListBuilder = new ListBuilder({

@@ -11,10 +11,11 @@ export default class LinkClicker extends GraphicWorker {
       });
 
     route.list.enter
-      .filter((datum, index, nodes) => {
-        return select(nodes[index]).classed('disabled') === false;
-      })
       .on('click', (datum, index, nodes) => {
+        if (select(nodes[index]).classed('disabled') === true) {
+          return;
+        }
+
         const d = {
           [datum.view.id]: data.link[index].id
         };
