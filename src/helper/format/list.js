@@ -27,6 +27,6 @@ export default function formatList(format) {
     const value = typeof data[name] === 'undefined' ||
       data[name] === null ? '' : data[name];
 
-    return format('list.' + name, value) || null;
+    return format('list.' + name, value, data) || null;
   };
 }
