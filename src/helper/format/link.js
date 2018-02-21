@@ -1,7 +1,10 @@
 import { stringFormat } from '@scola/d3-string-format';
+import normalizeLink from '../normalize/link';
 
 export default function formatLink() {
   return (datum, index, nodes, { data, name }) => {
+    index = normalizeLink(datum, index, nodes);
+
     const prefix = (datum.format || datum.name) + '.title';
     const value = data && data[index] || {};
 
