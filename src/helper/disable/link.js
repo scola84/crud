@@ -27,10 +27,10 @@ export default function disableLink(structure, disabler) {
         `${edit.permission}.view`
       ];
 
-      const viewObject = [
+      const viewObject = view ? [
         `${view.permission}.view`,
         disableListItem(`li.${name}`)
-      ];
+      ] : '';
 
       disabler
         .disable({
