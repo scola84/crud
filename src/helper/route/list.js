@@ -15,14 +15,6 @@ export default function routeList(options = {}) {
     object: names.object
   });
 
-  const permissions = defaults({}, options.permissions, {
-    add: `${names.object}.${names.object}.add`,
-    del: `${names.object}.${names.object}.del`,
-    edit: `${names.object}.${names.object}.edit`,
-    list: `${names.object}.${names.object}.list`,
-    view: `${names.object}.${names.object}.view`
-  });
-
   const gui = defaults({}, options.gui, {
     add: `add-${names.object}@${names.target}:clear`,
     back: 'main@menu:back;ltr',
@@ -33,6 +25,14 @@ export default function routeList(options = {}) {
 
   const http = defaults({}, options.http, {
     list: `GET /api/${names.object}?`
+  });
+
+  const permissions = defaults({}, options.permissions, {
+    add: `${names.object}.${names.object}.add`,
+    del: `${names.object}.${names.object}.del`,
+    edit: `${names.object}.${names.object}.edit`,
+    list: `${names.object}.${names.object}.list`,
+    view: `${names.object}.${names.object}.view`
   });
 
   return {

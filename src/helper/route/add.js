@@ -15,12 +15,12 @@ export default function routeAdd(options = {}) {
     object: names.object
   });
 
-  const gui = defaults({}, options.routes, {
+  const gui = defaults({}, options.gui, {
     cancel: `@${names.target}:back`,
     resolve: `edit-${names.object}?${names.id}@${names.target}:back`
   });
 
-  const http = defaults({}, options.routes, {
+  const http = defaults({}, options.http, {
     add: `POST /api/${names.object}`
   });
 

@@ -15,12 +15,6 @@ export default function routeEdit(options = {}) {
     object: names.object
   });
 
-  const permissions = defaults({}, options.permissions, {
-    del: `${names.object}.${names.object}.del`,
-    edit: `${names.object}.${names.object}.edit`,
-    view: `${names.object}.${names.object}.view`
-  });
-
   const gui = defaults({}, options.gui, {
     cancel: `view-${names.object}?@${names.target}:back`,
     done: `view-${names.object}@${names.target}:back`,
@@ -31,6 +25,12 @@ export default function routeEdit(options = {}) {
     del: `DELETE /api/${names.object}/%(${names.id})s`,
     edit: `PUT /api/${names.object}/%(${names.id})s`,
     view: `GET /api/${names.object}/%(${names.id})s`
+  });
+
+  const permissions = defaults({}, options.permissions, {
+    del: `${names.object}.${names.object}.del`,
+    edit: `${names.object}.${names.object}.edit`,
+    view: `${names.object}.${names.object}.view`
   });
 
   return {

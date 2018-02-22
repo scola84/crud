@@ -17,10 +17,6 @@ export default function routeSelect(options = {}) {
     object: names.object
   });
 
-  const permissions = defaults({}, options.permissions, {
-    select: `${names.object}.${names.object}.edit`
-  });
-
   const gui = defaults({}, options.gui, {
     add: `add-${names.list}@${names.target}:remember`,
     cancel: `view-${names.object}?@${names.target}:back`,
@@ -31,6 +27,10 @@ export default function routeSelect(options = {}) {
     list: `GET /api/${names.list}?`,
     send: `PUT /api/${names.object}`,
     view: `GET /api/${names.object}`
+  });
+
+  const permissions = defaults({}, options.permissions, {
+    select: `${names.object}.${names.object}.edit`
   });
 
   return {
