@@ -13,7 +13,7 @@ export default function formatForm(format, property = 'name') {
 
       if (typeof datum.value !== 'undefined') {
         value = typeof datum.value === 'function' ?
-          datum.value() : datum.value;
+          datum.value(route, data) : datum.value;
       }
 
       if (value !== null) {
