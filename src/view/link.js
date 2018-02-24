@@ -1,6 +1,6 @@
 import { GraphicWorker } from '@scola/gui';
 import { event, select } from 'd3';
-import { normalizeLink } from '../helper';
+import { normalizeList } from '../helper';
 
 export default class LinkClicker extends GraphicWorker {
   act(route, data, callback) {
@@ -17,7 +17,7 @@ export default class LinkClicker extends GraphicWorker {
           return;
         }
 
-        const dIndex = normalizeLink(datum, index, nodes);
+        const dIndex = normalizeList(datum, index, nodes);
 
         const d = {
           [datum.view.id]: data.link[dIndex].id

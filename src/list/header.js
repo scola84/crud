@@ -8,6 +8,18 @@ import {
 import { select } from 'd3';
 
 export default class ListHeader extends GraphicWorker {
+  constructor(options = {}) {
+    super(options);
+
+    this._search = null;
+    this.setSearch(options.search);
+  }
+
+  setSearch(value = true) {
+    this._search = value;
+    return this;
+  }
+
   act(route, data, callback) {
     const panel = select(route.node)
       .classed('header outset', true)
@@ -39,17 +51,19 @@ export default class ListHeader extends GraphicWorker {
         this.route(d, i, n, { data, name: 'back', route });
       });
 
+    if (this._search === true) {
+      renderSearch(route, { panel, right });
+    }
+
     right
-      .selectAll('button')
+      .selectAll('button:not(.search)')
       .data(this._structure || [])
       .enter()
       .append('button')
-      .attr('class', (d) => 'button icon ' + d.button)
+      .attr('class', (datum) => 'button icon ' + datum.button)
       .on('click', (d, i, n) => {
         this.route(d, i, n, { data, route });
       });
-
-    renderSearch(route, { panel, right });
 
     right
       .append('button')

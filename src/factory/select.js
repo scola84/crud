@@ -71,12 +71,14 @@ export default function createSelect(structure, route) {
 
   const selectListBuilder = new ListBuilder({
     add: route.add,
+    dynamic: structure.dynamic,
+    filter: structure.filter,
     format: formatList(route.format('list')),
     id: 'crud-select-list-builder',
     prepare: false,
     target: 'form-select',
     render: renderForm,
-    structure: structure.form.slice(-1)
+    structure: structure.list || structure.form.slice(-1)
   });
 
   const selectListClicker = new SelectClicker({
@@ -90,6 +92,7 @@ export default function createSelect(structure, route) {
   });
 
   const selectListPreparer = new ListPreparer({
+    dynamic: structure.dynamic,
     id: 'crud-select-list-preparer'
   });
 

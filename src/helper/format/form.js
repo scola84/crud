@@ -31,6 +31,10 @@ export default function formatForm(format, property = 'name') {
       }
     }
 
-    return format('form.' + name + '.' + datum[property]);
+    if (typeof datum[name] !== 'undefined') {
+      return format('form.value.' + name, datum[name]);
+    }
+
+    return format('form.' + name + '.' + datum[property], datum);
   };
 }

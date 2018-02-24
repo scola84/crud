@@ -41,7 +41,7 @@ export default class ObjectHeader extends GraphicWorker {
       .data(this._structure || [])
       .enter()
       .append('button')
-      .attr('class', (d) => 'button icon ' + d.button)
+      .attr('class', (datum) => 'button icon ' + datum.button)
       .on('click', (d, i, n) => {
         this.route(d, i, n, { data, route });
       });

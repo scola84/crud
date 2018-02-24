@@ -9,6 +9,7 @@ import {
 import {
   decideRequester,
   disableLink,
+  filterAdd,
   filterDisabler,
   filterLink,
   filterPermission,
@@ -18,7 +19,10 @@ import {
   formatList,
   formatString,
   formatSummary,
-  formatValidatorError
+  formatValidatorError,
+  handleGui,
+  handleHttp,
+  normalizeList
 } from './src/helper';
 
 import {
@@ -42,6 +46,7 @@ export {
 export {
   decideRequester,
   disableLink,
+  filterAdd,
   filterDisabler,
   filterLink,
   filterPermission,
@@ -51,7 +56,10 @@ export {
   formatList,
   formatString,
   formatSummary,
-  formatValidatorError
+  formatValidatorError,
+  handleGui,
+  handleHttp,
+  normalizeList
 };
 
 export {

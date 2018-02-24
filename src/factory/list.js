@@ -26,6 +26,8 @@ import {
 export default function createList(structure, route) {
   const listBuilder = new ListBuilder({
     add: false,
+    dynamic: structure.list && structure.list.dynamic,
+    filter: structure.list && structure.list.filter,
     format: formatList(route.format()),
     id: 'crud-list-builder',
     structure: structure.list && structure.list.list
@@ -45,10 +47,12 @@ export default function createList(structure, route) {
     format: route.format(),
     id: 'crud-list-header',
     route: route.gui(),
+    search: structure.list.search,
     structure: structure.list.header
   });
 
   const listPreparer = new ListPreparer({
+    dynamic: structure.list && structure.list.dynamic,
     height: structure.list.height,
     id: 'crud-list-preparer'
   });

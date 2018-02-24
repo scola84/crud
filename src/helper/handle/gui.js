@@ -23,9 +23,15 @@ export default function handleGui(routes = {}) {
             const names = rawParams.split(';');
             const picked = {};
 
+            let sourceName = null;
+            let targetName = null;
+
             for (let j = 0; j < names.length; j += 1) {
-              picked[names[j]] = route.params[names[j]] ||
-                data && data[names[j]];
+              [targetName, sourceName] = names[j].split('=');
+              sourceName = sourceName || targetName;
+
+              picked[targetName] = route.params[sourceName] ||
+                data && data[sourceName];
             }
 
             current.params = picked;

@@ -3,10 +3,10 @@ import Resolver from '../worker/resolver';
 
 export default class ObjectResolver extends Resolver {
   act(route, data, callback) {
-    if (route.response.request.method === 'PUT') {
-      super.act(route, data, callback);
-    } else {
+    if (route.response.request.method === 'DELETE') {
       this._resolveDelete(route);
+    } else {
+      super.act(route, data, callback);
     }
   }
 

@@ -6,6 +6,7 @@ import {
   ErrorReporter,
   FormBuilder,
   FormDisabler,
+  FormPreparer,
   FormReader,
   PanelDisabler
 } from '@scola/gui';
@@ -64,6 +65,7 @@ export default function createEdit(structure, route) {
   });
 
   const editBuilder = new FormBuilder({
+    filter: structure.edit.filter,
     format: formatForm(route.format()),
     id: 'crud-edit-builder',
     target: 'form-edit',
@@ -75,6 +77,8 @@ export default function createEdit(structure, route) {
     id: 'crud-edit-disabler',
     target: 'form-edit'
   });
+
+  const editPreparer = new FormPreparer();
 
   const editReader = new FormReader({
     id: 'crud-edit-reader'
@@ -175,6 +179,7 @@ export default function createEdit(structure, route) {
 
   broadcaster
     .connect(editBuilder)
+    .connect(editPreparer)
     .connect(editDisabler)
     .connect(editReader)
     .connect(editValidator)

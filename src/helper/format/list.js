@@ -13,6 +13,10 @@ export default function formatList(format) {
     }
 
     if (name === 'value') {
+      if (typeof datum.value !== 'undefined') {
+        return datum.value;
+      }
+
       return data[datum.name];
     }
 
@@ -25,7 +29,7 @@ export default function formatList(format) {
     }
 
     const value = typeof data[name] === 'undefined' ||
-      data[name] === null ? '' : data[name];
+      data[name] === null ? datum[name] || '' : data[name];
 
     return format('list.' + name, value, route, data) || null;
   };

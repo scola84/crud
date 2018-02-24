@@ -13,7 +13,7 @@ import formatSummary from './format/summary';
 import formatValidatorError from './format/error/validator';
 import handleGui from './handle/gui';
 import handleHttp from './handle/http';
-import normalizeLink from './normalize/link';
+import normalizeList from './normalize/list';
 
 export {
   decideRequester,
@@ -31,5 +31,5 @@ export {
   formatValidatorError,
   handleGui,
   handleHttp,
-  normalizeLink
+  normalizeList
 };
