@@ -1,4 +1,4 @@
-import { json } from '@scola/codec';
+import { codec } from '@scola/codec';
 
 import {
   ErrorDisabler,
@@ -118,7 +118,7 @@ export default function createView(structure, route) {
   objectHeader
     .connect(objectDisabler)
     .connect(viewer)
-    .connect(createBrowser(json))
+    .connect(createBrowser(...codec))
     .connect(viewDisabler)
     .connect(viewReporter)
     .connect(broadcaster);

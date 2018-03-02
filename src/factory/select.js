@@ -1,4 +1,4 @@
-import { json } from '@scola/codec';
+import { codec } from '@scola/codec';
 
 import {
   ErrorDisabler,
@@ -148,7 +148,7 @@ export default function createSelect(structure, route) {
   if (route.view) {
     selectHeader
       .connect(viewer)
-      .connect(createBrowser(json))
+      .connect(createBrowser(...codec))
       .connect(viewMerger)
       .connect(selectListPreparer);
   } else {
@@ -158,7 +158,7 @@ export default function createSelect(structure, route) {
 
   selectListPreparer
     .connect(lister)
-    .connect(createBrowser(json))
+    .connect(createBrowser(...codec))
     .connect(listerDisabler)
     .connect(listerReporter)
     .connect(selectFormBuilder)
@@ -169,7 +169,7 @@ export default function createSelect(structure, route) {
     .connect(selectValidator)
     .connect(selectValidatorReporter)
     .connect(sender)
-    .connect(createBrowser(json))
+    .connect(createBrowser(...codec))
     .connect(sendReporter)
     .connect(sendResolver)
     .connect(union);

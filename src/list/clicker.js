@@ -8,13 +8,16 @@ export default class ListClicker extends GraphicWorker {
       .on('click', (datum, index, nodes) => {
         select('body').dispatch('click');
 
+        const target = select(event.target);
+        datum = target.datum();
+
         const options = { disabled: false };
         const dIndex = normalizeList(datum, index, nodes, options);
 
         const d = data.data[dIndex];
         const disabled = select(nodes[index]).classed('disabled');
-        const name = select(event.target).classed('button') ?
-          'edit' : 'view';
+
+        const name = target.classed('button') ? 'edit' : 'view';
 
         if (name === 'view' && disabled === true) {
           return;

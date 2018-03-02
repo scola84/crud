@@ -1,4 +1,4 @@
-export default function formatForm(format, property = 'name') {
+export default function formatForm(format) {
   return (datum, index, nodes, { data, name, route }) => {
     if (name === 'value') {
       let value = null;
@@ -16,11 +16,9 @@ export default function formatForm(format, property = 'name') {
           datum.value(route, data) : datum.value;
       }
 
-      if (value !== null) {
-        return datum.type === 'plain' ?
-          format('form.value.' + datum.name, value) :
-          value;
-      }
+      return datum.type === 'plain' || datum.type === 'submit' ?
+        format('form.value.' + datum.name, value) :
+        value;
     }
 
     if (datum.type === 'select') {
@@ -32,9 +30,11 @@ export default function formatForm(format, property = 'name') {
     }
 
     if (typeof datum[name] !== 'undefined') {
-      return format('form.value.' + name, datum[name]);
+      return format('form.value.' + name, datum[name], route, data);
     }
 
-    return format('form.' + name + '.' + datum[property], datum);
+    const code = 'form.' + name + (datum.name ? '.' + datum.name : '');
+
+    return format(code, datum);
   };
 }

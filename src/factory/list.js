@@ -1,4 +1,4 @@
-import { json } from '@scola/codec';
+import { codec } from '@scola/codec';
 
 import {
   ErrorDisabler,
@@ -101,7 +101,7 @@ export default function createList(structure, route) {
   listHeader
     .connect(listPreparer)
     .connect(lister)
-    .connect(createBrowser(json))
+    .connect(createBrowser(...codec))
     .connect(listerDisabler)
     .connect(listerReporter)
     .connect(listBuilder)

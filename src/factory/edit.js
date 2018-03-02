@@ -1,4 +1,4 @@
-import { json } from '@scola/codec';
+import { codec } from '@scola/codec';
 import { stringFormat } from '@scola/d3-string-format';
 
 import {
@@ -43,7 +43,7 @@ export default function createEdit(structure, route) {
   });
 
   const deleteBuilder = new FormBuilder({
-    format: formatForm(stringFormat('action'), 'label'),
+    format: formatForm(stringFormat('action')),
     id: 'crud-edit-delete-builder',
     target: 'form-delete',
     structure: structure.del && structure.del.form.slice(0, 2)
@@ -121,7 +121,7 @@ export default function createEdit(structure, route) {
   });
 
   const undeleteBuilder = new FormBuilder({
-    format: formatForm(stringFormat('action'), 'label'),
+    format: formatForm(stringFormat('action')),
     id: 'crud-edit-undelete-builder',
     target: 'form-undelete',
     structure: structure.del && structure.del.form.slice(1)
@@ -172,7 +172,7 @@ export default function createEdit(structure, route) {
   objectHeader
     .connect(objectDisabler)
     .connect(viewer)
-    .connect(createBrowser(json))
+    .connect(createBrowser(...codec))
     .connect(viewDisabler)
     .connect(viewReporter)
     .connect(broadcaster);
@@ -185,7 +185,7 @@ export default function createEdit(structure, route) {
     .connect(editValidator)
     .connect(editValidatorReporter)
     .connect(editor)
-    .connect(createBrowser(json))
+    .connect(createBrowser(...codec))
     .connect(objectReporter);
 
   if (structure.del) {
@@ -194,14 +194,14 @@ export default function createEdit(structure, route) {
       .connect(deleteDisabler)
       .connect(deleteReader)
       .connect(deleter)
-      .connect(createBrowser(json))
+      .connect(createBrowser(...codec))
       .connect(objectReporter);
 
     broadcaster
       .connect(undeleteBuilder)
       .connect(undeleteReader)
       .connect(undeleter)
-      .connect(createBrowser(json))
+      .connect(createBrowser(...codec))
       .connect(objectReporter);
   }
 

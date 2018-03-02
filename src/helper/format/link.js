@@ -20,6 +20,10 @@ export default function formatLink() {
       return null;
     }
 
+    if (name === 'l5' && link.l5 === '') {
+      return null;
+    }
+
     return stringFormat(prefix)(name, link);
   };
 }

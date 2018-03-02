@@ -36,11 +36,6 @@ export default class ObjectHeader extends GraphicWorker {
       this.route(d, i, n, { data, name: 'cancel', route });
     });
 
-    left
-      .append('button')
-      .attr('tabindex', 0)
-      .classed('button left show-menu ion-navicon', true);
-
     right
       .append('button')
       .attr('form', 'form-add')

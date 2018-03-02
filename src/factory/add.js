@@ -1,4 +1,4 @@
-import { json } from '@scola/codec';
+import { codec } from '@scola/codec';
 
 import {
   ErrorReporter,
@@ -86,7 +86,7 @@ export default function createAdd(structure, route) {
     .connect(addValidator)
     .connect(addValidatorReporter)
     .connect(adder)
-    .connect(createBrowser(json))
+    .connect(createBrowser(...codec))
     .connect(addReporter)
     .connect(addResolver);
 

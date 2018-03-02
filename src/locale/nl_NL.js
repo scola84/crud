@@ -2,8 +2,8 @@ export default {
   action: {
     form: {
       value: {
-        delete: 'Verwijderen',
-        undelete: 'Herstellen'
+        del: 'Verwijderen',
+        undel: 'Herstellen'
       }
     },
     panel: {
