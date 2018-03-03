@@ -2,7 +2,7 @@ export default function normalizeList(datum, index, nodes, options = {}) {
   const selector = options.disabled === false ?
     'li:not(.disabled)' : 'li';
 
-  const list = nodes[index].closest('div.list');
+  const list = nodes[index].closest('div.list-group');
   const items = Array.from(list.querySelectorAll(selector));
   const item = nodes[index].closest('li');
 
