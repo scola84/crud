@@ -1,4 +1,9 @@
 import {
+  Requester,
+  Resolver
+} from './src/worker';
+
+import {
   createAdd,
   createEdit,
   createList,
@@ -34,6 +39,11 @@ import {
 } from './src/helper/route';
 
 import locale from './src/locale';
+
+export {
+  Requester,
+  Resolver
+};
 
 export {
   createAdd,

@@ -5,8 +5,6 @@ export default class ListClicker extends GraphicWorker {
   act(route, data, callback) {
     route.list.enter
       .on('click', (datum, index, nodes) => {
-        select('body').dispatch('click');
-
         const target = select(event.target);
         datum = target.datum();
 
