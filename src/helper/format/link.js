@@ -1,9 +1,9 @@
 import { stringFormat } from '@scola/d3-string-format';
-import normalizeList from '../normalize/list';
+import normalizeLink from '../normalize/link';
 
-export default function formatLink() {
+export default function formatLink(structure) {
   return (datum, index, nodes, { data, name }) => {
-    index = normalizeList(datum, index, nodes);
+    index = normalizeLink(structure, datum);
 
     const prefix = (datum.format || datum.name) + '.title';
     const value = data && data[index] || {};

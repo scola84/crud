@@ -46,7 +46,7 @@ export default function createView(structure, route) {
   const linkBuilder = new ListBuilder({
     dynamic: false,
     filter: filterLink(),
-    format: formatLink(),
+    format: formatLink(structure.view.link),
     id: 'crud-view-link-builder',
     target: 'link-list',
     structure: structure.view.link
@@ -54,7 +54,8 @@ export default function createView(structure, route) {
 
   const linkClicker = new LinkClicker({
     id: 'crud-view-link-clicker',
-    route: route.gui()
+    route: route.gui(),
+    structure: structure.view.link
   });
 
   const objectDisabler = new PanelDisabler({

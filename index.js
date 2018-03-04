@@ -22,7 +22,7 @@ import {
   formatValidatorError,
   handleGui,
   handleHttp,
-  normalizeList
+  normalizeLink
 } from './src/helper';
 
 import {
@@ -59,7 +59,7 @@ export {
   formatValidatorError,
   handleGui,
   handleHttp,
-  normalizeList
+  normalizeLink
 };
 
 export {
