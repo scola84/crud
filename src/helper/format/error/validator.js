@@ -14,6 +14,10 @@ export default function formatValidatorError(format) {
     const type = formatType(error.field.type);
 
     if (error.reason) {
+      if (error.reason === 'custom') {
+        return format('form.error.' + error.field.name);
+      }
+
       return formatMessage(error.message + '.' + error.reason, {
         length: error.field.length,
         name,
