@@ -1,7 +1,7 @@
 import {
   StateRouter,
   getView,
-  requestFile
+  requestResource
 } from '@scola/gui';
 
 function handleView(datum, index, nodes, data, name, route, routes) {
@@ -48,7 +48,7 @@ export default function handleGui(routes = {}) {
   return () => {
     return (datum, index, nodes, { data, name, route }) => {
       if (datum && typeof datum.path !== 'undefined') {
-        requestFile(datum, index, nodes[index], data);
+        requestResource(datum, index, nodes[index], data);
         return;
       }
 
