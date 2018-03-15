@@ -30,7 +30,8 @@ import {
   filterDisabler,
   formatDefaultError,
   formatForm,
-  formatValidatorError
+  formatValidatorError,
+  mergeData
 } from '../helper';
 
 export default function createEdit(structure, route) {
@@ -58,7 +59,8 @@ export default function createEdit(structure, route) {
   });
 
   const deleteReader = new FormReader({
-    id: 'crud-edit-delete-reader'
+    id: 'crud-edit-delete-reader',
+    merge: mergeData()
   });
 
   const editor = new Requester({
@@ -83,10 +85,12 @@ export default function createEdit(structure, route) {
   const editPreparer = new FormPreparer();
 
   const editReader = new FormReader({
-    id: 'crud-edit-reader'
+    id: 'crud-edit-reader',
+    merge: mergeData()
   });
 
   const editValidator = new Validator({
+    filter: filterData(),
     id: 'crud-edit-validator',
     structure: structure.edit.form
   });
@@ -131,7 +135,8 @@ export default function createEdit(structure, route) {
   });
 
   const undeleteReader = new FormReader({
-    id: 'crud-edit-undelete-reader'
+    id: 'crud-edit-undelete-reader',
+    merge: mergeData()
   });
 
   const viewer = new Requester({

@@ -32,7 +32,8 @@ import {
   formatValidatorError,
   formatDefaultError,
   formatForm,
-  formatList
+  formatList,
+  mergeData
 } from '../helper';
 
 export default function createSelect(structure, route) {
@@ -60,6 +61,7 @@ export default function createSelect(structure, route) {
 
   const selectFormReader = new FormReader({
     id: 'crud-select-form-reader',
+    merge: mergeData(),
     serialize: { empty: false, hash: true },
     target: 'form-select'
   });
@@ -99,6 +101,7 @@ export default function createSelect(structure, route) {
   });
 
   const selectValidator = new Validator({
+    filter: filterData(),
     id: 'crud-select-validator',
     structure: structure.form
   });

@@ -18,10 +18,12 @@ import {
 
 import {
   filterAdd,
+  filterData,
   filterDisabler,
   formatDefaultError,
   formatForm,
-  formatValidatorError
+  formatValidatorError,
+  mergeData
 } from '../helper';
 
 export default function createAdd(structure, route) {
@@ -38,7 +40,8 @@ export default function createAdd(structure, route) {
   });
 
   const addReader = new FormReader({
-    id: 'crud-add-reader'
+    id: 'crud-add-reader',
+    merge: mergeData()
   });
 
   const addReporter = new ErrorReporter({
@@ -53,6 +56,7 @@ export default function createAdd(structure, route) {
   });
 
   const addValidator = new Validator({
+    filter: filterData(),
     id: 'crud-add-validator',
     structure: structure.add.form
   });

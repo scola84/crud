@@ -14,6 +14,7 @@ import formatSummary from './format/summary';
 import formatValidatorError from './format/error/validator';
 import handleGui from './handle/gui';
 import handleHttp from './handle/http';
+import mergeData from './merge/data';
 import normalizeLink from './normalize/link';
 
 export {
@@ -33,5 +34,6 @@ export {
   formatValidatorError,
   handleGui,
   handleHttp,
+  mergeData,
   normalizeLink
 };
