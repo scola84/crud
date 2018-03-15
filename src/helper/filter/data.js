@@ -1,5 +1,5 @@
 export default function filterData(defaultValue = {}) {
-  return (request, data = {}) => {
-    return data.data || defaultValue;
+  return (route, data = {}) => {
+    return route.formData ? data : data.data || defaultValue;
   };
 }

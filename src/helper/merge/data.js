@@ -1,5 +1,5 @@
 export default function mergeData() {
-  return (request, data) => {
-    return { data };
+  return (route, data) => {
+    return route.formData ? data : { data };
   };
 }
