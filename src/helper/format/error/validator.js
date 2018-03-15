@@ -18,6 +18,22 @@ export default function formatValidatorError(format) {
         return format('form.error.' + error.field.name);
       }
 
+      if (error.reason === 'range') {
+        const [min, max] = error.field.range;
+        let scope = '';
+
+        if (min !== null && max !== null) {
+          scope = 'minmax';
+        } else if (min !== null) {
+          scope = 'min';
+        } else if (max !== null) {
+          scope = 'max';
+        }
+
+        return formatMessage(error.message + '.' + error.reason +
+          '.' + scope, { name, min, max });
+      }
+
       return formatMessage(error.message + '.' + error.reason, {
         length: error.field.length,
         name,
