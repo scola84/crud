@@ -25,6 +25,7 @@ import {
 import {
   decideRequester,
   disableLink,
+  filterData,
   filterDisabler,
   filterLink,
   formatDefaultError,
@@ -71,6 +72,7 @@ export default function createView(structure, route) {
   });
 
   const summaryBuilder = new SummaryBuilder({
+    filter: filterData(),
     format: formatSummary(route.format()),
     id: 'crud-view-summary-builder',
     structure: structure.view.summary

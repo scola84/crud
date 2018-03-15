@@ -27,6 +27,7 @@ import {
 } from '../worker';
 
 import {
+  filterData,
   filterDisabler,
   formatValidatorError,
   formatDefaultError,
@@ -50,6 +51,7 @@ export default function createSelect(structure, route) {
   });
 
   const selectFormBuilder = new FormBuilder({
+    filter: filterData(),
     format: formatForm(route.format()),
     id: 'crud-select-form-builder',
     structure: structure.form.slice(0, -1),
@@ -72,7 +74,7 @@ export default function createSelect(structure, route) {
   const selectListBuilder = new ListBuilder({
     add: route.add,
     dynamic: structure.dynamic,
-    filter: structure.filter,
+    filter: structure.filter || filterData([]),
     format: formatList(route.format('list')),
     id: 'crud-select-list-builder',
     prepare: false,

@@ -18,6 +18,7 @@ import {
 import { Requester } from '../worker';
 
 import {
+  filterData,
   filterDisabler,
   formatDefaultError,
   formatList
@@ -26,11 +27,11 @@ import {
 export default function createList(structure, route) {
   const listBuilder = new ListBuilder({
     add: false,
-    dynamic: structure.list && structure.list.dynamic,
-    filter: structure.list && structure.list.filter,
+    dynamic: structure.list.dynamic,
+    filter: structure.list.filter || filterData([]),
     format: formatList(route.format()),
     id: 'crud-list-builder',
-    structure: structure.list && structure.list.list
+    structure: structure.list.list
   });
 
   const listClicker = new ListClicker({
@@ -52,7 +53,7 @@ export default function createList(structure, route) {
   });
 
   const listPreparer = new ListPreparer({
-    dynamic: structure.list && structure.list.dynamic,
+    dynamic: structure.list.dynamic,
     height: structure.list.height,
     id: 'crud-list-preparer'
   });

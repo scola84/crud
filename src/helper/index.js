@@ -1,6 +1,7 @@
 import decideRequester from './decide/requester';
 import disableLink from './disable/link';
 import filterAdd from './filter/add';
+import filterData from './filter/data';
 import filterDisabler from './filter/disabler';
 import filterLink from './filter/link';
 import filterPermission from './filter/permission';
@@ -19,6 +20,7 @@ export {
   decideRequester,
   disableLink,
   filterAdd,
+  filterData,
   filterDisabler,
   filterLink,
   filterPermission,
