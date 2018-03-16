@@ -14,7 +14,7 @@ export default function disableLink(structure, disabler) {
     link = structure.view.link[i];
 
     for (let j = 0; j < link.fields.length; j += 1) {
-      const { name, edit, view } = link.fields[j];
+      const { name, edit, permission, view } = link.fields[j];
 
       const editLink = [
         `${edit.permission}.add`,
@@ -45,6 +45,14 @@ export default function disableLink(structure, disabler) {
           permission: [viewLink],
           selector: `li.${name}`
         });
+
+      if (permission) {
+        disabler
+          .hide({
+            permission,
+            selector: `li.${name}`
+          });
+      }
     }
   }
 }
