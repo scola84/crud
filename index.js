@@ -15,6 +15,7 @@ import {
   decideRequester,
   disableLink,
   filterAdd,
+  filterData,
   filterDisabler,
   filterLink,
   filterPermission,
@@ -27,6 +28,7 @@ import {
   formatValidatorError,
   handleGui,
   handleHttp,
+  mergeData,
   normalizeLink
 } from './src/helper';
 
@@ -57,6 +59,7 @@ export {
   decideRequester,
   disableLink,
   filterAdd,
+  filterData,
   filterDisabler,
   filterLink,
   filterPermission,
@@ -69,6 +72,7 @@ export {
   formatValidatorError,
   handleGui,
   handleHttp,
+  mergeData,
   normalizeLink
 };
 
