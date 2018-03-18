@@ -22,7 +22,7 @@ export default class Requester extends GraphicWorker {
     progress.append('span');
 
     this.pass(route, data, (event) => {
-      const fraction = event.lengthComputable ?
+      const fraction = event && event.lengthComputable ?
         event.loaded / event.total : 1;
 
       if (fraction === 1) {
