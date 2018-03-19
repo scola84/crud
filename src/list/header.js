@@ -45,7 +45,7 @@ export default class ListHeader extends GraphicWorker {
     left
       .append('button')
       .attr('tabindex', 0)
-      .classed('button icon back ion-ios-arrow-back', true)
+      .classed('button icon back flip ion-ios-arrow-back', true)
       .text(stringFormat('action.panel.button')('back'))
       .on('click', (d, i, n) => {
         this.route(d, i, n, { data, name: 'back', route });

@@ -9,7 +9,7 @@ export default function handleHttp(routes = {}) {
       try {
         url.path = sprintf.sprintf(path, route.params, data);
       } catch (error) {
-        throw new Error('400');
+        throw new Error(`400 ${error.message}`);
       }
 
       if (url.path[url.path.length - 1] === '?') {

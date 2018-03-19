@@ -1,5 +1,9 @@
 export default function formatForm(format) {
   return (datum, index, nodes, { data, name, route }) => {
+    if (name === 'data') {
+      return data;
+    }
+
     if (name === 'value') {
       let value = null;
 
@@ -16,7 +20,9 @@ export default function formatForm(format) {
           datum.value(route, data) : datum.value;
       }
 
-      return datum.type === 'plain' || datum.type === 'submit' ?
+      return datum.type === 'plain' ||
+        datum.type === 'submit' ||
+        datum.type === 'file' ?
         format('form.value.' + datum.name, value) :
         value;
     }
