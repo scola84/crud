@@ -26,10 +26,15 @@ export default class Requester extends GraphicWorker {
         event.loaded / event.total : 1;
 
       if (fraction === 1) {
-        progress.remove();
+        progress
+          .select('span')
+          .transition()
+          .style('width', '100%')
+          .on('end', () => progress.remove());
       } else {
         progress
           .select('span')
+          .transition()
           .style('width', (fraction * 100) + '%');
       }
     });
