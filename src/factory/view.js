@@ -10,7 +10,11 @@ import {
 } from '@scola/gui';
 
 import { createBrowser } from '@scola/http';
-import { Broadcaster, Worker } from '@scola/worker';
+
+import {
+  Broadcaster,
+  Unifier
+} from '@scola/worker';
 
 import {
   LinkClicker,
@@ -34,6 +38,8 @@ import {
 } from '../helper';
 
 export default function createView(structure, route) {
+  let unify = 0;
+
   const broadcaster = new Broadcaster({
     id: 'crud-view-broadcaster'
   });
@@ -88,8 +94,8 @@ export default function createView(structure, route) {
     id: 'crud-view-summary-disabler'
   });
 
-  const union = new Worker({
-    id: 'crud-view-union'
+  const unifier = new Unifier({
+    id: 'crud-view-unifier'
   });
 
   const viewer = new Requester({
@@ -127,22 +133,28 @@ export default function createView(structure, route) {
     .connect(broadcaster);
 
   if (structure.view.summary) {
+    unify += 1;
+
     broadcaster
       .connect(summaryBuilder)
       .connect(summaryDisabler)
       .connect(summaryClicker)
-      .connect(union);
+      .connect(unifier);
   }
 
   if (structure.view.link) {
+    unify += 1;
+
     disableLink(structure, linkDisabler);
 
     broadcaster
       .connect(linkBuilder)
       .connect(linkDisabler)
       .connect(linkClicker)
-      .connect(union);
+      .connect(unifier);
   }
 
-  return [objectHeader, union];
+  broadcaster.unify(unify);
+
+  return [objectHeader, unifier];
 }
