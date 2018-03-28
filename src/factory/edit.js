@@ -76,12 +76,6 @@ export default function createEdit(structure, route) {
     structure: structure.edit.form
   });
 
-  const editDisabler = new FormDisabler({
-    filter: filterDisabler(),
-    id: 'crud-edit-disabler',
-    target: 'form-edit'
-  });
-
   const editPreparer = new FormPreparer();
 
   const editReader = new FormReader({
@@ -134,6 +128,12 @@ export default function createEdit(structure, route) {
     structure: structure.del && structure.del.form.slice(1)
   });
 
+  const undeleteDisabler = new FormDisabler({
+    filter: filterDisabler(),
+    id: 'crud-edit-undelete-disabler',
+    target: 'form-undelete'
+  });
+
   const undeleteReader = new FormReader({
     id: 'crud-edit-undelete-reader',
     merge: mergeData()
@@ -155,21 +155,24 @@ export default function createEdit(structure, route) {
   });
 
   deleteDisabler
-    .disable({
+    .hide({
       permission: route.permission('del'),
-      selector: 'input'
-    });
-
-  editDisabler
-    .disable({
-      permission: route.permission('edit'),
-      selector: 'input'
+      selector: '.form'
     });
 
   objectDisabler
     .disable({
-      permission: route.permission('view'),
+      permission: [
+        route.permission('edit'),
+        route.permission('view')
+      ],
       selector: '.body, .bar .right'
+    });
+
+  undeleteDisabler
+    .hide({
+      permission: route.permission('del'),
+      selector: '.form'
     });
 
   viewDisabler
@@ -188,7 +191,6 @@ export default function createEdit(structure, route) {
   broadcaster
     .connect(editBuilder)
     .connect(editPreparer)
-    .connect(editDisabler)
     .connect(editReader)
     .connect(editValidator)
     .connect(editValidatorReporter)
@@ -207,6 +209,7 @@ export default function createEdit(structure, route) {
 
     broadcaster
       .connect(undeleteBuilder)
+      .connect(undeleteDisabler)
       .connect(undeleteReader)
       .connect(undeleter)
       .connect(createBrowser(...codec))

@@ -29,6 +29,7 @@ import {
 import {
   decideRequester,
   disableLink,
+  disableSummary,
   filterData,
   filterDisabler,
   filterLink,
@@ -47,7 +48,7 @@ export default function createView(structure, route) {
   const linkDisabler = new ListDisabler({
     filter: filterDisabler(),
     id: 'crud-view-link-disabler',
-    target: 'link-list'
+    target: 'view-link'
   });
 
   const linkBuilder = new ListBuilder({
@@ -55,8 +56,8 @@ export default function createView(structure, route) {
     filter: filterLink(),
     format: formatLink(structure.view.link),
     id: 'crud-view-link-builder',
-    target: 'link-list',
-    structure: structure.view.link
+    structure: structure.view.link,
+    target: 'view-link'
   });
 
   const linkClicker = new LinkClicker({
@@ -81,7 +82,8 @@ export default function createView(structure, route) {
     filter: filterData(),
     format: formatSummary(route.format()),
     id: 'crud-view-summary-builder',
-    structure: structure.view.summary
+    structure: structure.view.summary,
+    target: 'view-summary'
   });
 
   const summaryClicker = new SummaryClicker({
@@ -91,7 +93,8 @@ export default function createView(structure, route) {
 
   const summaryDisabler = new PanelDisabler({
     filter: filterDisabler(),
-    id: 'crud-view-summary-disabler'
+    id: 'crud-view-summary-disabler',
+    target: 'view-summary'
   });
 
   const unifier = new Unifier({
@@ -134,6 +137,8 @@ export default function createView(structure, route) {
 
   if (structure.view.summary) {
     unify += 1;
+
+    disableSummary(structure, summaryDisabler);
 
     broadcaster
       .connect(summaryBuilder)

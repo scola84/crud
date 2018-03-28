@@ -19,7 +19,8 @@ export default function disableLink(structure, disabler) {
       const editLink = [
         `${edit.permission}.add`,
         `${edit.permission}.del`,
-        `${edit.permission}.edit`
+        `${edit.permission}.edit`,
+        `${edit.permission}.list`
       ];
 
       const viewLink = [

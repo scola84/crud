@@ -14,6 +14,7 @@ import {
 import {
   decideRequester,
   disableLink,
+  disableSummary,
   filterAdd,
   filterData,
   filterDisabler,
@@ -58,6 +59,7 @@ export {
 export {
   decideRequester,
   disableLink,
+  disableSummary,
   filterAdd,
   filterData,
   filterDisabler,
