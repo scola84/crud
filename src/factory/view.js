@@ -39,8 +39,6 @@ import {
 } from '../helper';
 
 export default function createView(structure, route) {
-  let unify = 0;
-
   const broadcaster = new Broadcaster({
     id: 'crud-view-broadcaster'
   });
@@ -136,8 +134,6 @@ export default function createView(structure, route) {
     .connect(broadcaster);
 
   if (structure.view.summary) {
-    unify += 1;
-
     disableSummary(structure, summaryDisabler);
 
     broadcaster
@@ -148,8 +144,6 @@ export default function createView(structure, route) {
   }
 
   if (structure.view.link) {
-    unify += 1;
-
     disableLink(structure, linkDisabler);
 
     broadcaster
@@ -158,8 +152,6 @@ export default function createView(structure, route) {
       .connect(linkClicker)
       .connect(unifier);
   }
-
-  broadcaster.unify(unify);
 
   return [objectHeader, unifier];
 }
