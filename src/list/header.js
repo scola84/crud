@@ -76,7 +76,7 @@ export default class ListHeader extends GraphicWorker {
     right
       .append('button')
       .attr('tabindex', 0)
-      .classed('button icon add ion-ios-plus-empty', true)
+      .classed('button icon add ion-ios-add-outline', true)
       .on('click', (d, i, n) => {
         select('body').dispatch('click');
         this.route(d, i, n, { data, name: 'add', route });
