@@ -48,7 +48,8 @@ export default function handleGui(routes = {}) {
   return () => {
     return (datum, index, nodes, { data, name, route }) => {
       if (datum && typeof datum.path !== 'undefined') {
-        requestResource(datum, index, nodes[index], data);
+        const box = Object.assign({ node: nodes[index] }, datum);
+        requestResource(box, data);
         return;
       }
 
