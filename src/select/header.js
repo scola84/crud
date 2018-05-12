@@ -10,7 +10,7 @@ export default class SelectHeader extends GraphicWorker {
     this.setSearch(options.search);
   }
 
-  setSearch(value = true) {
+  setSearch(value = null) {
     this._search = value;
     return this;
   }
@@ -20,7 +20,7 @@ export default class SelectHeader extends GraphicWorker {
 
     const panel = select(route.node)
       .classed('header outset select', true)
-      .classed('search', this._search)
+      .classed('search', this._search !== false)
       .classed(route.path.replace('-', ' '), true);
 
     const header = panel

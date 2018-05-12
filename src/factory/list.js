@@ -55,7 +55,8 @@ export default function createList(structure, route) {
   const listPreparer = new ListPreparer({
     dynamic: structure.list.dynamic,
     height: structure.list.height,
-    id: 'crud-list-preparer'
+    id: 'crud-list-preparer',
+    search: structure.list.search
   });
 
   const lister = new Requester({

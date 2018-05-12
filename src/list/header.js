@@ -15,7 +15,7 @@ export default class ListHeader extends GraphicWorker {
     this.setSearch(options.search);
   }
 
-  setSearch(value = true) {
+  setSearch(value = null) {
     this._search = value;
     return this;
   }
@@ -51,7 +51,7 @@ export default class ListHeader extends GraphicWorker {
         this.route(d, i, n, { data, name: 'back', route });
       });
 
-    if (this._search === true) {
+    if (this._search !== false) {
       renderSearch(route, { panel, right });
     }
 

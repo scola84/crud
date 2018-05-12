@@ -97,7 +97,8 @@ export default function createSelect(structure, route) {
 
   const selectListPreparer = new ListPreparer({
     dynamic: structure.dynamic,
-    id: 'crud-select-list-preparer'
+    id: 'crud-select-list-preparer',
+    search: structure.search
   });
 
   const selectValidator = new Validator({
