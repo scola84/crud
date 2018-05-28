@@ -1,4 +1,5 @@
 import decideRequester from './decide/requester';
+import disableForm from './disable/form';
 import disableLink from './disable/link';
 import disableSummary from './disable/summary';
 import filterAdd from './filter/add';
@@ -20,6 +21,7 @@ import normalizeLink from './normalize/link';
 
 export {
   decideRequester,
+  disableForm,
   disableLink,
   disableSummary,
   filterAdd,

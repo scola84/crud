@@ -26,6 +26,7 @@ import {
 
 import {
   decideRequester,
+  disableForm,
   filterData,
   filterDisabler,
   formatDefaultError,
@@ -74,6 +75,12 @@ export default function createEdit(structure, route) {
     id: 'crud-edit-builder',
     target: 'form-edit',
     structure: structure.edit.form
+  });
+
+  const editDisabler = new FormDisabler({
+    filter: filterDisabler(),
+    id: 'crud-edit-disabler',
+    target: 'form-edit'
   });
 
   const editPreparer = new FormPreparer();
@@ -180,6 +187,8 @@ export default function createEdit(structure, route) {
       selector: '.body, .bar .right'
     });
 
+  disableForm(structure.edit, editDisabler);
+
   objectHeader
     .connect(objectDisabler)
     .connect(viewer)
@@ -190,6 +199,7 @@ export default function createEdit(structure, route) {
 
   broadcaster
     .connect(editBuilder)
+    .connect(editDisabler)
     .connect(editPreparer)
     .connect(editReader)
     .connect(editValidator)

@@ -3,6 +3,7 @@ import { codec } from '@scola/codec';
 import {
   ErrorReporter,
   FormBuilder,
+  FormDisabler,
   FormReader,
   PanelDisabler
 } from '@scola/gui';
@@ -17,6 +18,7 @@ import {
 } from '../worker';
 
 import {
+  disableForm,
   filterAdd,
   filterData,
   filterDisabler,
@@ -36,6 +38,12 @@ export default function createAdd(structure, route) {
     format: formatForm(route.format()),
     id: 'crud-add-builder',
     structure: structure.add.form,
+    target: 'form-add'
+  });
+
+  const addDisabler = new FormDisabler({
+    filter: filterDisabler(),
+    id: 'crud-add-disabler',
     target: 'form-add'
   });
 
@@ -83,9 +91,12 @@ export default function createAdd(structure, route) {
       selector: '.body, .bar .right'
     });
 
+  disableForm(structure.add, addDisabler);
+
   objectHeader
     .connect(objectDisabler)
     .connect(addBuilder)
+    .connect(addDisabler)
     .connect(addReader)
     .connect(addValidator)
     .connect(addValidatorReporter)

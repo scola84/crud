@@ -41,6 +41,6 @@ export default function formatForm(format) {
 
     const code = 'form.' + name + (datum.name ? '.' + datum.name : '');
 
-    return format(code, datum);
+    return format(code, datum, index, nodes);
   };
 }
