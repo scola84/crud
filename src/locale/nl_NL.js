@@ -11,11 +11,14 @@ export default {
         add: 'Toevoegen',
         back: 'Terug',
         cancel: 'Annuleren',
+        close: 'Sluiten',
         clr: 'Verwijderen',
         del: 'Verwijderen',
         done: 'Klaar',
         edit: 'Wijzigen',
-        save: 'Opslaan'
+        open: 'Openen',
+        save: 'Opslaan',
+        send: 'Versturen'
       },
       placeholder: {
         search: 'Zoeken'
