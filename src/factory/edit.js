@@ -190,9 +190,9 @@ export default function createEdit(structure, route) {
   disableForm(structure.edit, editDisabler);
 
   objectHeader
-    .connect(objectDisabler)
     .connect(viewer)
     .connect(createBrowser(...codec))
+    .connect(objectDisabler)
     .connect(viewDisabler)
     .connect(viewReporter)
     .connect(broadcaster);

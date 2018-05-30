@@ -126,9 +126,9 @@ export default function createView(structure, route) {
     });
 
   objectHeader
-    .connect(objectDisabler)
     .connect(viewer)
     .connect(createBrowser(...codec))
+    .connect(objectDisabler)
     .connect(viewDisabler)
     .connect(viewReporter)
     .connect(broadcaster);
