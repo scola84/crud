@@ -12,6 +12,7 @@ import { createBrowser } from '@scola/http';
 
 import {
   ListClicker,
+  ListFooter,
   ListHeader
 } from '../list';
 
@@ -42,6 +43,10 @@ export default function createList(structure, route) {
   const listDisabler = new PanelDisabler({
     filter: filterDisabler(),
     id: 'crud-list-disabler'
+  });
+
+  const listFooter = new ListFooter({
+    id: 'crud-list-footer'
   });
 
   const listHeader = new ListHeader({
@@ -101,6 +106,7 @@ export default function createList(structure, route) {
     });
 
   listHeader
+    .connect(listFooter)
     .connect(listPreparer)
     .connect(lister)
     .connect(createBrowser(...codec))

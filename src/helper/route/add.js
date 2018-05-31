@@ -17,7 +17,7 @@ export default function routeAdd(options = {}) {
 
   const gui = defaults({}, options.gui, {
     cancel: `@${names.target}:back`,
-    resolve: `edit-${names.object}?${names.id}@${names.target}:back`
+    resolve: `view-${names.object}?${names.id}@${names.target}:back`
   });
 
   const http = defaults({}, options.http, {

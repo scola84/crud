@@ -18,7 +18,7 @@ export default {
         edit: 'Wijzigen',
         open: 'Openen',
         save: 'Opslaan',
-        send: 'Versturen'
+        send: 'Verzenden'
       },
       placeholder: {
         search: 'Zoeken'

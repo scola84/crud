@@ -21,11 +21,12 @@ export default function formatList(format) {
     }
 
     if (name === 'state') {
-      const state = datum.state.filter((value, power) => {
-        return (data.state & (2 ** power)) !== 0;
+      const state = datum.value ? datum.value(route, data) : data.state;
+      const text = datum.state.filter((value, power) => {
+        return (state & (2 ** power)) !== 0;
       });
 
-      return state.length ? state.join(' ') : 'empty';
+      return text.length ? text.join(' ') : 'empty';
     }
 
     const value = typeof data[name] === 'undefined' ||

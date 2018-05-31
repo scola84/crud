@@ -4,7 +4,9 @@ export default function formatDefaultError(format, type) {
   const formatError = stringFormat('error.' + type);
 
   return (datum, index, nodes, { error }) => {
-    return format('error.' + type + '.' + error.message) ||
-      formatError(error.message);
+    let code = error.message.match(/^(\d{3})/);
+    code = code && code.pop() || error.message;
+
+    return format('error.' + type + '.' + code) || formatError(code);
   };
 }
