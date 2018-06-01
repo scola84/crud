@@ -47,9 +47,16 @@ function handleView(datum, index, nodes, data, name, route, routes) {
 export default function handleGui(routes = {}) {
   return () => {
     return (datum, index, nodes, { data, name, route }) => {
-      if (datum && typeof datum.path !== 'undefined') {
-        const box = Object.assign({ node: nodes[index] }, datum);
-        requestResource(box, data);
+      if (datum && typeof datum.request !== 'undefined') {
+        const [box, requestData, callback] = datum
+          .request(datum, index, nodes, { data, name, route });
+
+        if (box) {
+          box.datum = datum;
+          box.node = box.node || nodes[index];
+          requestResource(box, requestData, callback);
+        }
+
         return;
       }
 
