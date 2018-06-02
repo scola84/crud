@@ -22,9 +22,8 @@ import {
   filterAdd,
   filterData,
   filterDisabler,
-  formatDefaultError,
+  formatError,
   formatForm,
-  formatValidatorError,
   mergeData
 } from '../helper';
 
@@ -53,7 +52,7 @@ export default function createAdd(structure, route) {
   });
 
   const addReporter = new ErrorReporter({
-    format: formatDefaultError(route.format(), 'long'),
+    format: formatError(route.format(), 'long'),
     id: 'crud-add-reporter'
   });
 
@@ -70,7 +69,7 @@ export default function createAdd(structure, route) {
   });
 
   const addValidatorReporter = new ErrorReporter({
-    format: formatValidatorError(route.format()),
+    format: formatError(route.format()),
     id: 'crud-add-validator-reporter'
   });
 

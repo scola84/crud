@@ -7,13 +7,12 @@ import filterData from './filter/data';
 import filterDisabler from './filter/disabler';
 import filterLink from './filter/link';
 import filterPermission from './filter/permission';
-import formatDefaultError from './format/error/default';
+import formatError from './format/error';
 import formatForm from './format/form';
 import formatLink from './format/link';
 import formatList from './format/list';
 import formatString from './format/string';
 import formatSummary from './format/summary';
-import formatValidatorError from './format/error/validator';
 import handleGui from './handle/gui';
 import handleHttp from './handle/http';
 import mergeData from './merge/data';
@@ -29,13 +28,12 @@ export {
   filterDisabler,
   filterLink,
   filterPermission,
-  formatDefaultError,
+  formatError,
   formatForm,
   formatLink,
   formatList,
   formatString,
   formatSummary,
-  formatValidatorError,
   handleGui,
   handleHttp,
   mergeData,

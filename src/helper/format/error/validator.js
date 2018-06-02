@@ -5,10 +5,6 @@ export default function formatValidatorError(format) {
   const formatType = stringFormat('validator.type');
 
   return (datum, index, nodes, { error }) => {
-    if (typeof error.field === 'undefined') {
-      return error.message;
-    }
-
     const name = format('form.l1.' + error.field.name) ||
       format('form.placeholder.' + error.field.name);
     const type = formatType(error.field.type);
@@ -30,18 +26,18 @@ export default function formatValidatorError(format) {
           scope = 'max';
         }
 
-        return formatMessage(error.message + '.' + error.reason +
+        return formatMessage('400.' + error.reason +
           '.' + scope, { name, min, max });
       }
 
-      return formatMessage(error.message + '.' + error.reason, {
+      return formatMessage('400.' + error.reason, {
         length: error.field.length,
         name,
         type
       });
     }
 
-    return formatMessage(error.message + '.' + error.field.type, {
+    return formatMessage('400.' + error.field.type, {
       name: name.toLowerCase()
     });
   };

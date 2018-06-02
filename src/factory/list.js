@@ -21,7 +21,7 @@ import { Requester } from '../worker';
 import {
   filterData,
   filterDisabler,
-  formatDefaultError,
+  formatError,
   formatList
 } from '../helper';
 
@@ -74,7 +74,7 @@ export default function createList(structure, route) {
   });
 
   const listerReporter = new ErrorReporter({
-    format: formatDefaultError(route.format(), 'short'),
+    format: formatError(route.format(), 'short'),
     id: 'crud-lister-reporter'
   });
 

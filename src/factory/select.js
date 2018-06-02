@@ -29,8 +29,7 @@ import {
 import {
   filterData,
   filterDisabler,
-  formatValidatorError,
-  formatDefaultError,
+  formatError,
   formatForm,
   formatList,
   mergeData
@@ -47,7 +46,7 @@ export default function createSelect(structure, route) {
   });
 
   const listerReporter = new ErrorReporter({
-    format: formatDefaultError(route.format(), 'short'),
+    format: formatError(route.format(), 'short'),
     id: 'crud-select-lister-reporter'
   });
 
@@ -108,7 +107,7 @@ export default function createSelect(structure, route) {
   });
 
   const selectValidatorReporter = new ErrorReporter({
-    format: formatValidatorError(route.format()),
+    format: formatError(route.format()),
     id: 'crud-select-validator-reporter'
   });
 
@@ -118,7 +117,7 @@ export default function createSelect(structure, route) {
   });
 
   const sendReporter = new ErrorReporter({
-    format: formatDefaultError(route.format(), 'long'),
+    format: formatError(route.format(), 'long'),
     id: 'crud-select-send-reporter'
   });
 

@@ -29,9 +29,8 @@ import {
   disableForm,
   filterData,
   filterDisabler,
-  formatDefaultError,
+  formatError,
   formatForm,
-  formatValidatorError,
   mergeData
 } from '../helper';
 
@@ -97,7 +96,7 @@ export default function createEdit(structure, route) {
   });
 
   const editValidatorReporter = new ErrorReporter({
-    format: formatValidatorError(route.format()),
+    format: formatError(route.format()),
     id: 'crud-edit-validator-reporter'
   });
 
@@ -113,7 +112,7 @@ export default function createEdit(structure, route) {
   });
 
   const objectReporter = new ErrorReporter({
-    format: formatDefaultError(route.format(), 'long'),
+    format: formatError(route.format(), 'long'),
     id: 'crud-edit-object-reporter'
   });
 
@@ -157,7 +156,7 @@ export default function createEdit(structure, route) {
   });
 
   const viewReporter = new ErrorReporter({
-    format: formatDefaultError(route.format(), 'short'),
+    format: formatError(route.format(), 'short'),
     id: 'crud-edit-view-reporter'
   });
 

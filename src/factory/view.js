@@ -33,7 +33,7 @@ import {
   filterData,
   filterDisabler,
   filterLink,
-  formatDefaultError,
+  formatError,
   formatLink,
   formatSummary
 } from '../helper';
@@ -110,7 +110,7 @@ export default function createView(structure, route) {
   });
 
   const viewReporter = new ErrorReporter({
-    format: formatDefaultError(route.format(), 'short'),
+    format: formatError(route.format(), 'short'),
     id: 'crud-view-reporter'
   });
 
