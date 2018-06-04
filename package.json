@@ -10,10 +10,10 @@
   "dependencies": {
     "@scola/codec": "^1.4.0",
     "@scola/d3-string-format": "^1.3.1",
-    "@scola/gui": "^5.1.1",
-    "@scola/http": "^4.1.1",
-    "@scola/validator": "^11.0.1",
-    "@scola/worker": "^2.3.0",
+    "@scola/gui": "^5.2.0",
+    "@scola/http": "^4.2.0",
+    "@scola/validator": "^11.1.0",
+    "@scola/worker": "^2.4.0",
     "d3": "^5.4.0",
     "lodash-es": "^4.17.10",
     "sprintf-js": "^1.1.1"
