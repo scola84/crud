@@ -13,7 +13,9 @@ export default function disableForm(structure, disabler) {
 
       disabler
         .hide({
-          permission: permission || (() => true),
+          permission: (typeof permission === 'function' ? (route, data, node) => {
+            return permission(route, data && data.data, node);
+          } : permission) || (() => true),
           selector: `li.${name}`
         });
     }
