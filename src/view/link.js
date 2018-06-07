@@ -20,7 +20,8 @@ export default class LinkClicker extends GraphicWorker {
         const dIndex = normalizeLink(this._structure, datum);
 
         const d = {
-          [datum.view.id]: data.link[dIndex].id
+          [datum.view.id]: data.link[dIndex].id,
+          id: data.link[dIndex].id
         };
 
         this.route(datum, index, nodes, { data: d, name: 'view', route });
