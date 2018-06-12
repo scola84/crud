@@ -1,4 +1,5 @@
 import defaults from 'lodash-es/defaults';
+import checkFormat from '../internal/check-format';
 import checkRoute from '../internal/check-route';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
@@ -29,6 +30,7 @@ export default function routeAdd(options = {}) {
     add: `${names.object}.${names.object}.add`
   });
 
+  checkFormat(format.object, options);
   checkRoute(gui, options);
   checkRoute(http, options);
   checkRoute(permissions, options);
