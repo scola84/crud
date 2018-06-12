@@ -1,4 +1,5 @@
 import defaults from 'lodash-es/defaults';
+import checkRoute from '../internal/check-route';
 import filterPermission from '../filter/permission';
 import formatString from '../format/string';
 import handleGui from '../handle/gui';
@@ -26,6 +27,10 @@ export default function routeView(options = {}) {
   const permissions = defaults({}, options.permissions, {
     view: `${names.object}.${names.object}.view`
   });
+
+  checkRoute(gui, options);
+  checkRoute(http, options);
+  checkRoute(permissions, options);
 
   return {
     format: formatString(format),
