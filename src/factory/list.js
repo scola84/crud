@@ -98,7 +98,7 @@ export default function createList(structure, route) {
     })
     .hide({
       permission: route.permission('edit'),
-      selector: 'li .secondary .button'
+      selector: 'li .secondary .edit'
     })
     .hide({
       permission: route.permission('del'),

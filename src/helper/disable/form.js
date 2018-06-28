@@ -1,9 +1,3 @@
-function createPermission(permission) {
-  return typeof permission === 'function' ? (route, data, node) => {
-    return permission(route, data, node);
-  } : permission;
-}
-
 export default function disableForm(structure, disabler) {
   if (Array.isArray(structure.form) === false) {
     return;
@@ -19,7 +13,7 @@ export default function disableForm(structure, disabler) {
 
       disabler
         .hide({
-          permission: createPermission(permission) || (() => true),
+          permission: permission || (() => true),
           selector: `li.${name}`
         });
     }

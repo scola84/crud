@@ -1,9 +1,13 @@
-export default function filterPermission(permission) {
+import filterDisabler from './disabler';
+
+export default function filterPermission(permissions) {
+  const filter = filterDisabler();
+
   return (name) => {
+    const permission = permissions[name];
+
     return (route, data) => {
-      return typeof permission[name] === 'function' ?
-        permission[name](route, data) :
-        route.user.may(permission[name]);
+      return filter(route, data, permission);
     };
   };
 }
