@@ -162,13 +162,13 @@ export default function createSelect(structure, route) {
   }
 
   selectListPreparer
+    .connect(selectListDisabler)
     .connect(lister)
     .connect(createBrowser(...codec))
     .connect(listerDisabler)
     .connect(listerReporter)
     .connect(selectFormBuilder)
     .connect(selectListBuilder)
-    .connect(selectListDisabler)
     .connect(selectListClicker)
     .connect(selectFormReader)
     .connect(selectValidator)
