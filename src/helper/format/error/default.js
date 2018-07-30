@@ -5,7 +5,7 @@ export default function formatDefaultError(format, type) {
 
   return (datum, index, nodes, { error }) => {
     let code = error.message.match(/^(\d{3})/);
-    code = code && code.pop() || error.message;
+    code = error.reason || code && code.pop() || error.message;
 
     return format('error.' + type + '.' + code) || formatError(code);
   };
