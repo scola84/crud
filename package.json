@@ -8,13 +8,13 @@
   "main": "./index.js",
   "jsnext:main": "./index.js",
   "dependencies": {
-    "@scola/codec": "^1.4.2",
+    "@scola/codec": "^2.0.0",
     "@scola/d3-string-format": "^1.5.0",
-    "@scola/gui": "^6.0.0",
-    "@scola/http": "^4.2.1",
-    "@scola/validator": "^11.1.1",
-    "@scola/worker": "^2.4.0",
-    "d3": "^5.4.0",
+    "@scola/gui": "^6.1.1",
+    "@scola/http": "^5.0.0",
+    "@scola/validator": "^11.3.4",
+    "@scola/worker": "^2.6.2",
+    "d3": "^5.5.0",
     "lodash-es": "^4.17.10",
     "sprintf-js": "^1.1.1"
   }
