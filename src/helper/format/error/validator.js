@@ -4,14 +4,14 @@ export default function formatValidatorError(format) {
   const formatMessage = stringFormat('validator.error.long');
   const formatType = stringFormat('validator.type');
 
-  return (datum, index, nodes, { error }) => {
+  return (datum, index, nodes, { error, route }) => {
     const name = format('form.l1.' + error.field.name) ||
       format('form.placeholder.' + error.field.name);
     const type = formatType(error.field.type);
 
     if (error.reason) {
       if (error.reason === 'custom') {
-        return format('form.error.' + error.field.name);
+        return format('form.error.' + error.field.name, route, error);
       }
 
       if (error.reason === 'range') {
