@@ -1,13 +1,15 @@
 import { GraphicWorker } from '@scola/gui';
 import { select } from 'd3';
 
+const emptyMethods = ['GET', 'OPTIONS'];
+
 export default class Requester extends GraphicWorker {
   act(route, data) {
     route = Object.assign({
       box: route
     }, this.route(route, data));
 
-    if (route.method !== 'GET') {
+    if (emptyMethods.indexOf(route.method) === -1) {
       route.headers = Object.assign({
         'Content-Type': route.box.formData ?
           'multipart/form-data' : 'application/json'

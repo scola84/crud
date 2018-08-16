@@ -36,7 +36,6 @@ export default function routeEdit(options = {}) {
   });
 
   checkFormat(format.object, options);
-
   checkRoute(gui, options);
   checkRoute(http, options);
   checkRoute(permissions, options);
@@ -46,6 +45,7 @@ export default function routeEdit(options = {}) {
     gui: handleGui(gui),
     http: handleHttp(http),
     id: names.id,
+    options: http.options ? true : false,
     permission: filterPermission(permissions),
   };
 }

@@ -40,6 +40,7 @@ export default function routeAdd(options = {}) {
     gui: handleGui(gui),
     http: handleHttp(http),
     id: names.id,
+    options: http.options ? true : false,
     permission: filterPermission(permissions)
   };
 }

@@ -13,7 +13,11 @@ import {
 
 import { createBrowser } from '@scola/http';
 import { Validator } from '@scola/validator';
-import { Broadcaster } from '@scola/worker';
+
+import {
+  Broadcaster,
+  Worker
+} from '@scola/worker';
 
 import {
   ObjectHeader,
@@ -31,7 +35,8 @@ import {
   filterDisabler,
   formatError,
   formatForm,
-  mergeData
+  mergeData,
+  mergeOptions
 } from '../helper';
 
 export default function createEdit(structure, route) {
@@ -45,11 +50,12 @@ export default function createEdit(structure, route) {
   });
 
   const deleteBuilder = new FormBuilder({
+    extract: (s) => s.del && s.del.form.slice(0, 2),
     filter: filterData(),
     format: formatForm(stringFormat('action')),
     id: 'crud-edit-delete-builder',
     target: 'form-delete',
-    structure: structure.del && structure.del.form.slice(0, 2)
+    structure
   });
 
   const deleteDisabler = new FormDisabler({
@@ -69,11 +75,12 @@ export default function createEdit(structure, route) {
   });
 
   const editBuilder = new FormBuilder({
+    extract: (s) => s.edit.form,
     filter: structure.edit.filter || filterData(),
     format: formatForm(route.format()),
     id: 'crud-edit-builder',
     target: 'form-edit',
-    structure: structure.edit.form
+    structure
   });
 
   const editDisabler = new FormDisabler({
@@ -90,9 +97,10 @@ export default function createEdit(structure, route) {
   });
 
   const editValidator = new Validator({
+    extract: (s) => s.edit.form,
     filter: filterData(),
     id: 'crud-edit-validator',
-    structure: structure.edit.form
+    structure
   });
 
   const editValidatorReporter = new ErrorReporter({
@@ -121,17 +129,28 @@ export default function createEdit(structure, route) {
     route: route.gui()
   });
 
+  const optionsRequester = new Requester({
+    id: 'crud-edit-options-requester',
+    route: route.http('options')
+  });
+
+  const optionsMerger = new Worker({
+    id: 'crud-edit-options-merger',
+    merge: mergeOptions()
+  });
+
   const undeleter = new Requester({
     id: 'crud-edit-undeleter',
     route: route.http('del')
   });
 
   const undeleteBuilder = new FormBuilder({
+    extract: (s) => s.del && s.del.form.slice(1),
     filter: filterData(),
     format: formatForm(stringFormat('action')),
     id: 'crud-edit-undelete-builder',
     target: 'form-undelete',
-    structure: structure.del && structure.del.form.slice(1)
+    structure
   });
 
   const undeleteDisabler = new FormDisabler({
@@ -188,7 +207,16 @@ export default function createEdit(structure, route) {
 
   disableForm(structure.edit, editDisabler);
 
+  function createOptions() {
+    optionsRequester
+      .connect(createBrowser(...codec))
+      .connect(optionsMerger);
+
+    return [optionsRequester, optionsMerger];
+  }
+
   objectHeader
+    .connect(route.options ? createOptions() : null)
     .connect(viewer)
     .connect(createBrowser(...codec))
     .connect(objectDisabler)

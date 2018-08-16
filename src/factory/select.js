@@ -27,15 +27,19 @@ import {
 } from '../worker';
 
 import {
+  checkSelect,
   filterData,
   filterDisabler,
   formatError,
   formatForm,
   formatList,
-  mergeData
+  mergeData,
+  mergeOptions
 } from '../helper';
 
 export default function createSelect(structure, route) {
+  checkSelect(structure, route);
+
   const lister = new Requester({
     id: 'crud-lister',
     route: route.http('list')
@@ -50,11 +54,22 @@ export default function createSelect(structure, route) {
     id: 'crud-select-lister-reporter'
   });
 
+  const optionsRequester = new Requester({
+    id: 'crud-select-options-requester',
+    route: route.http('options')
+  });
+
+  const optionsMerger = new Worker({
+    id: 'crud-select-options-merger',
+    merge: mergeOptions(structure)
+  });
+
   const selectFormBuilder = new FormBuilder({
+    extract: (s) => s[route.action].form.slice(0, -1),
     filter: filterData(),
     format: formatForm(route.format()),
     id: 'crud-select-form-builder',
-    structure: structure.form.slice(0, -1),
+    structure,
     target: 'form-select'
   });
 
@@ -75,13 +90,16 @@ export default function createSelect(structure, route) {
   const selectListBuilder = new ListBuilder({
     add: route.add,
     dynamic: structure.dynamic,
+    extract: (s) => {
+      return s[route.action].list || s[route.action].form.slice(-1);
+    },
     filter: structure.filter || filterData([]),
     format: formatList(route.format('list')),
     id: 'crud-select-list-builder',
     prepare: false,
     target: 'form-select',
     render: renderForm,
-    structure: structure.list || structure.form.slice(-1)
+    structure
   });
 
   const selectListClicker = new SelectClicker({
@@ -101,9 +119,10 @@ export default function createSelect(structure, route) {
   });
 
   const selectValidator = new Validator({
+    extract: (s) => s[route.action].form,
     filter: filterData(),
     id: 'crud-select-validator',
-    structure: structure.form
+    structure
   });
 
   const selectValidatorReporter = new ErrorReporter({
@@ -150,18 +169,26 @@ export default function createSelect(structure, route) {
       selector: '.body, .bar .right'
     });
 
-  if (route.view) {
-    selectHeader
-      .connect(viewer)
+  function createOptions() {
+    optionsRequester
       .connect(createBrowser(...codec))
-      .connect(viewMerger)
-      .connect(selectListPreparer);
-  } else {
-    selectHeader
-      .connect(selectListPreparer);
+      .connect(optionsMerger);
+
+    return [optionsRequester, optionsMerger];
   }
 
-  selectListPreparer
+  function createView() {
+    viewer
+      .connect(createBrowser(...codec))
+      .connect(viewMerger);
+
+    return [viewer, viewMerger];
+  }
+
+  selectHeader
+    .connect(route.options ? createOptions() : null)
+    .connect(route.view ? createView() : null)
+    .connect(selectListPreparer)
     .connect(selectListDisabler)
     .connect(lister)
     .connect(createBrowser(...codec))

@@ -10,6 +10,7 @@ import {
 
 import { createBrowser } from '@scola/http';
 import { Validator } from '@scola/validator';
+import { Worker } from '@scola/worker';
 import { ObjectHeader } from '../add';
 
 import {
@@ -24,7 +25,8 @@ import {
   filterDisabler,
   formatError,
   formatForm,
-  mergeData
+  mergeData,
+  mergeOptions
 } from '../helper';
 
 export default function createAdd(structure, route) {
@@ -34,9 +36,10 @@ export default function createAdd(structure, route) {
   });
 
   const addBuilder = new FormBuilder({
+    extract: (s) => s.add.form,
     format: formatForm(route.format()),
     id: 'crud-add-builder',
-    structure: structure.add.form,
+    structure,
     target: 'form-add'
   });
 
@@ -63,9 +66,10 @@ export default function createAdd(structure, route) {
   });
 
   const addValidator = new Validator({
+    extract: (s) => s.add.form,
     filter: filterData(),
     id: 'crud-add-validator',
-    structure: structure.add.form
+    structure
   });
 
   const addValidatorReporter = new ErrorReporter({
@@ -84,6 +88,16 @@ export default function createAdd(structure, route) {
     route: route.gui()
   });
 
+  const optionsRequester = new Requester({
+    id: 'crud-add-options-requester',
+    route: route.http('options')
+  });
+
+  const optionsMerger = new Worker({
+    id: 'crud-add-options-merger',
+    merge: mergeOptions(structure)
+  });
+
   objectDisabler
     .disable({
       permission: route.permission('add'),
@@ -92,7 +106,16 @@ export default function createAdd(structure, route) {
 
   disableForm(structure.add, addDisabler);
 
+  function createOptions() {
+    optionsRequester
+      .connect(createBrowser(...codec))
+      .connect(optionsMerger);
+
+    return [optionsRequester, optionsMerger];
+  }
+
   objectHeader
+    .connect(route.options ? createOptions() : null)
     .connect(objectDisabler)
     .connect(addBuilder)
     .connect(addDisabler)

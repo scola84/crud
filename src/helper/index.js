@@ -1,3 +1,6 @@
+import checkFormat from './internal/check-format';
+import checkRoute from './internal/check-route';
+import checkSelect from './internal/check-select';
 import decideRequester from './decide/requester';
 import disableForm from './disable/form';
 import disableLink from './disable/link';
@@ -16,9 +19,13 @@ import formatSummary from './format/summary';
 import handleGui from './handle/gui';
 import handleHttp from './handle/http';
 import mergeData from './merge/data';
+import mergeOptions from './merge/options';
 import normalizeLink from './normalize/link';
 
 export {
+  checkFormat,
+  checkRoute,
+  checkSelect,
   decideRequester,
   disableForm,
   disableLink,
@@ -37,5 +44,6 @@ export {
   handleGui,
   handleHttp,
   mergeData,
+  mergeOptions,
   normalizeLink
 };

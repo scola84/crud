@@ -6,6 +6,12 @@ import formatString from '../format/string';
 import handleGui from '../handle/gui';
 import handleHttp from '../handle/http';
 
+const map = {
+  DELETE: 'clr',
+  POST: 'add',
+  PUT: 'edit'
+};
+
 export default function routeSelect(options = {}) {
   const names = defaults({}, options.names, {
     id: `${options.names.list}_id`,
@@ -42,12 +48,14 @@ export default function routeSelect(options = {}) {
   checkRoute(permissions, options);
 
   return {
+    action: map[http.send.split(' ').shift()],
     add: gui.add ? true : false,
     format: formatString(format),
     gui: handleGui(gui),
     http: handleHttp(http),
     id: names.id,
     permission: filterPermission(permissions),
+    options: http.options ? true : false,
     view: http.view ? true : false
   };
 }
