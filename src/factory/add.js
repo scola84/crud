@@ -1,6 +1,7 @@
 import { codec } from '@scola/codec';
 
 import {
+  ErrorDisabler,
   ErrorReporter,
   FormBuilder,
   FormDisabler,
@@ -98,9 +99,23 @@ export default function createAdd(structure, route) {
     merge: mergeOptions(structure)
   });
 
+  const viewDisabler = new ErrorDisabler({
+    id: 'crud-add-view-disabler'
+  });
+
+  const viewReporter = new ErrorReporter({
+    format: formatError(route.format(), 'short'),
+    id: 'crud-add-view-reporter'
+  });
+
   objectDisabler
     .disable({
       permission: route.permission('add'),
+      selector: '.body, .bar .right'
+    });
+
+  viewDisabler
+    .disable({
       selector: '.body, .bar .right'
     });
 
@@ -117,6 +132,8 @@ export default function createAdd(structure, route) {
   objectHeader
     .connect(route.options ? createOptions() : null)
     .connect(objectDisabler)
+    .connect(viewDisabler)
+    .connect(viewReporter)
     .connect(addBuilder)
     .connect(addDisabler)
     .connect(addReader)
