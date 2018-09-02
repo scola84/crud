@@ -12,15 +12,19 @@ import {
 } from './src/factory';
 
 import {
+  checkFormat,
+  checkRoute,
+  checkSelect,
   decideRequester,
+  disableForm,
   disableLink,
   disableSummary,
   filterAdd,
   filterData,
   filterDisabler,
-  formatError,
   filterLink,
   filterPermission,
+  formatError,
   formatForm,
   formatLink,
   formatList,
@@ -29,7 +33,9 @@ import {
   handleGui,
   handleHttp,
   mergeData,
-  normalizeLink
+  mergeOptions,
+  normalizeLink,
+  structureObject
 } from './src/helper';
 
 import {
@@ -56,15 +62,19 @@ export {
 };
 
 export {
+  checkFormat,
+  checkRoute,
+  checkSelect,
   decideRequester,
+  disableForm,
   disableLink,
   disableSummary,
   filterAdd,
   filterData,
   filterDisabler,
-  formatError,
   filterLink,
   filterPermission,
+  formatError,
   formatForm,
   formatLink,
   formatList,
@@ -73,7 +83,9 @@ export {
   handleGui,
   handleHttp,
   mergeData,
-  normalizeLink
+  mergeOptions,
+  normalizeLink,
+  structureObject
 };
 
 export {

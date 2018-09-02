@@ -21,6 +21,7 @@ import handleHttp from './handle/http';
 import mergeData from './merge/data';
 import mergeOptions from './merge/options';
 import normalizeLink from './normalize/link';
+import structureObject from './structure/object';
 
 export {
   checkFormat,
@@ -45,5 +46,6 @@ export {
   handleHttp,
   mergeData,
   mergeOptions,
-  normalizeLink
+  normalizeLink,
+  structureObject
 };
