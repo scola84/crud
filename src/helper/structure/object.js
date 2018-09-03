@@ -6,7 +6,7 @@ const skipTypes = [
   'file'
 ];
 
-export default function structureObject(prefix, structures) {
+export default function structureObject(prefix, structures, options = {}) {
   return (route, data) => {
     const values = JSON.parse(data.values);
 
@@ -64,7 +64,7 @@ export default function structureObject(prefix, structures) {
         structure[structure.length] = {
           class: classes.join(' '),
           text: text.join(' - '),
-          fields: generateFields(name, name, form.form, object)
+          fields: generateFields(name, name, form.form, object, options)
         };
       }
 
@@ -142,7 +142,7 @@ function generateError(prefix, values) {
   return fields;
 }
 
-function generateFields(name, sub, form, values) {
+function generateFields(name, sub, form, values, options) {
   const fields = [];
 
   let code = null;
@@ -159,7 +159,9 @@ function generateFields(name, sub, form, values) {
       field = section.fields[j];
 
       if (typeof values[field.name] === 'undefined') {
-        continue;
+        if (options.skip_undefined) {
+          continue;
+        }
       }
 
       if (skipTypes.indexOf(field.type) > -1) {
