@@ -107,7 +107,7 @@ export default function structureObject(prefix, structures, options = {}) {
           structure[structure.length] = {
             class: classes.join(' '),
             text: text.join(' - '),
-            fields: generateFields(name, sub, form.form, object)
+            fields: generateFields(name, sub, form.form, object, options)
           };
         }
       }
