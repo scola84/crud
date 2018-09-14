@@ -2,6 +2,7 @@ import merge from 'lodash-es/merge';
 
 const map = {
   add: 'POST',
+  call: 'POST',
   clr: 'DELETE',
   del: 'DELETE',
   edit: 'PUT',

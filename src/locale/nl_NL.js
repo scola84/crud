@@ -10,7 +10,7 @@ export default {
       button: {
         add: 'Toevoegen',
         back: 'Terug',
-        call: 'Bellen',
+        call: 'Uitvoeren',
         cancel: 'Annuleren',
         close: 'Sluiten',
         clr: 'Verwijderen',
@@ -20,7 +20,8 @@ export default {
         mail: 'Mailen',
         open: 'Openen',
         save: 'Opslaan',
-        send: 'Verzenden'
+        send: 'Verzenden',
+        tel: 'Bellen'
       },
       placeholder: {
         search: 'Zoeken'

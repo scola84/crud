@@ -14,6 +14,7 @@ import formatError from './format/error';
 import formatForm from './format/form';
 import formatLink from './format/link';
 import formatList from './format/list';
+import formatResult from './format/result';
 import formatString from './format/string';
 import formatSummary from './format/summary';
 import handleGui from './handle/gui';
@@ -21,6 +22,12 @@ import handleHttp from './handle/http';
 import mergeData from './merge/data';
 import mergeOptions from './merge/options';
 import normalizeLink from './normalize/link';
+import routeAdd from './route/add';
+import routeCall from './route/call';
+import routeEdit from './route/edit';
+import routeList from './route/list';
+import routeSelect from './route/select';
+import routeView from './route/view';
 import structureObject from './structure/object';
 
 export {
@@ -40,6 +47,7 @@ export {
   formatForm,
   formatLink,
   formatList,
+  formatResult,
   formatString,
   formatSummary,
   handleGui,
@@ -47,5 +55,11 @@ export {
   mergeData,
   mergeOptions,
   normalizeLink,
+  routeAdd,
+  routeCall,
+  routeEdit,
+  routeList,
+  routeSelect,
+  routeView,
   structureObject
 };

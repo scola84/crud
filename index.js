@@ -5,6 +5,7 @@ import {
 
 import {
   createAdd,
+  createCall,
   createEdit,
   createList,
   createSelect,
@@ -28,6 +29,7 @@ import {
   formatForm,
   formatLink,
   formatList,
+  formatResult,
   formatString,
   formatSummary,
   handleGui,
@@ -35,16 +37,14 @@ import {
   mergeData,
   mergeOptions,
   normalizeLink,
-  structureObject
-} from './src/helper';
-
-import {
   routeAdd,
+  routeCall,
   routeEdit,
   routeList,
   routeSelect,
-  routeView
-} from './src/helper/route';
+  routeView,
+  structureObject
+} from './src/helper';
 
 import locale from './src/locale';
 
@@ -55,6 +55,7 @@ export {
 
 export {
   createAdd,
+  createCall,
   createEdit,
   createList,
   createSelect,
@@ -78,6 +79,7 @@ export {
   formatForm,
   formatLink,
   formatList,
+  formatResult,
   formatString,
   formatSummary,
   handleGui,
@@ -85,15 +87,13 @@ export {
   mergeData,
   mergeOptions,
   normalizeLink,
-  structureObject
-};
-
-export {
   routeAdd,
+  routeCall,
   routeEdit,
   routeList,
   routeSelect,
-  routeView
+  routeView,
+  structureObject
 };
 
 export {

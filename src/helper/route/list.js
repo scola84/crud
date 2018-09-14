@@ -19,7 +19,7 @@ export default function routeList(options = {}) {
 
   const gui = defaults({}, options.gui, {
     add: `add-${names.object}@${names.target}:clear`,
-    back: 'main@menu:back;ltr',
+    back: '@menu:back;ltr',
     edit: `edit-${names.object}?${names.id}@${names.target}`,
     view: `view-${names.object}?${names.id}@${names.target}:clear`,
     del: `del-${names.object}`
