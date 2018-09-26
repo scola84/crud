@@ -11,9 +11,9 @@
     "@scola/codec": "^2.1.1",
     "@scola/d3-string-format": "^1.5.4",
     "@scola/gui": "^6.2.9",
-    "@scola/http": "^5.1.4",
+    "@scola/http": "^5.2.1",
     "@scola/validator": "^11.4.2",
-    "@scola/worker": "^2.8.0",
+    "@scola/worker": "^2.9.0",
     "d3": "^5.7.0",
     "lodash-es": "^4.17.11",
     "sprintf-js": "^1.1.1"
