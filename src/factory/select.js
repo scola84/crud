@@ -28,6 +28,7 @@ import {
 
 import {
   checkSelect,
+  decideDisabler,
   filterData,
   filterDisabler,
   formatError,
@@ -41,7 +42,7 @@ export default function createSelect(structure, route) {
   checkSelect(structure, route);
 
   const lister = new Requester({
-    id: 'crud-lister',
+    id: 'crud-select-lister',
     route: route.http('list')
   });
 
@@ -103,13 +104,14 @@ export default function createSelect(structure, route) {
   });
 
   const selectListClicker = new SelectClicker({
-    id: 'crud-select-clicker',
+    id: 'crud-select-list-clicker',
     route: route.gui()
   });
 
   const selectListDisabler = new PanelDisabler({
+    decide: decideDisabler(),
     filter: filterDisabler(),
-    id: 'crud-select-disabler'
+    id: 'crud-select-list-disabler'
   });
 
   const selectListPreparer = new ListPreparer({
@@ -154,6 +156,12 @@ export default function createSelect(structure, route) {
     route: route.http('view')
   });
 
+  const viewDisabler = new PanelDisabler({
+    decide: decideDisabler(),
+    filter: filterDisabler(),
+    id: 'crud-select-view-disabler'
+  });
+
   const viewMerger = new ViewMerger({
     id: 'crud-select-view-merger'
   });
@@ -164,6 +172,12 @@ export default function createSelect(structure, route) {
     });
 
   selectListDisabler
+    .disable({
+      permission: route.permission('select'),
+      selector: '.body, .bar .right'
+    });
+
+  viewDisabler
     .disable({
       permission: route.permission('select'),
       selector: '.body, .bar .right'
@@ -180,9 +194,10 @@ export default function createSelect(structure, route) {
   function createView() {
     viewer
       .connect(createBrowser(...codec))
-      .connect(viewMerger);
+      .connect(viewMerger)
+      .connect(viewDisabler);
 
-    return [viewer, viewMerger];
+    return [viewer, viewDisabler];
   }
 
   selectHeader

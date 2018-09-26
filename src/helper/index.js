@@ -1,6 +1,7 @@
 import checkFormat from './internal/check-format';
 import checkRoute from './internal/check-route';
 import checkSelect from './internal/check-select';
+import decideDisabler from './decide/disabler';
 import decideRequester from './decide/requester';
 import disableForm from './disable/form';
 import disableLink from './disable/link';
@@ -34,6 +35,7 @@ export {
   checkFormat,
   checkRoute,
   checkSelect,
+  decideDisabler,
   decideRequester,
   disableForm,
   disableLink,
