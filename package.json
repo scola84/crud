@@ -9,13 +9,14 @@
   "jsnext:main": "./index.js",
   "dependencies": {
     "@scola/codec": "^2.1.2",
-    "@scola/d3-string-format": "^1.5.5",
-    "@scola/gui": "^6.2.10",
-    "@scola/http": "^5.2.1",
+    "@scola/d3-string-format": "^1.6.2",
+    "@scola/gui": "^6.3.2",
+    "@scola/http": "^5.2.6",
     "@scola/validator": "^11.4.3",
-    "@scola/worker": "^2.9.0",
+    "@scola/worker": "^2.9.2",
     "d3": "^5.7.0",
     "lodash-es": "^4.17.11",
+    "luxon": "^1.4.3",
     "sprintf-js": "^1.1.1"
   }
 }
