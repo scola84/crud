@@ -35,6 +35,12 @@ export default function formatForm(format) {
       }
     }
 
+    if (datum.type === 'checkbox') {
+      if (name === 'checked') {
+        return datum.value === data[datum.name];
+      }
+    }
+
     if (typeof datum[name] !== 'undefined') {
       return format('form.value.' + name, datum[name], route, data);
     }
