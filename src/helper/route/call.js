@@ -8,7 +8,6 @@ import handleHttp from '../handle/http';
 export default function routeCall(options = {}) {
   const names = defaults({}, options.names, {
     call: options.names.call,
-    section: options.names.section,
     target: 'main'
   });
 
@@ -21,7 +20,7 @@ export default function routeCall(options = {}) {
   });
 
   const permissions = defaults({}, options.permissions, {
-    call: `${names.section}.${names.call}.call`
+    call: `${names.call}.${names.call}.call`
   });
 
   checkFormat(format.call, options);
