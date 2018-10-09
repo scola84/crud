@@ -23,7 +23,7 @@ export default function formatForm(format) {
       return datum.type === 'plain' ||
         datum.type === 'submit' ||
         datum.type === 'file' ?
-        format('form.value.' + datum.name, value) :
+        format('form.value.' + datum.name, value, route, data) :
         value;
     }
 
