@@ -152,8 +152,14 @@ function generateFields(name, sub, form, values, options) {
   let section = null;
   let text = null;
 
+  form = typeof form === 'function' ? form() : form;
+
   for (let i = 0; i < form.length; i += 1) {
     section = form[i];
+
+    if (section.hidden === true) {
+      continue;
+    }
 
     for (let j = 0; j < section.fields.length; j += 1) {
       field = section.fields[j];
@@ -165,6 +171,10 @@ function generateFields(name, sub, form, values, options) {
       }
 
       if (skipTypes.indexOf(field.type) > -1) {
+        continue;
+      }
+
+      if (typeof field.name === 'undefined') {
         continue;
       }
 
