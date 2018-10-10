@@ -195,8 +195,12 @@ function generateFields(name, sub, form, values, options) {
 
       if (values.error) {
         if (values.error.message) {
-          error = stringFormat(name + '.' + sub +
-            '.error.long')(values.error.message.slice(0, 3));
+          let errorCode = values.error.message.match(/^(\d{3})/);
+
+          errorCode = values.error.reason ||
+            errorCode && errorCode.pop() || values.error.message;
+
+          error = stringFormat(name + '.' + sub + '.error.long')(errorCode);
         }
 
         if (values.error.field) {
