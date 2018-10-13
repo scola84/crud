@@ -1,5 +1,10 @@
 import { stringFormat } from '@scola/d3-string-format';
-import { GraphicWorker } from '@scola/gui';
+
+import {
+  GraphicWorker,
+  renderBack
+} from '@scola/gui';
+
 import { select } from 'd3';
 
 export default class CallHeader extends GraphicWorker {
@@ -14,6 +19,9 @@ export default class CallHeader extends GraphicWorker {
     const center = header
       .select('.center');
 
+    const left = header
+      .select('.left');
+
     const right = header
       .select('.right');
 
@@ -21,6 +29,10 @@ export default class CallHeader extends GraphicWorker {
       .append('div')
       .classed('title', true)
       .text(this.format('title.l1.0'));
+
+    renderBack(route, { icon: true, left }, (d, i, n) => {
+      this.route(d, i, n, { data, name: 'back', route });
+    });
 
     right
       .append('button')
