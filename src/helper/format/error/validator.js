@@ -6,7 +6,9 @@ export default function formatValidatorError(format) {
 
   return (datum, index, nodes, { error, route }) => {
     const name = format('form.l1.' + error.field.name) ||
-      format('form.placeholder.' + error.field.name);
+      format('form.placeholder.' + error.field.name) ||
+      error.field.name;
+
     const type = formatType(error.field.type);
 
     if (error.reason) {
@@ -14,12 +16,12 @@ export default function formatValidatorError(format) {
         return format('form.error.' + error.field.name, route, error);
       }
 
-      if (error.reason === 'range') {
-        const [min, max] = error.field.range;
+      if (error.reason === 'length' || error.reason === 'range') {
+        const [min = null, max = null] = error.field[error.reason];
         let scope = '';
 
         if (min !== null && max !== null) {
-          scope = 'minmax';
+          scope = min === max ? 'exact' : 'minmax';
         } else if (min !== null) {
           scope = 'min';
         } else if (max !== null) {
