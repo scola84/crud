@@ -2,8 +2,9 @@ import { getString, stringFormat } from '@scola/d3-string-format';
 import { DateTime } from 'luxon';
 
 const skipTypes = [
-  'plain',
-  'file'
+  'checkbox',
+  'file',
+  'plain'
 ];
 
 export default function structureObject(prefix, structures, options = {}) {
