@@ -40,7 +40,10 @@ function handleView(datum, index, nodes, data, name, route, routes) {
       }
     }
 
-    getView(current.name).handle(current);
+    name = current.name === 'self' ?
+      route.name : current.name;
+
+    getView(name).handle(current);
   }
 }
 
