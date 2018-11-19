@@ -2,6 +2,7 @@ import { stringFormat } from '@scola/d3-string-format';
 
 import {
   GraphicWorker,
+  renderBack,
   renderSearch
 } from '@scola/gui';
 
@@ -42,14 +43,11 @@ export default class ListHeader extends GraphicWorker {
       .classed('title', true)
       .text(this.format('title.l1.d'));
 
-    left
-      .append('button')
-      .attr('tabindex', 0)
-      .classed('button icon back flip ion-ios-arrow-back', true)
-      .text(stringFormat('action.panel.button')('back'))
-      .on('click', (d, i, n) => {
-        this.route(d, i, n, { data, name: 'back', route });
-      });
+    const text = stringFormat('action.panel.button')('back');
+
+    renderBack(route, { icon: true, left, text }, (d, i, n) => {
+      this.route(d, i, n, { data, name: 'back', route });
+    });
 
     if (this._search !== false) {
       renderSearch(route, { panel, right });
