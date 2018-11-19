@@ -1,10 +1,10 @@
-.main .panel.object.deleted .header .button:not(.done),
-.main .panel.object.deleted form#form-delete,
-.main .panel.object:not(.deleted) .header .button.done,
-.main .panel.object:not(.deleted) form#form-undelete {
+.section.main .panel.object.deleted .header .button:not(.done),
+.section.main .panel.object.deleted form#form-delete,
+.section.main .panel.object:not(.deleted) .header .button.done,
+.section.main .panel.object:not(.deleted) form#form-undelete {
   display: none;
 }
 
-.main .panel.object.edit form#form-delete input[type=submit] {
+.section.main .panel.object.edit form#form-delete input[type=submit] {
   color: red;
 }
