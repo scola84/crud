@@ -1,7 +1,8 @@
 .section.main .panel.object.deleted .header .button:not(.done),
-.section.main .panel.object.deleted form#form-delete,
+.section.main .panel.object.deleted .submit.delete,
 .section.main .panel.object:not(.deleted) .header .button.done,
-.section.main .panel.object:not(.deleted) form#form-undelete {
+.section.main .panel.object:not(.deleted) .submit.fdelete,
+.section.main .panel.object:not(.deleted) .submit.undelete {
   display: none;
 }
 

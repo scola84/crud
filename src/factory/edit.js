@@ -50,7 +50,7 @@ export default function createEdit(structure, route) {
   });
 
   const deleteBuilder = new FormBuilder({
-    extract: (s) => s.del && s.del.form.slice(0, 2),
+    extract: (s) => s.del.form,
     filter: filterData(),
     format: formatForm(stringFormat('action')),
     id: 'crud-edit-delete-builder',
@@ -125,6 +125,7 @@ export default function createEdit(structure, route) {
   });
 
   const objectResolver = new ObjectResolver({
+    filter: filterData(),
     id: 'crud-edit-object-resolver',
     route: route.gui()
   });
@@ -137,31 +138,6 @@ export default function createEdit(structure, route) {
   const optionsMerger = new Worker({
     id: 'crud-edit-options-merger',
     merge: mergeOptions()
-  });
-
-  const undeleter = new Requester({
-    id: 'crud-edit-undeleter',
-    route: route.http('del')
-  });
-
-  const undeleteBuilder = new FormBuilder({
-    extract: (s) => s.del && s.del.form.slice(1),
-    filter: filterData(),
-    format: formatForm(stringFormat('action')),
-    id: 'crud-edit-undelete-builder',
-    target: 'form-undelete',
-    structure
-  });
-
-  const undeleteDisabler = new FormDisabler({
-    filter: filterDisabler(),
-    id: 'crud-edit-undelete-disabler',
-    target: 'form-undelete'
-  });
-
-  const undeleteReader = new FormReader({
-    id: 'crud-edit-undelete-reader',
-    merge: mergeData()
   });
 
   const viewer = new Requester({
@@ -192,12 +168,6 @@ export default function createEdit(structure, route) {
         route.permission('view')
       ],
       selector: '.body, .bar .right'
-    });
-
-  undeleteDisabler
-    .hide({
-      permission: route.permission('del'),
-      selector: '.form'
     });
 
   viewDisabler
@@ -241,14 +211,6 @@ export default function createEdit(structure, route) {
       .connect(deleteDisabler)
       .connect(deleteReader)
       .connect(deleter)
-      .connect(createBrowser(...codec))
-      .connect(objectReporter);
-
-    broadcaster
-      .connect(undeleteBuilder)
-      .connect(undeleteDisabler)
-      .connect(undeleteReader)
-      .connect(undeleter)
       .connect(createBrowser(...codec))
       .connect(objectReporter);
   }
