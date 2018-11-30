@@ -3,7 +3,7 @@ export default {
     form: {
       value: {
         delete: 'Verwijderen',
-        fdelete: 'Definitief verwijderen',
+        fdelete: 'Vernietigen',
         undelete: 'Herstellen'
       }
     },
