@@ -26,7 +26,7 @@ export default function routeEdit(options = {}) {
   const http = defaults({}, options.http, {
     del: `DELETE /api/${names.object}/%(${names.id})s`,
     edit: `PUT /api/${names.object}/%(${names.id})s`,
-    view: `GET /api/${names.object}/%(${names.id})s`
+    view: `GET /api/${names.object}/%(${names.id})s?link[omit]=*`
   });
 
   const permissions = defaults({}, options.permissions, {
