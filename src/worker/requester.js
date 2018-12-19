@@ -6,17 +6,19 @@ const emptyMethods = ['GET', 'OPTIONS'];
 export default class Requester extends GraphicWorker {
   act(route, data) {
     route = Object.assign({
-      box: route
+      extra: {
+        box: route
+      }
     }, this.route(route, data));
 
     if (emptyMethods.indexOf(route.method) === -1) {
       route.headers = Object.assign({
-        'Content-Type': route.box.formData ?
+        'Content-Type': route.extra.box.formData ?
           'multipart/form-data' : 'application/json'
       }, route.headers);
     }
 
-    const progress = select(route.box.node)
+    const progress = select(route.extra.box.node)
       .select('.content')
       .append('div')
       .classed('progress', true);
