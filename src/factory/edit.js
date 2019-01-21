@@ -21,11 +21,12 @@ import {
 
 import {
   ObjectHeader,
-  ObjectResolver
+  DeleteResolver
 } from '../edit';
 
 import {
-  Requester
+  Requester,
+  Resolver
 } from '../worker';
 
 import {
@@ -69,6 +70,17 @@ export default function createEdit(structure, route) {
     merge: mergeData()
   });
 
+  const deleteReporter = new ErrorReporter({
+    format: formatError(route.format(), 'long'),
+    id: 'crud-edit-delete-reporter'
+  });
+
+  const deleteResolver = new DeleteResolver({
+    filter: filterData(),
+    id: 'crud-edit-delete-resolver',
+    route: route.gui()
+  });
+
   const editor = new Requester({
     id: 'crud-editor',
     route: route.http('edit')
@@ -96,6 +108,17 @@ export default function createEdit(structure, route) {
     merge: mergeData()
   });
 
+  const editReporter = new ErrorReporter({
+    format: formatError(route.format(), 'long'),
+    id: 'crud-edit-edit-reporter'
+  });
+
+  const editResolver = new Resolver({
+    filter: filterData(),
+    id: 'crud-edit-edit-resolver',
+    route: route.gui()
+  });
+
   const editValidator = new Validator({
     extract: (s) => s.edit.form,
     filter: filterData(),
@@ -116,17 +139,6 @@ export default function createEdit(structure, route) {
   const objectHeader = new ObjectHeader({
     format: route.format(),
     id: 'crud-edit-object-header',
-    route: route.gui()
-  });
-
-  const objectReporter = new ErrorReporter({
-    format: formatError(route.format(), 'long'),
-    id: 'crud-edit-object-reporter'
-  });
-
-  const objectResolver = new ObjectResolver({
-    filter: filterData(),
-    id: 'crud-edit-object-resolver',
     route: route.gui()
   });
 
@@ -187,7 +199,8 @@ export default function createEdit(structure, route) {
 
   objectHeader
     .connect(route.options ? createOptions() : null)
-    .connect(viewer)
+    .connect(viewer
+      .bypass(objectDisabler))
     .connect(createBrowser(...codec))
     .connect(objectDisabler)
     .connect(viewDisabler)
@@ -203,7 +216,8 @@ export default function createEdit(structure, route) {
     .connect(editValidatorReporter)
     .connect(editor)
     .connect(createBrowser(...codec))
-    .connect(objectReporter);
+    .connect(editReporter)
+    .connect(editResolver);
 
   if (structure.del) {
     broadcaster
@@ -212,11 +226,9 @@ export default function createEdit(structure, route) {
       .connect(deleteReader)
       .connect(deleter)
       .connect(createBrowser(...codec))
-      .connect(objectReporter);
+      .connect(deleteReporter)
+      .connect(deleteResolver);
   }
 
-  objectReporter
-    .connect(objectResolver);
-
-  return [objectHeader, objectResolver];
+  return [objectHeader, editResolver];
 }

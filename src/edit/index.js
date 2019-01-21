@@ -1,7 +1,7 @@
 import ObjectHeader from './header';
-import ObjectResolver from './resolver';
+import DeleteResolver from './resolver';
 
 export {
   ObjectHeader,
-  ObjectResolver
+  DeleteResolver
 };
