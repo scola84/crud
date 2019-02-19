@@ -233,6 +233,7 @@ function generateFieldError(name, sub, values) {
       stringFormat(name + '.' + sub);
 
     values.error.result = values;
+    values.error.reason = values.error.reason || 'empty';
 
     value = formatError(format)(null, null, null, {
       error: values.error
