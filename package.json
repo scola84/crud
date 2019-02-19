@@ -8,15 +8,15 @@
   "main": "./index.js",
   "jsnext:main": "./index.js",
   "dependencies": {
-    "@scola/codec": "^2.4.0",
-    "@scola/d3-string-format": "^1.6.5",
-    "@scola/gui": "^6.4.12",
-    "@scola/http": "^5.8.0",
-    "@scola/validator": "^11.4.7",
-    "@scola/worker": "^2.13.2",
-    "d3": "^5.7.0",
+    "@scola/codec": "^2.4.2",
+    "@scola/d3-string-format": "^1.6.7",
+    "@scola/gui": "^6.4.20",
+    "@scola/http": "^5.9.4",
+    "@scola/validator": "^11.4.11",
+    "@scola/worker": "^2.14.2",
+    "d3": "^5.9.1",
     "lodash-es": "^4.17.11",
-    "luxon": "^1.10.0",
+    "luxon": "^1.11.3",
     "sprintf-js": "^1.1.2"
   }
 }
