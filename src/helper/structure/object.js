@@ -1,6 +1,8 @@
 import { getString, stringFormat } from '@scola/d3-string-format';
 import { DateTime } from 'luxon';
 
+import formatError from '../format/error';
+
 const skipTypes = [
   'checkbox',
   'file',
@@ -25,7 +27,10 @@ export default function structureObject(prefix, structures, options = {}) {
     if (values.object) {
       for (let i = 0; i < values.object.object.length; i += 1) {
         structure[structure.length] = {
-          fields: generateError(prefix, values.object.object[i])
+          class: 'object',
+          fields: [
+            generateStructureError(prefix, values.object.object[i])
+          ]
         };
       }
     }
@@ -118,31 +123,6 @@ export default function structureObject(prefix, structures, options = {}) {
   };
 }
 
-function generateError(prefix, values) {
-  const fields = [];
-
-  if (values.id) {
-    fields[fields.length] = {
-      type: 'plain',
-      text: stringFormat(prefix + '.form.l1')('id'),
-      value: () => {
-        return values.id;
-      }
-    };
-  }
-
-  fields[fields.length] = {
-    type: 'plain',
-    text: stringFormat(prefix + '.form.l1')('error'),
-    value: () => {
-      return stringFormat(prefix + '.error.long')(values.error.slice(0, 3)) ||
-        values.error;
-    }
-  };
-
-  return fields;
-}
-
 function generateFields(name, sub, form, values, options) {
   const fields = [];
 
@@ -154,6 +134,10 @@ function generateFields(name, sub, form, values, options) {
   let text = null;
 
   form = typeof form === 'function' ? form() : form;
+
+  if (values.error) {
+    fields[fields.length] = generateFieldError(name, sub, values);
+  }
 
   for (let i = 0; i < form.length; i += 1) {
     section = form[i];
@@ -195,21 +179,10 @@ function generateFields(name, sub, form, values, options) {
       icon = 'ion-ios-checkmark-circle-outline';
 
       if (values.error) {
-        if (values.error.message) {
-          let errorCode = values.error.message.match(/^(\d{3})/);
-
-          errorCode = values.error.reason ||
-            errorCode && errorCode.pop() || values.error.message;
-
-          error = stringFormat(name + '.' + sub + '.error.long')(errorCode);
-        }
-
         if (values.error.field) {
           if (values.error.field.name === field.name) {
             icon = 'ion-ios-close-circle-outline';
           }
-        } else if (values.error.message) {
-          icon = 'ion-ios-close-circle-outline';
         }
       }
 
@@ -249,4 +222,50 @@ function generateFields(name, sub, form, values, options) {
   }
 
   return fields;
+}
+
+function generateFieldError(name, sub, values) {
+  let value = '';
+
+  if (values.error.field) {
+    const format = name === sub ?
+      stringFormat(name) :
+      stringFormat(name + '.' + sub);
+
+    values.error.result = values;
+
+    value = formatError(format)(null, null, null, {
+      error: values.error
+    });
+  } else {
+    value = name === sub ?
+      stringFormat(name + '.error.long')(values.error.reason) :
+      stringFormat(name + '.' + sub + '.error.long')(values.error.reason);
+  }
+
+  return {
+    name: 'error',
+    type: 'plain',
+    value: () => value
+  };
+}
+
+function generateStructureError(prefix, values) {
+  const [,
+    status = '',
+    code = 'unknown'
+  ] = values.error.match(/(\d{3})?( ?.+)?/);
+
+  let value = '';
+
+  value += stringFormat(prefix + '.form.l1.error')(status) || status;
+  value += ' ';
+  value += stringFormat(prefix + '.form.value.error')(code.trim(), values) ||
+    code.trim();
+
+  return {
+    name: 'error',
+    type: 'plain',
+    value: () => value
+  };
 }
