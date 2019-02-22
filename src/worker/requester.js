@@ -19,7 +19,7 @@ export default class Requester extends GraphicWorker {
     }
 
     const progress = select(route.extra.box.node)
-      .select('.content')
+      .select('.body')
       .append('div')
       .classed('progress', true);
 
