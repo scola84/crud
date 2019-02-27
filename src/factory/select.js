@@ -85,16 +85,16 @@ export default function createSelect(structure, route) {
     format: route.format(),
     id: 'crud-select-header',
     route: route.gui(),
-    search: structure.search
+    search: structure[route.action].search
   });
 
   const selectListBuilder = new ListBuilder({
     add: route.add,
-    dynamic: structure.dynamic,
+    dynamic: structure[route.action].dynamic,
     extract: (s) => {
       return s[route.action].list || s[route.action].form.slice(-1);
     },
-    filter: structure.filter || filterData([]),
+    filter: structure[route.action].filter || filterData([]),
     format: formatList(route.format('list')),
     id: 'crud-select-list-builder',
     prepare: false,
@@ -115,7 +115,7 @@ export default function createSelect(structure, route) {
   });
 
   const selectListPreparer = new ListPreparer({
-    dynamic: structure.dynamic,
+    dynamic: structure[route.action].dynamic,
     extract: (s) => s[route.action].search,
     id: 'crud-select-list-preparer',
     structure
