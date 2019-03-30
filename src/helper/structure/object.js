@@ -60,9 +60,12 @@ export default function structureObject(prefix, structures, options = {}) {
           classes.push('pass');
         }
 
-        if (object.exists ||
-          object.include === false) {
-          classes.push('skip');
+        if (object.exists === true) {
+          classes.push('exists');
+        }
+
+        if (object.include === true) {
+          classes.push('include');
         }
 
         text.push(stringFormat(name + '.title.l1')(0));
@@ -101,9 +104,12 @@ export default function structureObject(prefix, structures, options = {}) {
             classes.push('pass');
           }
 
-          if (object.exists ||
-            object.include === false) {
-            classes.push('skip');
+          if (object.exists === true) {
+            classes.push('exists');
+          }
+
+          if (object.include === true) {
+            classes.push('include');
           }
 
           text.push(stringFormat(name + '.title.l1')(0));
@@ -238,10 +244,12 @@ function generateFieldError(name, sub, values) {
     value = formatError(format)(null, null, null, {
       error: values.error
     });
-  } else {
+  } else if (values.error.reason) {
     value = name === sub ?
       stringFormat(name + '.error.long')(values.error.reason) :
       stringFormat(name + '.' + sub + '.error.long')(values.error.reason);
+  } else {
+    value = values.error.message;
   }
 
   return {
