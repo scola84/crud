@@ -33,6 +33,7 @@ function handleView(datum, index, nodes, data, name, route, routes) {
           sourceName = sourceName || targetName;
 
           picked[targetName] = route.params[sourceName] ||
+            datum && datum[sourceName] ||
             data && data[sourceName];
         }
 
